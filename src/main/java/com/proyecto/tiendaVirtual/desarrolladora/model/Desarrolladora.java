@@ -15,12 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Desarrolladora {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private String paisOrigen;
-    @OneToMany(mappedBy = "juegos")
+
+    @OneToMany(mappedBy = "desarrolladora")
     private List<Juego> juegos = new ArrayList<>();
 
 }
