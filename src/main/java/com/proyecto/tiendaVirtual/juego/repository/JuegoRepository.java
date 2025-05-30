@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Optional;
 @Repository
 public interface JuegoRepository extends JpaRepository<Juego,Long> {
-    Optional<Juego> findByName(String nombre);
+    Optional<Juego> findByNombre(String nombre);
     List<Juego> getByCategoria(Categoria categoria);
 }
