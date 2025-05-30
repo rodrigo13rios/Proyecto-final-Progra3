@@ -38,7 +38,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     @Override
 
     public Optional<Desarrolladora> findByNombre(String nombre) throws ElementoNoEncontradoException {
-        Optional<Desarrolladora> desarrolladora = desarrolladoraRepository.findByNombre(nombre);
+        Optional<Desarrolladora> desarrolladora = repo.findByNombre(nombre);
         if (desarrolladora.isEmpty()) {
             throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese nombre");
         }
