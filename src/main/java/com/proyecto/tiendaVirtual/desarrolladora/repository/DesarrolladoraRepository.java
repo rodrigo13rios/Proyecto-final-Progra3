@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface DesarrolladoraRepository extends JpaRepository<Desarrolladora,Long> {
-    Optional<Desarrolladora> findByName(String name);
+    Optional<Desarrolladora> findByNombre(String name);
 }
