@@ -15,30 +15,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Perfil {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nickName;
 
-    @OneToOne
-    @JoinColumn(name = "id_usuario")
-    //private Usuario usuario;
+//    @OneToOne
+//    @JoinColumn(name = "id_usuario")
+//    private Cuenta cuenta;
 
 
     @ManyToMany
     @JoinTable(
             name = "perfil_juego",
-            joinColumns = @JoinColumn(name = "perfil_id"),
-            inverseJoinColumns = @JoinColumn(name = "juego_id")
+            joinColumns = @JoinColumn(name = "id_perfil"),
+            inverseJoinColumns = @JoinColumn(name = "id_juego")
     )
     private List<Juego> juegos = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "perfil_amigos",
-            joinColumns = @JoinColumn(name = "perfil_id"),
-            inverseJoinColumns = @JoinColumn(name = "amigo_id")
-    )
-    private List<Perfil> amigos = new ArrayList<>();
 }

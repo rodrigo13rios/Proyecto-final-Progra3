@@ -12,22 +12,22 @@ import java.util.Optional;
 @Service
 public class PerfilServiceImpl implements PerfilService {
     //@AutoWired
-    private final PerfilRepository perfilRepository;
+    private final PerfilRepository repo;
 
-    public PerfilServiceImpl(PerfilRepository perfilRepository){
-        this.perfilRepository=perfilRepository;
+    public PerfilServiceImpl(PerfilRepository repo){
+        this.repo=repo;
     }
     @Override
     public void createPerfil(Perfil perfil) throws ElementoExistenteException {
-        if (perfilRepository.existsById(perfil.getId())){
+        if (repo.existsById(perfil.getId())){
             throw new ElementoExistenteException("El perfil ya se encuentra creado");
         }
-        perfilRepository.save(perfil);
+        repo.save(perfil);
     }
 
     @Override
     public List<Perfil> getAllPerfil() throws ListaVaciaException {
-        List<Perfil> perfiles = perfilRepository.findAll();
+        List<Perfil> perfiles = repo.findAll();
         if (perfiles.isEmpty()){
             throw new ListaVaciaException("No se encuentran perfiles cargados");
         }
@@ -36,14 +36,14 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Override
     public Optional<Perfil> getPefilById(Long id) throws ElementoNoEncontradoException {
-        Optional<Perfil> optional = perfilRepository.findById(id);
+        Optional<Perfil> optional = repo.findById(id);
         if (optional.isEmpty())throw new ElementoNoEncontradoException("No se encontro un perfil con el ID");
         return optional;
     }
 
     @Override
     public Optional<Perfil> getPerfilByNickName(String nickName) throws ElementoNoEncontradoException {
-        Optional<Perfil> optional = perfilRepository.findAll()
+        Optional<Perfil> optional = repo.findAll()
                                     .stream()
                                     .filter(x->x.getNickName().equals(nickName))
                                     .findFirst();
@@ -54,9 +54,9 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Override
     public void updatePerfil(Long id, Perfil updatePerfil) throws ElementoNoEncontradoException {
-        if (perfilRepository.existsById(id)){
-            perfilRepository.deleteById(id);
-            perfilRepository.save(updatePerfil);
+        if (repo.existsById(id)){
+            repo.deleteById(id);
+            repo.save(updatePerfil);
         }
         throw new ElementoNoEncontradoException("No se encontro un perfil con el ID indicado");
 
@@ -64,8 +64,8 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Override
     public void deletePerfil(Long id) throws ElementoNoEncontradoException {
-        if (perfilRepository.existsById(id)){
-            perfilRepository.deleteById(id);
+        if (repo.existsById(id)){
+            repo.deleteById(id);
         }
         throw new ElementoNoEncontradoException("No se encontro un perfil con el ID seleccionado");
     }
