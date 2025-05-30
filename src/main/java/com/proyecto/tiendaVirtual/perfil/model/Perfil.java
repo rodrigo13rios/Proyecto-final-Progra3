@@ -20,9 +20,9 @@ public class Perfil {
 
     private String nickName;
 
-    @OneToOne
-    @JoinColumn(name = "id_usuario")
-    //private Cuenta cuenta;
+//    @OneToOne
+//    @JoinColumn(name = "id_usuario")
+//    private Cuenta cuenta;
 
 
     @ManyToMany
@@ -32,12 +32,4 @@ public class Perfil {
             inverseJoinColumns = @JoinColumn(name = "id_juego")
     )
     private List<Juego> juegos = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "perfil_amigos",
-            joinColumns = @JoinColumn(name = "id_perfil"),
-            inverseJoinColumns = @JoinColumn(name = "id_perfil_amigo")
-    )
-    private List<Perfil> amigos = new ArrayList<>();
 }
