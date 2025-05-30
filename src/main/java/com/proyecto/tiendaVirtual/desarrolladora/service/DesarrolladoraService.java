@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface DesarrolladoraService {
     void createDesarrolladora(Desarrolladora desarrolladora) throws ElementoExistenteException;
     Optional<Desarrolladora> findDesarrolladoraById(Long id) throws ElementoNoEncontradoException;
-    Optional<Desarrolladora> findByName(String nombre) throws ElementoNoEncontradoException;
+    Optional<Desarrolladora> findByNombre(String nombre) throws ElementoNoEncontradoException;
     List<Desarrolladora> getAllDesarrolladoras() throws ListaVaciaException;
     void updateDesarrolladora(Long id, Desarrolladora updatedDesarrolladora) throws ElementoNoEncontradoException;
     void deleteDesarrolladora(Long id) throws ElementoNoEncontradoException;

@@ -42,10 +42,8 @@ public class JuegoServiceImpl implements JuegoService{
     //TODO preguntar al profe si esta bien implementado asi o es como en DesarrolladoraServiceImpl
     @Override
     public Optional<Juego> findByName(String nombre) throws ListaVaciaException {
-        Optional<Juego> optional = juegoRepository.findAll()
-                                    .stream()
-                                    .filter(x->x.getNombre().equals(nombre))
-                                    .findFirst();
+
+        Optional<Juego> optional = juegoRepository.findByNombre(nombre);
         if (optional.isEmpty()){
             throw new ListaVaciaException("No se encuentran juegos con el nombre a buscar");
         }
