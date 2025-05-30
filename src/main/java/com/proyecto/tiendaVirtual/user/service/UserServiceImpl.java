@@ -1,6 +1,5 @@
 package com.proyecto.tiendaVirtual.user.service;
 
-import com.proyecto.tiendaVirtual.config.PasswordConfig;
 import com.proyecto.tiendaVirtual.exceptions.ElementoExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ListaVaciaException;
@@ -28,8 +27,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.passwordEncoder=passwordEncoder;
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> findByUsername(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -80,10 +79,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         throw new ElementoNoEncontradoException("No se encontro el usuario ingresado");
     }
 
+
     @Override
-    public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user= userOptional.orElseThrow(()->new UsernameNotFoundException("No se a encontrado un usuario con el mail: "+username));
+    public UserDetails loadUserByUsername(String email)throws UsernameNotFoundException {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        User user= userOptional.orElseThrow(()->new UsernameNotFoundException("No se a encontrado un usuario con el mail: "+email));
 
         return new org.springframework.security.core.userdetails.User(//Este es el objeto que Spring Security utiliza internamente para representar los detalles de un usuario autenticado
                 user.getNombre(),
