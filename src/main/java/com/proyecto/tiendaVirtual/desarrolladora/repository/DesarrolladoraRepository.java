@@ -11,4 +11,3 @@ import java.util.Optional;
 public interface DesarrolladoraRepository extends JpaRepository<Desarrolladora, Long> {
     Optional<Desarrolladora> findByNombre(String nombre);
 }
-
