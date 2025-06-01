@@ -1,6 +1,6 @@
 package com.proyecto.tiendaVirtual.user.service;
 
-import com.proyecto.tiendaVirtual.exceptions.ElementoExistenteException;
+import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ListaVaciaException;
 import com.proyecto.tiendaVirtual.user.model.Role;
@@ -32,9 +32,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User createUser(User user) throws ElementoExistenteException {
+    public User createUser(User user) throws ElementoYaExistenteException {
         if (userRepository.existsById(user.getId())){
-            throw new ElementoExistenteException("El usuario ya existe");
+            throw new ElementoYaExistenteException("El usuario ya existe");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);

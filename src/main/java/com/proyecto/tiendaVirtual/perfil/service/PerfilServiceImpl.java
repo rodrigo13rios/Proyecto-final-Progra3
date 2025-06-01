@@ -1,6 +1,6 @@
 package com.proyecto.tiendaVirtual.perfil.service;
 
-import com.proyecto.tiendaVirtual.exceptions.ElementoExistenteException;
+import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ListaVaciaException;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
@@ -18,9 +18,9 @@ public class PerfilServiceImpl implements PerfilService {
         this.repo=repo;
     }
     @Override
-    public void createPerfil(Perfil perfil) throws ElementoExistenteException {
+    public void createPerfil(Perfil perfil) throws ElementoYaExistenteException {
         if (repo.existsById(perfil.getId())){
-            throw new ElementoExistenteException("El perfil ya se encuentra creado");
+            throw new ElementoYaExistenteException("El perfil ya se encuentra creado");
         }
         repo.save(perfil);
     }
