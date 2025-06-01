@@ -2,7 +2,6 @@ package com.proyecto.tiendaVirtual.perfil.service;
 
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
-import com.proyecto.tiendaVirtual.exceptions.ListaVaciaException;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class PerfilServiceImpl implements PerfilService {
         this.repo=repo;
     }
     @Override
-    public void createPerfil(Perfil perfil) throws ElementoYaExistenteException {
+    public void create(Perfil perfil) throws ElementoYaExistenteException {
         if (repo.existsById(perfil.getId())){
             throw new ElementoYaExistenteException("El perfil ya se encuentra creado");
         }
@@ -26,23 +25,19 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
-    public List<Perfil> getAllPerfil() throws ListaVaciaException {
-        List<Perfil> perfiles = repo.findAll();
-        if (perfiles.isEmpty()){
-            throw new ListaVaciaException("No se encuentran perfiles cargados");
-        }
-        return perfiles;
+    public List<Perfil> getAll() {
+        return repo.findAll();
     }
 
     @Override
-    public Optional<Perfil> getPefilById(Long id) throws ElementoNoEncontradoException {
+    public Optional<Perfil> getById(Long id) throws ElementoNoEncontradoException {
         Optional<Perfil> optional = repo.findById(id);
         if (optional.isEmpty())throw new ElementoNoEncontradoException("No se encontro un perfil con el ID");
         return optional;
     }
 
     @Override
-    public Optional<Perfil> getPerfilByNickName(String nickName) throws ElementoNoEncontradoException {
+    public Optional<Perfil> getByNickName(String nickName) throws ElementoNoEncontradoException {
         Optional<Perfil> optional = repo.findAll()
                                     .stream()
                                     .filter(x->x.getNickName().equals(nickName))
@@ -53,7 +48,7 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
-    public void updatePerfil(Long id, Perfil updatePerfil) throws ElementoNoEncontradoException {
+    public void update(Long id, Perfil updatePerfil) throws ElementoNoEncontradoException {
         if (repo.existsById(id)){
             repo.deleteById(id);
             repo.save(updatePerfil);
@@ -63,7 +58,7 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
-    public void deletePerfil(Long id) throws ElementoNoEncontradoException {
+    public void delete(Long id) throws ElementoNoEncontradoException {
         if (repo.existsById(id)){
             repo.deleteById(id);
         }

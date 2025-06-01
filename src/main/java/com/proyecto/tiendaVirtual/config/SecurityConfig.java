@@ -23,13 +23,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
         http.
                 authorizeHttpRequests(authorize -> authorize  // metodo para autorizar solicitudes
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/desarrolladora/**").hasRole("DESARROLLADOR")
-                        .requestMatchers("/cliente/**").hasRole("CLIENTE")
-                        .requestMatchers("/public/**").permitAll()
-                        .anyRequest().authenticated()    // Cualquier otra solicitud requiere autenticación
+                        //.requestMatchers("/admin/**").hasRole("ADMIN")
+                        //.requestMatchers("/desarrolladora/**").hasRole("DESARROLLADOR")
+                        //.requestMatchers("/cliente/**").hasRole("CLIENTE")
+                        //.requestMatchers("/public/**").permitAll()
+
+                        //.anyRequest().authenticated()    // Cualquier otra solicitud requiere autenticación
+
+                        .requestMatchers("/api/**").permitAll()
+                        .anyRequest().permitAll() //PARA TESTEAR SIN NECESIDAD DE LOGIN
+
                 ).formLogin(form->form.permitAll())    // Permite a todos acceder a la página de login
                 .logout(logout->logout.logoutSuccessUrl("/login").permitAll());   // Permite a todos acceder al logout
+
         return http.build();
     }
 

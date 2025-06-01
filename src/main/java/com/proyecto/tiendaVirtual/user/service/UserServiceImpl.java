@@ -2,7 +2,6 @@ package com.proyecto.tiendaVirtual.user.service;
 
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
-import com.proyecto.tiendaVirtual.exceptions.ListaVaciaException;
 import com.proyecto.tiendaVirtual.user.model.Role;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
@@ -32,7 +31,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User createUser(User user) throws ElementoYaExistenteException {
+    public User create(User user) throws ElementoYaExistenteException {
         if (userRepository.existsById(user.getId())){
             throw new ElementoYaExistenteException("El usuario ya existe");
         }
@@ -41,17 +40,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> getAllUser() throws ListaVaciaException {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public Optional<User> getUserById(Long id) throws ElementoNoEncontradoException {
+    public Optional<User> getById(Long id) throws ElementoNoEncontradoException {
         return Optional.empty();
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) throws ElementoNoEncontradoException {
+    public Optional<User> getByEmail(String email) throws ElementoNoEncontradoException {
         Optional<User>optional=userRepository
                 .findAll()
                 .stream()
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updateUser(Long id, User userUpdated) throws ElementoNoEncontradoException {
+    public void update(Long id, User userUpdated) throws ElementoNoEncontradoException {
         if(userRepository.existsById(id)){
             userRepository.deleteById(id);
             userRepository.save(userUpdated);
@@ -72,7 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void deleteUser(Long id) throws ElementoNoEncontradoException {
+    public void delete(Long id) throws ElementoNoEncontradoException {
         if(userRepository.existsById(id)){
             userRepository.deleteById(id);
         }

@@ -4,7 +4,6 @@ import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraRepository;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
-import com.proyecto.tiendaVirtual.exceptions.ListaVaciaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +37,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     @Override
 
     public Optional<Desarrolladora> findByNombre(String nombre) throws ElementoNoEncontradoException {
-        Optional<Desarrolladora> desarrolladora = desarrolladoraRepository.findByNombre(nombre);
+        Optional<Desarrolladora> desarrolladora = repo.findByNombre(nombre);
         if (desarrolladora.isEmpty()) {
             throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese nombre");
         }
