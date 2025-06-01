@@ -28,9 +28,8 @@ public class SecurityConfig {
                         .requestMatchers("/cliente/**").hasRole("CLIENTE")
                         .requestMatchers("/public/**").permitAll()
                         .anyRequest().authenticated()    // Cualquier otra solicitud requiere autenticación
-                ).formLogin(form->form.permitAll()    // Permite a todos acceder a la página de login
-                ).logout(logout->logout.logoutSuccessUrl("/login").permitAll()   // Permite a todos acceder al logout
-                );
+                ).formLogin(form->form.permitAll())    // Permite a todos acceder a la página de login
+                .logout(logout->logout.logoutSuccessUrl("/login").permitAll());   // Permite a todos acceder al logout
         return http.build();
     }
 
