@@ -18,9 +18,6 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
     @Override
     public void create(Desarrolladora desarrolladora) throws ElementoYaExistenteException {
-        if (repo.existsById(desarrolladora.getId())){
-            throw new ElementoYaExistenteException("La desarrolladora ya se encuentra cargada");
-        }
         repo.save(desarrolladora);
     }
 
