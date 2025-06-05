@@ -10,10 +10,10 @@ import java.util.Optional;
 
 @Service
 public interface DesarrolladoraService {
-    void create(Desarrolladora desarrolladora);
+    Desarrolladora create(Desarrolladora desarrolladora);
     Optional<Desarrolladora> findById(Long id);
     Optional<Desarrolladora> findByNombre(String nombre);
     List<Desarrolladora> getAll();
-    void update(Long id, Desarrolladora updatedDesarrolladora);
+    Desarrolladora update(Long id, Desarrolladora updatedDesarrolladora);
     void delete(Long id) throws ElementoNoEncontradoException;
 }
