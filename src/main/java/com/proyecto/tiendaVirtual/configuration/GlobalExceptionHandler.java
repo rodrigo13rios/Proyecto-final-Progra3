@@ -1,6 +1,7 @@
 package com.proyecto.tiendaVirtual.configuration;
 
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +13,19 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ElementoNoEncontradoException.class)
-    public ResponseEntity<Map<String, String>> cathElementoNoEncontradoException(ElementoNoEncontradoException ex) {
+    public ResponseEntity<Map<String, String>> cathElementoNoEncontrado(ElementoNoEncontradoException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(ElementoYaExistenteException.class)
+    public ResponseEntity<Map<String, String>> cathElementoYaExistente(ElementoNoEncontradoException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+
 
     // Manejo genérico para cualquier otra excepción no controlada
     @ExceptionHandler(Exception.class)
