@@ -47,12 +47,19 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     }
 
     @Override
-    public void update(Long id, Desarrolladora updatedDesarrolladora) throws ElementoNoEncontradoException {
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-            repo.save(updatedDesarrolladora);
-        }else throw new ElementoNoEncontradoException("No se encuentra cargada una desarrolladora con ese Id");
+    public void update(Long id, Desarrolladora nuevaData) {
+        // Buscar la desarrolladora existente por ID
+        Desarrolladora existente = repo.findById(id)
+                .orElseThrow(() -> new ElementoNoEncontradoException("Desarrolladora con ID " + id + " no encontrada"));
+
+        // Actualizar campos
+        existente.setNombre(nuevaData.getNombre());
+        existente.setPaisOrigen(nuevaData.getPaisOrigen());
+
+        // Guardar
+        repo.save(existente);
     }
+
 
     @Override
     public void delete(Long id) throws ElementoNoEncontradoException {

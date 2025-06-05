@@ -21,7 +21,12 @@ public class DesarrolladoraController {
     }
 
     @PostMapping
-    public void create(@RequestBody Desarrolladora desarrolladora) throws ElementoYaExistenteException {
+    public void create(@RequestBody Desarrolladora desarrolladora) {
         service.create(desarrolladora);
+    }
+
+    @PutMapping("/{id}")
+    public void update(@PathVariable Long id, @RequestBody Desarrolladora desarrolladora) {
+        service.update(id,desarrolladora);
     }
 }
