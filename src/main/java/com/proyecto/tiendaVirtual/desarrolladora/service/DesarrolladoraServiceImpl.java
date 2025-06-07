@@ -2,9 +2,8 @@ package com.proyecto.tiendaVirtual.desarrolladora.service;
 
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraRepository;
-import com.proyecto.tiendaVirtual.exceptions.ElementoExistenteException;
+import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
-import com.proyecto.tiendaVirtual.exceptions.ListaVaciaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +17,12 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
 
     @Override
-    public void createDesarrolladora(Desarrolladora desarrolladora) throws ElementoExistenteException {
-        if (repo.existsById(desarrolladora.getId())){
-            throw new ElementoExistenteException("La desarrolladora ya se encuentra cargada");
-        }
+    public void create(Desarrolladora desarrolladora) throws ElementoYaExistenteException {
         repo.save(desarrolladora);
     }
 
     @Override
-    public Optional<Desarrolladora> findDesarrolladoraById(Long id) throws ElementoNoEncontradoException {
+    public Optional<Desarrolladora> findById(Long id) throws ElementoNoEncontradoException {
         Optional<Desarrolladora> desarrolladora = repo.findById(id);
         if (desarrolladora.isEmpty()){
             throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese ID");
@@ -38,7 +34,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     @Override
 
     public Optional<Desarrolladora> findByNombre(String nombre) throws ElementoNoEncontradoException {
-        Optional<Desarrolladora> desarrolladora = desarrolladoraRepository.findByNombre(nombre);
+        Optional<Desarrolladora> desarrolladora = repo.findByNombre(nombre);
         if (desarrolladora.isEmpty()) {
             throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese nombre");
         }
@@ -46,16 +42,12 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     }
 
     @Override
-    public List<Desarrolladora> getAllDesarrolladoras() throws ListaVaciaException {
-        List<Desarrolladora> desarrolladoras = repo.findAll();
-        if (desarrolladoras.isEmpty()){
-            throw new ListaVaciaException("No se encuentran desarrolladoras cargadas");
-        }
-        return desarrolladoras;
+    public List<Desarrolladora> getAll() {
+        return repo.findAll();
     }
 
     @Override
-    public void updateDesarrolladora(Long id, Desarrolladora updatedDesarrolladora) throws ElementoNoEncontradoException {
+    public void update(Long id, Desarrolladora updatedDesarrolladora) throws ElementoNoEncontradoException {
         if (repo.existsById(id)){
             repo.deleteById(id);
             repo.save(updatedDesarrolladora);
@@ -63,7 +55,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     }
 
     @Override
-    public void deleteDesarrolladora(Long id) throws ElementoNoEncontradoException {
+    public void delete(Long id) throws ElementoNoEncontradoException {
         if (repo.existsById(id)){
             repo.deleteById(id);
 
