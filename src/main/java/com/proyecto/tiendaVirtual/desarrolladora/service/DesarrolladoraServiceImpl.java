@@ -17,8 +17,8 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
 
     @Override
-    public void create(Desarrolladora desarrolladora) throws ElementoYaExistenteException {
-        repo.save(desarrolladora);
+    public Desarrolladora create(Desarrolladora desarrolladora) throws ElementoYaExistenteException {
+        return repo.save(desarrolladora);
     }
 
     @Override
@@ -47,18 +47,28 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     }
 
     @Override
-    public void update(Long id, Desarrolladora updatedDesarrolladora) throws ElementoNoEncontradoException {
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-            repo.save(updatedDesarrolladora);
-        }else throw new ElementoNoEncontradoException("No se encuentra cargada una desarrolladora con ese Id");
+    public Desarrolladora update(Long id, Desarrolladora nuevo) {
+        // Buscar la desarrolladora existente por ID
+        Desarrolladora existente = repo.findById(id)
+                .orElseThrow(() -> new ElementoNoEncontradoException("Desarrolladora con ID " + id + " no encontrada"));
+
+        // Actualizar campos
+        if (nuevo.getNombre() != null) {
+            existente.setNombre(nuevo.getNombre());
+        }
+        if (nuevo.getPaisOrigen() != null) {
+            existente.setPaisOrigen(nuevo.getPaisOrigen());
+        }
+
+        // Guardar y retornar
+        return repo.save(existente);
     }
+
 
     @Override
     public void delete(Long id) throws ElementoNoEncontradoException {
         if (repo.existsById(id)){
             repo.deleteById(id);
-
         }else{
             throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese Id");
         }
