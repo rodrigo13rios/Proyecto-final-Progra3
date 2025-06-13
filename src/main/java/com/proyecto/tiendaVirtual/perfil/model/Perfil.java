@@ -20,7 +20,7 @@ public class Perfil {
     private Long id;
 
     private String nickName;
-    @OneToOne
+    @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "billetera_id")
     private Billetera billetera;
 
