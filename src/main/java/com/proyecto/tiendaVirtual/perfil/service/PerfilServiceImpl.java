@@ -4,24 +4,22 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 @Service
 public class PerfilServiceImpl implements PerfilService {
-    //@AutoWired
-    private final PerfilRepository repo;
+    @Autowired
+    private PerfilRepository repo;
 
-    public PerfilServiceImpl(PerfilRepository repo){
-        this.repo=repo;
-    }
     @Override
-    public void create(Perfil perfil) throws ElementoYaExistenteException {
+    public Perfil create(Perfil perfil) throws ElementoYaExistenteException {
         if (repo.existsById(perfil.getId())){
             throw new ElementoYaExistenteException("El perfil ya se encuentra creado");
         }
-        repo.save(perfil);
+        return repo.save(perfil);
     }
 
     @Override
@@ -48,13 +46,23 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
-    public void update(Long id, Perfil updatePerfil) throws ElementoNoEncontradoException {
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-            repo.save(updatePerfil);
-        }
-        throw new ElementoNoEncontradoException("No se encontro un perfil con el ID indicado");
+    public Perfil update(Long id, Perfil nuevo) {
+//        if (repo.existsById(id)){
+//            repo.deleteById(id);
+//            repo.save(updatePerfil);
+//        }
+//        throw new ElementoNoEncontradoException("No se encontro un perfil con el ID indicado");
 
+        Perfil existente = repo.findById(id).orElseThrow(()-> new ElementoNoEncontradoException("Perfil con ID "+id+" no encontrado"));
+
+        if (nuevo.getNickName()!= null){
+            existente.setNickName(nuevo.getNickName());
+        }
+        if (nuevo.getJuegos()!= null){
+            existente.setJuegos(nuevo.getJuegos());
+        }
+
+        return repo.save(existente);
     }
 
     @Override
