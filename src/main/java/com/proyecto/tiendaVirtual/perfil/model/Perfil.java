@@ -24,10 +24,6 @@ public class Perfil {
     @JoinColumn(name = "billetera_id")
     private Billetera billetera;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_usuario")
-//    private Cuenta cuenta;
-
 
     @ManyToMany
     @JoinTable(
