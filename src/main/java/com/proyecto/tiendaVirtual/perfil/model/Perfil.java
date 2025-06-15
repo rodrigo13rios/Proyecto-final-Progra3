@@ -2,6 +2,7 @@ package com.proyecto.tiendaVirtual.perfil.model;
 
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
+import com.proyecto.tiendaVirtual.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,14 +21,13 @@ public class Perfil {
     private Long id;
 
     private String nickName;
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "billetera_id")
     private Billetera billetera;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_usuario")
-//    private Cuenta cuenta;
-
+    @OneToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 
     @ManyToMany
     @JoinTable(
