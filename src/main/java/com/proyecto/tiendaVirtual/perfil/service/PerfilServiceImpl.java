@@ -8,11 +8,14 @@ import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
+import com.proyecto.tiendaVirtual.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 @Service
 public class PerfilServiceImpl implements PerfilService {
     @Autowired
@@ -21,16 +24,21 @@ public class PerfilServiceImpl implements PerfilService {
     private JuegoService juegoService;
 
     @Override
-    public Perfil create(PerfilDTO dto) throws ElementoYaExistenteException {
+    public Perfil create(UserDTO dto) throws ElementoYaExistenteException {
 
-        if (repo.existsByNickName(dto.getNickName()))throw new ElementoYaExistenteException("Ya existe un perfil con el nickName ingresado");
         Perfil perfil = new Perfil();
         Billetera billetera = new Billetera();
         billetera.setSaldo(0.0);
 
-        perfil.setNickName(dto.getNickName());
+        perfil.setNickName(generarNickName(dto));
+        if (repo.existsByNickName(perfil.getNickName()))throw new ElementoYaExistenteException("Ya existe un perfil con el nickName ingresado");
         perfil.setBilletera(billetera);
-        return repo.save(perfil);
+
+        return perfil;
+    }
+
+    public String generarNickName(UserDTO user){
+        return user.getNombre().toLowerCase()+"."+user.getApellido().toLowerCase()+new Random().nextInt(1000);
     }
 
     @Override
@@ -95,6 +103,6 @@ public class PerfilServiceImpl implements PerfilService {
         if (repo.existsById(id)){
             repo.deleteById(id);
         }
-        throw new ElementoNoEncontradoException("No se encontro un perfil con el ID seleccionado");
+        else throw new ElementoNoEncontradoException("No se encontro un perfil con el ID seleccionado");
     }
 }

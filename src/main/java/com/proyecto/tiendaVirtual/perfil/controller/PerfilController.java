@@ -38,11 +38,11 @@ public class PerfilController {
         return ResponseEntity.ok(juegos);
     }
 
-    @PostMapping
-    public ResponseEntity<Perfil> create(@RequestBody PerfilDTO dto){
-        Perfil result = service.create(dto);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<Perfil> create(@RequestBody PerfilDTO dto){
+//        Perfil result = service.create(dto);
+//        return new ResponseEntity<>(result, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Perfil> update(@PathVariable Long id, @RequestBody PerfilDTO perfil){

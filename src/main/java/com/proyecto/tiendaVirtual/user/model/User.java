@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.user.model;
 
+import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,12 +22,12 @@ public class User {
     private String apellido;
     private String email;
     private String password;
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "id_perfil")
     private Perfil perfil;
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private Desarrolladora desarrolladora;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name="id_user"),inverseJoinColumns = @JoinColumn(name = "id_role"))
-    private Set<Role> roles= new HashSet<>();
 }

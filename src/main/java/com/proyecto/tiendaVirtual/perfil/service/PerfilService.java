@@ -5,6 +5,8 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
+import com.proyecto.tiendaVirtual.user.dto.UserDTO;
+import com.proyecto.tiendaVirtual.user.model.User;
 import org.springframework.stereotype.Service;
 
 import java.time.Period;
@@ -13,7 +15,7 @@ import java.util.Optional;
 
 @Service
 public interface PerfilService {
-    Perfil create(PerfilDTO dto);
+    Perfil create(UserDTO dto);
     List<Perfil> getAll();
     Optional<Perfil> getById(Long id);
     Optional<Perfil> getByNickName(String nickName);
@@ -21,4 +23,5 @@ public interface PerfilService {
     void delete(Long id);
     List<Juego> obtenerJuegos(Long id);
     void agregarJuego(Long id,Long juedoId);
+    String generarNickName(UserDTO dto);
 }
