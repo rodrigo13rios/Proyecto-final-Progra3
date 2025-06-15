@@ -1,6 +1,5 @@
 package com.proyecto.tiendaVirtual.utils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.proyecto.tiendaVirtual.dto.ErrorDTO;
 import lombok.AllArgsConstructor;
