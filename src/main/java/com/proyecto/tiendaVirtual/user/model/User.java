@@ -25,7 +25,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "id_perfil")
     private Perfil perfil;
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private Desarrolladora desarrolladora;
     @Enumerated(EnumType.STRING)
     private Role role;
