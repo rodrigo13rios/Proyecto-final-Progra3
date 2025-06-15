@@ -19,7 +19,7 @@ import java.util.Optional;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("api/juego")
 public class JuegoController {
 
@@ -35,7 +35,7 @@ public class JuegoController {
         if(!juegos.isEmpty()){
             ApiResponse<List<Juego>>juegoApiResponse=new ApiResponse<>(juegos);
             log.info("JuegoController::getJuegos response{}", ValueMapper.jsonAsString(juegoApiResponse));
-            return new ResponseEntity<>(juegoApiResponse, HttpStatus.OK);
+            return new ResponseEntity<>(juegoApiResponse, HttpStatus.CREATED);
         }
         log.info("ProductController::getJuegos - No se encontraron juegos, returning NO_CONTENT.");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
