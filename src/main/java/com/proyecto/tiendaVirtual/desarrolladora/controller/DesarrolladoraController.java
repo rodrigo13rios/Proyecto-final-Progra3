@@ -17,12 +17,12 @@ public class DesarrolladoraController {
     @Autowired
     private DesarrolladoraService service;
 
-    @GetMapping
+    @GetMapping("/get")
     public List<Desarrolladora> getAll() {
         return service.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Desarrolladora> create(@RequestBody Desarrolladora desarrolladora) {
         Desarrolladora result = service.create(desarrolladora);
         return new ResponseEntity<>(result, HttpStatus.CREATED);

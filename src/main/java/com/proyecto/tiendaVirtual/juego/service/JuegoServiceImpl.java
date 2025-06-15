@@ -18,11 +18,11 @@ public class JuegoServiceImpl implements JuegoService{
         this.repo = repo;
     }
 
-    //TOdO ver si es mejor verificar por nombre del juego que por el ID
     @Override
     public void create(Juego juego) throws ElementoYaExistenteException {
 
-        if (repo.existsById(juego.getId())){
+        Optional<Juego>findJuego=repo.findByNombre(juego.getNombre());
+        if (findJuego.isPresent()){
             throw new ElementoYaExistenteException("El juego ya se encuentra cargado");
         }
         repo.save(juego);
@@ -63,11 +63,14 @@ public class JuegoServiceImpl implements JuegoService{
 
     //TODO: revisar actualizacion, quiza habra que agregar DTO
     @Override
-    public void update(Long id, Juego updateJuego) throws ElementoNoEncontradoException {
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-            repo.save(updateJuego);
-        }else throw new ElementoNoEncontradoException("El juego no se encuentra cargado");
+    public Juego update(Long id, Juego updateJuego) throws ElementoNoEncontradoException {
+        return repo.findById(id).map(existing ->{
+                    existing.setNombre(updateJuego.getNombre());
+                    existing.setPrecio(updateJuego.getPrecio());
+                    existing.setCategoria(updateJuego.getCategoria());
+                    existing.setDesarrolladora(updateJuego.getDesarrolladora());
+                    return repo.save(existing);
+                }).orElseThrow(()->new ElementoNoEncontradoException("No se encontro un juego con ID:"+id));
     }
 
     @Override

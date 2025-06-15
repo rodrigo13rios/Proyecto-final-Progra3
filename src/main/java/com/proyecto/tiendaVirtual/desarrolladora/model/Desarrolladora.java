@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.desarrolladora.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class Desarrolladora {
     private String paisOrigen;
 
     @OneToMany(mappedBy = "desarrolladora")
+    @JsonIgnore
     private List<Juego> juegos = new ArrayList<>();
 
 }
