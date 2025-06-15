@@ -15,6 +15,6 @@ public interface JuegoService {
     Optional<Juego> findByName(String nombre) throws ElementoNoEncontradoException;
     List<Juego> getByCategoria(Categoria categoria);
     List<Juego> getAll();
-    void update(Long id, Juego updateJuego) throws ElementoNoEncontradoException;
+    Juego update(Long id, Juego updateJuego) throws ElementoNoEncontradoException;
     void delete(Long id) throws ElementoNoEncontradoException;
 }
