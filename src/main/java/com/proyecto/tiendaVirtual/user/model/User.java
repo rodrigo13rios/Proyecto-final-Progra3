@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "users")
 @Data
@@ -23,7 +20,6 @@ public class User {
     private String email;
     private String password;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "id_perfil")
     private Perfil perfil;
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private Desarrolladora desarrolladora;

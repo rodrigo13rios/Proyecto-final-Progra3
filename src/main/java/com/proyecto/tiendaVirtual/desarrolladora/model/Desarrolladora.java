@@ -2,6 +2,7 @@ package com.proyecto.tiendaVirtual.desarrolladora.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
+import com.proyecto.tiendaVirtual.user.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,4 +33,7 @@ public class Desarrolladora {
     @JsonIgnore
     private List<Juego> juegos = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 }
