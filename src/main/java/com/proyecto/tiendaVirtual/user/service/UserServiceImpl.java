@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
 
     public User createUser(UserDTO dto){
-        if(repo.existByEmail(dto.getEmail()))throw new ElementoYaExistenteException("Ya se encuentra un usuario con el email "+dto.getEmail()+" cargado");
+        if(repo.existsByEmail(dto.getEmail()))throw new ElementoYaExistenteException("Ya se encuentra un usuario con el email "+dto.getEmail()+" cargado");
         User user;
         if (dto.getRole().equals(Role.PERFIL)){
            user = createUserPerfil(dto);
