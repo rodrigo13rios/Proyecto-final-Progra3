@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface CompraRepository extends JpaRepository<Compra,Long> {
-    List<Compra> findByCliente_nickName(String nickName);
+    List<Compra> findByCliente_Email(String email);
 }

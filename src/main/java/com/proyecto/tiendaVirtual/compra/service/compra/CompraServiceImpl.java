@@ -11,6 +11,8 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.NumeroInvalidoException;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
+import com.proyecto.tiendaVirtual.user.model.User;
+import com.proyecto.tiendaVirtual.user.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,7 +31,7 @@ public class CompraServiceImpl implements CompraService{
     @Autowired
     CompraRepository compraRepository;
     @Autowired
-    PerfilService perfilService;
+    UserService userService;
     @Autowired
     CarroDeCompraService carroService;
     @Autowired
@@ -37,18 +39,18 @@ public class CompraServiceImpl implements CompraService{
     @Autowired
     BilleteraService billeteraService;
 
-    public List<Compra> getCompraByCliente(String nickName){
-        return this.compraRepository.findByCliente_nickName(nickName);
+    public List<Compra> getCompraByCliente(String email){
+        return this.compraRepository.findByCliente_Email(email);
     }
 
     @Transactional
-    public void createCompra(String nickName)throws ElementoNoEncontradoException{
-        Optional<Perfil> clienteOptional= this.perfilService.getByNickName(nickName);
+    public void createCompra(String email)throws ElementoNoEncontradoException{
+        Optional<User> clienteOptional= this.userService.getByEmail(email);
         if (clienteOptional.isEmpty()){
-            throw new ElementoNoEncontradoException("No se encontro un perfil con el nickname:"+nickName);
+            throw new ElementoNoEncontradoException("No se encontro un perfil con el nickname:"+email);
         }
-        Perfil cliente=clienteOptional.get();
-        List<CarroDeCompras>carroDeComprasList=this.carroService.getCarroByCliente_nickName(cliente.getNickName());
+        User cliente=clienteOptional.get();
+        List<CarroDeCompras>carroDeComprasList=this.carroService.getCarroByCliente_Email(cliente.getEmail());
 
         DecimalFormat decimalFormat=new DecimalFormat("0.00",new DecimalFormatSymbols(Locale.US));// Formatea para no pasarse de decimales. LocalUs es para no generar problema con el "."
         decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
@@ -62,7 +64,7 @@ public class CompraServiceImpl implements CompraService{
 
         Compra compra=new Compra(Double.parseDouble(decimalFormat.format(total)), LocalDate.now(),cliente);
 
-        billeteraService.descontarSaldo(total,cliente.getId());
+        billeteraService.descontarSaldo(total,cliente.getPerfil().getId());
         Compra compraSave=this.compraRepository.save(compra);
 
         for (CarroDeCompras carroDeCompras : carroDeComprasList) {

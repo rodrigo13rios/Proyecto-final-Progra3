@@ -27,7 +27,7 @@ public class Compra {
     private LocalDate fecha;
 
     @ManyToOne(optional=false, cascade=CascadeType.DETACH, fetch = FetchType.EAGER)// No se si usar EAGER o LAZY
-    private Perfil cliente;
+    private User cliente;
 
     @Min(value =0, message = "La cantidad unitaria no puede ser menor a 0")
     @Max(value = 999999999, message = "el valor no puede ser mayor a 999999999")
@@ -35,7 +35,7 @@ public class Compra {
     private double total;
 
 
-    public Compra(double total, LocalDate date, Perfil cliente) {
+    public Compra(double total, LocalDate date, User cliente) {
         this.total=total;
         this.fecha=date;
         this.cliente=cliente;

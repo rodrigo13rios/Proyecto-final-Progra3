@@ -8,8 +8,8 @@ import java.util.List;
 
 @Service
 public interface CompraService {
-    void createCompra(String nickName);
-    List<Compra> getCompraByCliente(String nickName);
+    void createCompra(String email);
+    List<Compra> getCompraByCliente(String email);
 
 
 

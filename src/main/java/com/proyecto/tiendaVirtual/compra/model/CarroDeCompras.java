@@ -1,7 +1,7 @@
 package com.proyecto.tiendaVirtual.compra.model;
 
 import com.proyecto.tiendaVirtual.juego.model.Juego;
-import com.proyecto.tiendaVirtual.perfil.model.Perfil;
+import com.proyecto.tiendaVirtual.user.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -21,7 +21,7 @@ public class CarroDeCompras {
     private Long id;
 
     @ManyToOne(optional=false, cascade = CascadeType.DETACH, fetch=FetchType.EAGER)
-    private Perfil cliente;
+    private User cliente;
 
     @NotNull
     @ManyToOne(optional=false, cascade = CascadeType.DETACH, fetch=FetchType.EAGER)

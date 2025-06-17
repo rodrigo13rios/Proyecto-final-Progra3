@@ -1,8 +1,9 @@
 package com.proyecto.tiendaVirtual.compra.controller;
 
+import com.proyecto.tiendaVirtual.compra.dto.CarroDeComprasDTO;
 import com.proyecto.tiendaVirtual.compra.model.CarroDeCompras;
 import com.proyecto.tiendaVirtual.compra.service.carritodecompra.CarroDeCompraService;
-import com.proyecto.tiendaVirtual.configuration.MyUserDetails;
+import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.ApiResponse;
 import com.proyecto.tiendaVirtual.utils.ValueMapper;
 import jakarta.validation.Valid;
@@ -11,13 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @Slf4j
 @RestController
-@RequestMapping("/shopingList")
+@RequestMapping("/api/shopingList")
 public class CarroDeCompraController {
 
     @Autowired
@@ -26,9 +28,9 @@ public class CarroDeCompraController {
 
     @GetMapping("/get")
     public ResponseEntity<ApiResponse> getListByCliente(){
-        MyUserDetails userDetails=(MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String nickName= userDetails.getNickname();
-        List<CarroDeCompras> list=service.getCarroByCliente_nickName(nickName);
+        UserDetails userDetails=(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email= userDetails.getUsername();
+        List<CarroDeCompras> list=service.getCarroByCliente_Email(email);
         if (list.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -46,9 +48,10 @@ public class CarroDeCompraController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse>addJuegoAlCarro(@RequestBody @Valid CarroDeCompras carroDeCompras, BindingResult bindingResult){
-        log.info("CarroDeComprasController::addProductToCart petición: {}", ValueMapper.jsonAsString(carroDeCompras));
-
+    public ResponseEntity<ApiResponse>addJuegoAlCarro(@RequestBody @Valid CarroDeComprasDTO dto, BindingResult bindingResult){
+        log.info("CarroDeComprasController::addProductToCart petición: {}", ValueMapper.jsonAsString(dto));
+        UserDetails userDetails=(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email= userDetails.getUsername();
         if (bindingResult.hasErrors()){
 
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
@@ -56,7 +59,8 @@ public class CarroDeCompraController {
             ApiResponse<String>error=new ApiResponse<>(errorMessage);
             return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
         }
-        service.addJuego(carroDeCompras);
+
+        CarroDeCompras carroDeCompras=service.addJuego(dto,email);
         ApiResponse<CarroDeCompras> apiResponse=new ApiResponse<>(carroDeCompras);
         return new ResponseEntity(apiResponse,HttpStatus.OK);
     }
