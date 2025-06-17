@@ -117,10 +117,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void delete(Long id) {
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-        }else throw new ElementoNoEncontradoException("User con ID "+id+" no fue encontrado");
+    public void delete() {
+        //El Delete se realiza sobre el User logeado de quien hace la peticion. Haciendo así que solo pueda borrar su propio User.
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User existente = repo.findByEmail(email)
+                .orElseThrow(() -> new ElementoNoEncontradoException("No se ha podido obtener el usuario logeado"));
+
+        repo.delete(existente);
     }
 
     @Override
