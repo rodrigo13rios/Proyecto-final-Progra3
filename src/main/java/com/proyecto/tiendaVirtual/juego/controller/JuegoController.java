@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,7 @@ public class JuegoController {
 
     // toDO: Fecha de lanzamiento ingresa la fecha en la cual se crea. Se deberia poder ingresar la fecha que el usuario quiera y validarlo.
     @PostMapping("/create")
+    @PreAuthorize("hasRole('DESARROLLADORA')")
     public ResponseEntity<ApiResponse> createNewJuego(@RequestBody @Valid Juego juegoNuevo){
         log.info("JuegoController::createNewJuego peticion{}",ValueMapper.jsonAsString(juegoNuevo));
         juegoNuevo.setFechaLanzamiento(LocalDate.now());
@@ -54,6 +56,7 @@ public class JuegoController {
     }
 
     @PutMapping("/update/{id_juego}")
+    @PreAuthorize("hasRole('DESARROLLADORA')")
     public ResponseEntity<ApiResponse>updateJuego(@Valid @PathVariable Long id_juego,@RequestBody Juego juegoUpdate){
         log.info("JuegoController::updateJuego response {}",ValueMapper.jsonAsString(id_juego));
         Juego juegoNuevo=juegoService.update(id_juego,juegoUpdate);
@@ -65,6 +68,7 @@ public class JuegoController {
     }
 
     @DeleteMapping("/delete/{id_juego}")
+    @PreAuthorize("hasRole('DESARROLLADORA')")
     public ResponseEntity<ApiResponse>deleteJuego(@PathVariable Long id_juego){
         log.info("JuegoController::deleteJuego peticion iniciada con el id:{}", ValueMapper.jsonAsString(id_juego));
         Optional<Juego> juego=juegoService.findById(id_juego);

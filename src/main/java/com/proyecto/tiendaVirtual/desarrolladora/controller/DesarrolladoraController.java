@@ -18,13 +18,17 @@ public class DesarrolladoraController {
     /// No POST: Desarrolladora se crea desde User
 
 //    Get ALL
-    @GetMapping
+
+    @GetMapping("/get")
+
     public List<Desarrolladora> getAll() {
         return service.getAll();
     }
 
 //    Get By ID
-    @GetMapping("/{id}")
+
+    @GetMapping("/getById/{id}")
+
     public ResponseEntity<Desarrolladora> getById(@PathVariable Long id) {
         Desarrolladora desarrolladora = service.findById(id)
                 .orElseThrow(() -> new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese ID"));
@@ -32,14 +36,18 @@ public class DesarrolladoraController {
     }
 
 //    Update
-    @PutMapping("/{id}")
+
+    @PutMapping("/update/{id}")
+
     public ResponseEntity<Desarrolladora> update(@PathVariable Long id, @RequestBody Desarrolladora desarrolladora) {
         Desarrolladora result = service.update(id,desarrolladora);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 //    Delete
-    @DeleteMapping("/{id}")
+
+    @DeleteMapping("/delete/{id}")
+
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
