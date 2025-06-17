@@ -23,11 +23,11 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
+        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authBuilder
                 .userDetailsService(userService)
-                .passwordEncoder(passwordEncoder)
-                .and()
-                .build();
+                .passwordEncoder(passwordEncoder);
+        return authBuilder.build();
     }
 
     @Bean
