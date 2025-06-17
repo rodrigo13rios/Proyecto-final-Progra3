@@ -136,6 +136,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
+        dto.setNombre(user.getNombre());
+        dto.setApellido(user.getApellido());
 
         if (user.getPerfil()!=null){
             dto.setNickName(user.getPerfil().getNickName());

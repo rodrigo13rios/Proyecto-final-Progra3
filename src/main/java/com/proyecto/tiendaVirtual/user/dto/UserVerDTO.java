@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 public class UserVerDTO {
     private Long id;
     private String email;
+    private String nombre;
+    private String apellido;
     private Role role;
     private String nickName;
     private String nombreDesarrolladora;
