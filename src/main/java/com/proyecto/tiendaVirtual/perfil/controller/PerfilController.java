@@ -24,7 +24,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/perfil")
-@PreAuthorize("hasRole('PERFIL')")
 public class PerfilController {
     @Autowired
     private PerfilService service;
