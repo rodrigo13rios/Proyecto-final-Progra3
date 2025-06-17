@@ -35,27 +35,28 @@ public class SecurityConfig {
         return http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-                        //Testeo
                         .requestMatchers("/api/test/**").authenticated()
-
-                        //User
-                        .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
-
-                        //Desarrolladora
-                        .requestMatchers(HttpMethod.GET,"/api/desarrolladora/**").authenticated() //Se permite cualquier GET
-                        .requestMatchers("/api/desarrolladora/**").hasRole("DESARROLLADORA") //Otros métodos POST/PUT/DEL requieren el Rol
-
-                        //Perfil
-                        .requestMatchers(HttpMethod.GET,"/api/perfil/**").authenticated() //Se permite cualquier GET
-                        .requestMatchers("/api/perfil/**").hasRole("PERFIL") //Otros métodos POST/PUT/DEL requieren el Rol
-
-                        //Billetera
-                        .requestMatchers("/api/billetera/**").hasRole("PERFIL")
-
-                        //Otras Rutas
+                        .requestMatchers(HttpMethod.POST,"/api/users/create")
+                        .permitAll()
+                        .requestMatchers("/api/users/**")
+                        .authenticated()
+                        .requestMatchers("/api/juego/get",
+                                "/api/juego/buscarPorId"
+                                ,"/api/juego/buscarPorNombre")
+                        .permitAll()
+                        .requestMatchers("/api/juegos/create",
+                                "/api/juegos/update",
+                                "/api/juegos/delete")
+                        .hasRole("DESARROLLADORA")
+                        .requestMatchers("/api/perfil/**")
+                        .hasRole("PERFIL")
+                        .requestMatchers("/api/billetera/**")
+                        .hasRole("PERFIL")
+                        .requestMatchers("/api/desarrolladora/**")
+                        .hasRole("DESARROLLADORA")
                         .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults())
+
+                ).httpBasic(Customizer.withDefaults())
                 .build();
     }
 }
