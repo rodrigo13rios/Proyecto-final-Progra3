@@ -4,7 +4,10 @@ import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraRepository;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.user.model.User;
+import com.proyecto.tiendaVirtual.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +17,8 @@ import java.util.Optional;
 public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     @Autowired
     private DesarrolladoraRepository repo;
+    @Autowired
+    private UserRepository userRepo;
 
 
     @Override
@@ -42,10 +47,18 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     }
 
     @Override
-    public Desarrolladora update(Long id, Desarrolladora nuevo) {
-        // Buscar la desarrolladora existente por ID
-        Desarrolladora existente = repo.findById(id)
-                .orElseThrow(() -> new ElementoNoEncontradoException("Desarrolladora con ID " + id + " no encontrada"));
+    public Desarrolladora update(Desarrolladora nuevo) {
+        //El Update se realiza sobre la Desarrolladora del User logeado que hace la peticion. Haciendo así que solo pueda editar su propia Desarrolladora.
+        //Obtengo el User
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User logedUser = userRepo.findByEmail(email)
+                .orElseThrow(() -> new ElementoNoEncontradoException("No se ha podido obtener el usuario logeado"));
+
+        //Obtengo la desarrolladora desde el User
+        Desarrolladora existente = logedUser.getDesarrolladora();
+        if (existente == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Desarrolladora del User logeado");
+        }
 
         // Actualizar campos
         if (nuevo.getNombre() != null) {
