@@ -35,12 +35,15 @@ public class SecurityConfig {
         return http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-
+                        //Testeo
                         .requestMatchers("/api/test/**").hasRole("PERFIL")
+
 
                         //User
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
+
                         .requestMatchers(HttpMethod.PUT,"/api/users").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/users").authenticated()
 
 
 
