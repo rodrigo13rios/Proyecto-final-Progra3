@@ -40,7 +40,7 @@ public class DesarrolladoraController {
 
 //    Delete
     @DeleteMapping
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public void delete() {
+        service.delete();
     }
 }

@@ -13,6 +13,7 @@ import com.proyecto.tiendaVirtual.user.dto.UserVerDTO;
 import com.proyecto.tiendaVirtual.user.model.Role;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
+import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,6 +38,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     DesarrolladoraService desarrolladoraService;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    SecurityUtils securityUtils;
 
 
     @Override
@@ -105,10 +108,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User update(UserUpdateDTO nuevo) {
         //El Update se realiza sobre el User logeado de quien hace la peticion. Haciendo así que solo pueda editar su propio User.
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User existente = repo.findByEmail(email)
-                .orElseThrow(() -> new ElementoNoEncontradoException("No se ha podido obtener el usuario logeado"));
-
+        User existente = securityUtils.getLoggedUser();
 
         if (nuevo.getNombre()!=null) existente.setNombre(nuevo.getNombre().toUpperCase());
         if (nuevo.getApellido()!=null) existente.setApellido(nuevo.getApellido().toUpperCase());
@@ -119,10 +119,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void delete() {
         //El Delete se realiza sobre el User logeado de quien hace la peticion. Haciendo así que solo pueda borrar su propio User.
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User existente = repo.findByEmail(email)
-                .orElseThrow(() -> new ElementoNoEncontradoException("No se ha podido obtener el usuario logeado"));
-
+        User existente = securityUtils.getLoggedUser();
         repo.delete(existente);
     }
 
