@@ -22,6 +22,5 @@ public interface PerfilService {
     Perfil update(Long id, PerfilDTO nuevo);
     void delete(Long id);
     List<Juego> obtenerJuegos(Long id);
-    void agregarJuego(Long id,Long juedoId);
-    String generarNickName(UserDTO dto);
+    void agregarJuego(Long id,Long juegoId);
 }

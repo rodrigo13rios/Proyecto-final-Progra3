@@ -35,10 +35,6 @@ public class PerfilServiceImpl implements PerfilService {
         return repo.save(perfil);
     }
 
-    public String generarNickName(UserDTO user){
-        return user.getNombre().toLowerCase()+"."+user.getApellido().toLowerCase()+new Random().nextInt(1000);
-    }
-
     @Override
     public List<Perfil> getAll() {
         return repo.findAll();
@@ -46,17 +42,12 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Override
     public Optional<Perfil> getById(Long id) {
-        Optional<Perfil> optional = repo.findById(id);
-        if (optional.isEmpty())throw new ElementoNoEncontradoException("Perfil con ID "+id+" no fue encontrado");
-        return optional;
+        return repo.findById(id);
     }
 
     @Override
     public Optional<Perfil> getByNickName(String nickName) {
-        Optional<Perfil> optional = repo.findByNickName(nickName);
-
-        if (optional.isEmpty()) throw new ElementoNoEncontradoException("No se encontro un perfil con el NickName indicado");
-        return optional;
+        return repo.findByNickName(nickName);
     }
 
     @Override
@@ -79,20 +70,16 @@ public class PerfilServiceImpl implements PerfilService {
         perfil.getJuegos().add(juego);
         repo.save(perfil);
     }
+
     @Override
     public Perfil update(Long id, PerfilDTO nuevo) {
-
         Perfil existente = repo.findById(id).orElseThrow(()-> new ElementoNoEncontradoException("Perfil con ID "+id+" no encontrado"));
         if (nuevo.getNickName()!=null){
-
-        if (!existente.getNickName().equals(nuevo.getNickName()) && repo.existsByNickName(nuevo.getNickName())) {
-            throw new ElementoYaExistenteException("Ya existe un perfil con el nickName "+nuevo.getNickName());
-        }
-
+            if (!existente.getNickName().equals(nuevo.getNickName()) && repo.existsByNickName(nuevo.getNickName())) {
+                throw new ElementoYaExistenteException("Ya existe un perfil con el nickName "+nuevo.getNickName());
+            }
             existente.setNickName(nuevo.getNickName());
         }
-
-
         return repo.save(existente);
     }
 

@@ -15,6 +15,8 @@ public class DesarrolladoraController {
     @Autowired
     private DesarrolladoraService service;
 
+    /// No POST: Desarrolladora se crea desde User
+
 //    Get ALL
     @GetMapping
     public List<Desarrolladora> getAll() {
@@ -27,13 +29,6 @@ public class DesarrolladoraController {
         Desarrolladora desarrolladora = service.findById(id)
                 .orElseThrow(() -> new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese ID"));
         return ResponseEntity.ok(desarrolladora);
-    }
-
-//    Create
-    @PostMapping
-    public ResponseEntity<Desarrolladora> create(@RequestBody Desarrolladora desarrolladora) {
-        Desarrolladora result = service.create(desarrolladora);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
 //    Update

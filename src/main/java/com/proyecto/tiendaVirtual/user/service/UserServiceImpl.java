@@ -5,7 +5,6 @@ import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
-import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import com.proyecto.tiendaVirtual.user.dto.UserDTO;
 import com.proyecto.tiendaVirtual.user.dto.UserUpdateDTO;

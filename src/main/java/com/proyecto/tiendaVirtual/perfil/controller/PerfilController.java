@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.perfil.controller;
 
+import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/perfil")
@@ -19,12 +19,24 @@ public class PerfilController {
     @Autowired
     private PerfilService service;
 
+    /// No POST: Perfil se crea desde User
+
+//    Get ALL
     @GetMapping
     public ResponseEntity<List<Perfil>> getAll(){
         List<Perfil> perfiles = service.getAll();
         return ResponseEntity.ok(perfiles);
     }
 
+//    Get By ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Perfil> getById(@PathVariable Long id) {
+        Perfil desarrolladora = service.getById(id)
+                .orElseThrow(() -> new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese ID"));
+        return ResponseEntity.ok(desarrolladora);
+    }
+
+//    Get By Nickname
     @GetMapping("/{nickName}/nickName")
     public ResponseEntity<Perfil> getByNickName(@PathVariable String nickName){
         Perfil optional = service.getByNickName(nickName)
@@ -32,24 +44,21 @@ public class PerfilController {
         return ResponseEntity.ok(optional);
     }
 
+//    Get Juegos By Perfil_ID
     @GetMapping("/{id}/juegos")
     public ResponseEntity<List<Juego>> obtenerJuegos(@PathVariable Long id){
         List<Juego> juegos = service.obtenerJuegos(id);
         return ResponseEntity.ok(juegos);
     }
 
-//    @PostMapping
-//    public ResponseEntity<Perfil> create(@RequestBody PerfilDTO dto){
-//        Perfil result = service.create(dto);
-//        return new ResponseEntity<>(result, HttpStatus.CREATED);
-//    }
-
+//    Update
     @PutMapping("/{id}")
     public ResponseEntity<Perfil> update(@PathVariable Long id, @RequestBody PerfilDTO perfil){
         Perfil result = service.update(id, perfil);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+//    Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable Long id){
         service.delete(id);
