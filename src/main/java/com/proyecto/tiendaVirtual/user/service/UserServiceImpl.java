@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,53 +37,57 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     PasswordEncoder passwordEncoder;
 
 
-    public User createUser(UserDTO dto){
-        if(repo.existByEmail(dto.getEmail()))throw new ElementoYaExistenteException("Ya se encuentra un usuario con el email "+dto.getEmail()+" cargado");
-        User user;
-        if (dto.getRole().equals(Role.PERFIL)){
-           user = createUserPerfil(dto);
-        }else {
-           user = createUserDesarrolladora(dto);
-        }
-        return user;
-    }
     @Override
-    public User createUserPerfil(UserDTO dto) {
-
-
-        Perfil perfil = perfilService.create(dto);
-
-        User user = new User();
-        user.setNombre(dto.getNombre());
-        user.setApellido(dto.getApellido());
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(dto.getRole());
-        user.setPerfil(perfil);
-
-
-        perfil.setUser(user);
-
-        return repo.save(user);
-    }
-
-    public User createUserDesarrolladora(UserDTO dto){
-        //cambiar en otra rama Desarrolladora desarrolladora = desarrolladoraService.create(dto);
-        Desarrolladora desarrolladora = new Desarrolladora();
-        desarrolladora.setNombre(dto.getNombreDesarrolladora());
-        desarrolladora.setPaisOrigen(dto.getPaisOrigen());
-
+    @Transactional
+    public User createUser(UserDTO userDTO) {
+        if (getByEmail(userDTO.getEmail()).isPresent()) {
+            throw new ElementoYaExistenteException("Ya existe un usuario con ese email");
+        }
 
         User user = new User();
-        user.setNombre(dto.getNombre());
-        user.setApellido(dto.getApellido());
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(dto.getRole());
-        user.setDesarrolladora(desarrolladora);
+        user.setNombre(userDTO.getNombre());
+        user.setApellido(userDTO.getApellido());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setRole(userDTO.getRole());
 
-        return repo.save(user);
+        // 🔁 Guardar primero el usuario para que tenga ID
+        User result = repo.save(user);
+
+        // Si el usuario es una desarrolladora
+        if (result.getRole().equals(Role.DESARROLLADORA)) {
+            Desarrolladora desarrolladora = new Desarrolladora();
+            desarrolladora.setNombre(userDTO.getNombreDesarrolladora());
+            desarrolladora.setPaisOrigen(userDTO.getPaisOrigen());
+            desarrolladora.setUser(result);
+            //Guardo la Desarrolladora
+            Desarrolladora desResult = desarrolladoraService.create(desarrolladora);
+
+            // Guardo nuevamente el usuario ahora con su Desarrolladora almacenada.
+            result.setDesarrolladora(desResult);
+            repo.save(result);
+        }
+
+        // Si el usuario es un perfil común
+        else if (result.getRole().equals(Role.PERFIL)) {
+            Perfil perfil = new Perfil();
+            perfil.setNickName(userDTO.getNickname());
+            perfil.setUser(result);
+            //Inicializo y Guardo el Perfil
+            Perfil perResult = perfilService.create(perfil); // <- Esta función también crea dependencias necesarias de Perfil (como Billetera)
+
+            // Guardo nuevamente el usuario ahora con su Perfil almacenado.
+            result.setPerfil(perResult);
+            repo.save(result);
+        }
+
+        else {//Si el rol ingresado no existe
+            throw new RuntimeException("El rol no existe");
+        }
+
+        return result;
     }
+
     @Override
     public List<UserVerDTO> getAll() {
         return repo.findAll().stream().map(this::convertirAVerDTO).toList();
@@ -90,9 +95,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Optional<User> getById(Long id) {
-        Optional<User> optional = repo.findById(id);
-        if (optional.isEmpty())throw new ElementoNoEncontradoException("User con el ID "+ id +" no fue encontrado");
-        return optional;
+        return repo.findById(id);
     }
 
     @Override
@@ -116,9 +119,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Optional<User> getByEmail(String email) {
-        Optional<User> optional = repo.findByEmail(email);
-        if (optional.isEmpty())throw new ElementoNoEncontradoException("User con email "+email+" no fue encontrado");
-        return optional;
+        return repo.findByEmail(email);
     }
 
     public UserVerDTO convertirAVerDTO(User user){

@@ -20,38 +20,44 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    @PostMapping("/create")
+//    Create
+    @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO){
         User result = service.createUser(userDTO);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+//    Get ALL
     @GetMapping("/get")
     public ResponseEntity<List<UserVerDTO>> getAll(){
         List<UserVerDTO> users = service.getAll();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/buscarPorId/{id}")
+//    Get By ID
+    @GetMapping("/getById/{id}")
     public ResponseEntity<UserVerDTO> getById(@PathVariable Long id){
         User optional = service.getById(id).orElseThrow(()-> new ElementoNoEncontradoException("No se encontro el perfil"));
         UserVerDTO userVerDTO = service.convertirAVerDTO(optional);
         return ResponseEntity.ok(userVerDTO);
     }
 
-    @GetMapping("/buscarPorEmail/{id}")
+//    Get By Email
+    @GetMapping("/getByEmail/{id}")
     public ResponseEntity<UserVerDTO> getByEmail(@PathVariable String email){
         User optional = service.getByEmail(email).orElseThrow(()-> new ElementoNoEncontradoException("No se encontro el perfil"));
         UserVerDTO userVerDTO = service.convertirAVerDTO(optional);
         return ResponseEntity.ok(userVerDTO);
     }
 
+//    Update
     @PutMapping("/update/{id}")
     public ResponseEntity<UserVerDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO nuevo){
         User actualizado = service.update(id,nuevo);
         return ResponseEntity.ok(service.convertirAVerDTO(actualizado));
     }
 
+//    Delete
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);

@@ -25,20 +25,18 @@ public class BilleteraController {
     @Autowired
     PerfilService perfilService;
 
-    @PostMapping
-    public ResponseEntity<Billetera> create(@RequestBody Billetera billetera){
-        Billetera result = service.create(billetera);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
+    /// No POST: Billetera se crea desde Perfil
 
     @GetMapping("/controlarSaldo/{perfilId}")
     public ResponseEntity<Map> consultarSaldo (@PathVariable Long perfilId){
+        validarPropietario(perfilId);
         double saldo = service.consultarSaldo(perfilId);
         return ResponseEntity.ok(Map.of("Saldo",saldo));
     }
 
     @PutMapping("/recargar/{perfilId}")
     public ResponseEntity<String> recargarSaldo(@PathVariable Long perfilId, @RequestBody double carga){
+        validarPropietario(perfilId);
         service.cargarSaldo(carga,perfilId);
         return ResponseEntity.ok("Recarga Exitosa");
     }

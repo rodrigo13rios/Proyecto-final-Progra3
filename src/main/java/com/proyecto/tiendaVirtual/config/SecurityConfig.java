@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/billetera/**")
                                         .hasRole("PERFIL")
                         .requestMatchers("/api/desarrolladora/**")
-                                        .hasRole("Desarrolladora")
+                                        .hasRole("DESARROLLADORA")
                         .anyRequest().authenticated()
 
                 ).build();
