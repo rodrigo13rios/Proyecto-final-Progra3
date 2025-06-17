@@ -87,8 +87,14 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
-    public Perfil update(Long id, PerfilDTO nuevo) {
-        Perfil existente = repo.findById(id).orElseThrow(()-> new ElementoNoEncontradoException("Perfil con ID "+id+" no encontrado"));
+    public Perfil update(PerfilDTO nuevo) {
+        //Obtengo el Perfil
+        Perfil existente = securityUtils.getLoggedUser().getPerfil();
+        if (existente == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener el Perfil del User logeado");
+        }
+
+        //Validación del nuevo Nickname
         if (nuevo.getNickName()!=null){
             if (!existente.getNickName().equals(nuevo.getNickName()) && repo.existsByNickName(nuevo.getNickName())) {
                 throw new ElementoYaExistenteException("Ya existe un perfil con el nickName "+nuevo.getNickName());
