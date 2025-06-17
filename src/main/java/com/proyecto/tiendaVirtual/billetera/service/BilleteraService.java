@@ -1,6 +1,7 @@
 package com.proyecto.tiendaVirtual.billetera.service;
 
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
+import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import org.springframework.stereotype.Service;
 
 @Service

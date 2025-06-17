@@ -81,7 +81,6 @@ public class BilleteraServiceImpl implements BilleteraService{
 
     }
 
-
     @Override
     public void delete(Long id){
         if (repo.existsById(id))repo.deleteById(id);

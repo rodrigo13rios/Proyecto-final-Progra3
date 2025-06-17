@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.configuration;
 
+import com.proyecto.tiendaVirtual.exceptions.AccesoNegadoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.NumeroInvalidoException;
@@ -29,6 +30,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String,String>> catchNumeroInvalido(NumeroInvalidoException ex){
         Map<String, String> error = new HashMap<>();
         error.put("Error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+    @ExceptionHandler(AccesoNegadoException.class)
+    public ResponseEntity<Map<String,String>> catchAccesoNegado(AccesoNegadoException ex){
+        Map<String,String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
