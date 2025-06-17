@@ -22,5 +22,6 @@ public interface PerfilService {
     Perfil update(Long id, PerfilDTO nuevo);
     void delete(Long id);
     List<Juego> obtenerJuegos(Long id);
+    List<Juego> obtenerJuegos();
     void agregarJuego(Long id,Long juegoId);
 }
