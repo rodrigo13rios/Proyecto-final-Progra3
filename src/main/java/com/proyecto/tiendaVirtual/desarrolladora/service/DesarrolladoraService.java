@@ -15,5 +15,4 @@ public interface DesarrolladoraService {
     Optional<Desarrolladora> findByNombre(String nombre);
     List<Desarrolladora> getAll();
     Desarrolladora update(Desarrolladora updatedDesarrolladora);
-    void delete() throws ElementoNoEncontradoException;
 }

@@ -16,6 +16,7 @@ public class DesarrolladoraController {
     private DesarrolladoraService service;
 
     /// No POST: Desarrolladora se crea desde User
+    /// No DELETE: Desarrolladora se borra junto a User
 
 //    Get ALL
     @GetMapping
@@ -36,11 +37,5 @@ public class DesarrolladoraController {
     public ResponseEntity<Desarrolladora> update(@RequestBody Desarrolladora desarrolladora) {
         Desarrolladora result = service.update(desarrolladora);
         return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-//    Delete
-    @DeleteMapping
-    public void delete() {
-        service.delete();
     }
 }

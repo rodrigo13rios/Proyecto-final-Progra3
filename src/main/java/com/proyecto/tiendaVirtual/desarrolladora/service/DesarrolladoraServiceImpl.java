@@ -70,18 +70,4 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
         // Guardar y retornar
         return repo.save(existente);
     }
-
-
-    @Override
-    public void delete() throws ElementoNoEncontradoException {
-        User logedUser = securityUtils.getLoggedUser();
-
-        //Obtengo la desarrolladora desde el User
-        Desarrolladora existente = logedUser.getDesarrolladora();
-        if (existente == null) {
-            throw new ElementoNoEncontradoException("No se ha podido obtener la Desarrolladora del User logeado");
-        }
-
-        repo.delete(existente);
-    }
 }
