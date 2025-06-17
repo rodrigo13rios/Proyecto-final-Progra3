@@ -42,10 +42,9 @@ public class SecurityConfig {
                         //User
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
 
-                        .requestMatchers(HttpMethod.PUT,"/api/users").authenticated()
-                        .requestMatchers(HttpMethod.DELETE,"/api/users").authenticated()
-
-
+                        //Desarrolladora
+                        .requestMatchers(HttpMethod.GET,"/api/desarrolladora/**").authenticated() //Se permite cualquier GET
+                        .requestMatchers("/api/desarrolladora/**").hasRole("DESARROLLADORA") //Otros metodos POST/PUT/DEL requieren el Rol
 
                         .anyRequest().authenticated()
                 )
