@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.user.service;
 
+import com.proyecto.tiendaVirtual.config.PasswordConfig;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
@@ -13,19 +14,27 @@ import com.proyecto.tiendaVirtual.user.model.Role;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     UserRepository repo;
     @Autowired
     PerfilService perfilService;
     @Autowired
     DesarrolladoraService desarrolladoraService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -39,7 +48,9 @@ public class UserServiceImpl implements UserService {
         user.setNombre(userDTO.getNombre());
         user.setApellido(userDTO.getApellido());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
+
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
         user.setRole(userDTO.getRole());
 
         // 🔁 Guardar primero el usuario para que tenga ID
@@ -97,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
         if (nuevo.getNombre()!=null) existente.setNombre(nuevo.getNombre());
         if (nuevo.getApellido()!=null) existente.setApellido(nuevo.getApellido());
-        if (nuevo.getPassword()!=null) existente.setPassword(nuevo.getPassword());
+        if (nuevo.getPassword()!=null) existente.setPassword(passwordEncoder.encode(nuevo.getPassword()));
         return repo.save(existente);
     }
 
@@ -125,5 +136,25 @@ public class UserServiceImpl implements UserService {
             dto.setNombreDesarrolladora(user.getDesarrolladora().getNombre());
         }
         return dto;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> optional = repo.findByEmail(email);
+        User user = optional.orElseThrow(()-> new ElementoNoEncontradoException("El email no se encuentra registrado"));
+        if (user.getRole().equals(Role.DESARROLLADORA)){
+
+            return new org.springframework.security.core.userdetails.User(
+                    user.getEmail(),
+                    user.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_DESARROLLADORA"))
+            );
+        }
+        else return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_PERFIL"))
+        );
+
     }
 }
