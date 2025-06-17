@@ -15,13 +15,12 @@ import java.util.Optional;
 
 @Service
 public interface PerfilService {
-    Perfil create(UserDTO dto);
+    Perfil create(Perfil perfil);
     List<Perfil> getAll();
     Optional<Perfil> getById(Long id);
     Optional<Perfil> getByNickName(String nickName);
     Perfil update(Long id, PerfilDTO nuevo);
     void delete(Long id);
     List<Juego> obtenerJuegos(Long id);
-    void agregarJuego(Long id,Long juedoId);
-    String generarNickName(UserDTO dto);
+    void agregarJuego(Long id,Long juegoId);
 }

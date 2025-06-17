@@ -20,18 +20,21 @@ public class UserController {
     @Autowired
     private UserService service;
 
+//    Create
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO){
         User result = service.createUser(userDTO);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+//    Get ALL
     @GetMapping
     public ResponseEntity<List<UserVerDTO>> getAll(){
         List<UserVerDTO> users = service.getAll();
         return ResponseEntity.ok(users);
     }
 
+//    Get By ID
     @GetMapping("/{id}")
     public ResponseEntity<UserVerDTO> getById(@PathVariable Long id){
         User optional = service.getById(id).orElseThrow(()-> new ElementoNoEncontradoException("No se encontro el perfil"));
@@ -39,6 +42,7 @@ public class UserController {
         return ResponseEntity.ok(userVerDTO);
     }
 
+//    Get By Email
     @GetMapping("/{id}/email")
     public ResponseEntity<UserVerDTO> getByEmail(@PathVariable String email){
         User optional = service.getByEmail(email).orElseThrow(()-> new ElementoNoEncontradoException("No se encontro el perfil"));
@@ -46,12 +50,14 @@ public class UserController {
         return ResponseEntity.ok(userVerDTO);
     }
 
+//    Update
     @PutMapping("/{id}")
     public ResponseEntity<UserVerDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO nuevo){
         User actualizado = service.update(id,nuevo);
         return ResponseEntity.ok(service.convertirAVerDTO(actualizado));
     }
 
+//    Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);

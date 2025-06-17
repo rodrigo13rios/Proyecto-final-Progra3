@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.perfil.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.user.model.User;
@@ -27,6 +28,7 @@ public class Perfil {
 
     @OneToOne
     @JoinColumn(name = "user_id",nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToMany

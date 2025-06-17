@@ -18,27 +18,22 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
     @Override
     public Desarrolladora create(Desarrolladora desarrolladora) throws ElementoYaExistenteException {
+        if (findByNombre(desarrolladora.getNombre()).isPresent()) {
+            throw new ElementoYaExistenteException("Ya existe una desarrolladora con ese nombre");
+        }
         return repo.save(desarrolladora);
     }
 
     @Override
-    public Optional<Desarrolladora> findById(Long id) throws ElementoNoEncontradoException {
-        Optional<Desarrolladora> desarrolladora = repo.findById(id);
-        if (desarrolladora.isEmpty()){
-            throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese ID");
-        }
-        return desarrolladora;
+    public Optional<Desarrolladora> findById(Long id) {
+        return repo.findById(id);
     }
 
 
     @Override
 
-    public Optional<Desarrolladora> findByNombre(String nombre) throws ElementoNoEncontradoException {
-        Optional<Desarrolladora> desarrolladora = repo.findByNombre(nombre);
-        if (desarrolladora.isEmpty()) {
-            throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese nombre");
-        }
-        return desarrolladora;
+    public Optional<Desarrolladora> findByNombre(String nombre){
+        return repo.findByNombre(nombre);
     }
 
     @Override
