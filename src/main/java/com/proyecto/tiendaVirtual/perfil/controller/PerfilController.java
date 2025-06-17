@@ -1,6 +1,10 @@
 package com.proyecto.tiendaVirtual.perfil.controller;
 
+
 import com.proyecto.tiendaVirtual.exceptions.AccesoNegadoException;
+
+import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
+
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
@@ -16,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/perfil")
@@ -35,7 +38,9 @@ public class PerfilController {
     }
 
 //    Get By ID
+
     @GetMapping("/obtenerPorId/{id}")
+
     public ResponseEntity<Perfil> getById(@PathVariable Long id) {
         Perfil desarrolladora = service.getById(id)
                 .orElseThrow(() -> new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese ID"));
@@ -43,7 +48,9 @@ public class PerfilController {
     }
 
 //    Get By Nickname
+
     @GetMapping("/obtenerPorNickName/{nickName}")
+
     public ResponseEntity<Perfil> getByNickName(@PathVariable String nickName){
         Perfil optional = service.getByNickName(nickName)
                         .orElseThrow(()-> new ElementoNoEncontradoException("No se encuentra un perfil con el nickName "+nickName));
@@ -51,14 +58,18 @@ public class PerfilController {
     }
 
 //    Get Juegos By Perfil_ID
+
     @GetMapping("/obtenerJuegos/{id}")
+
     public ResponseEntity<List<Juego>> obtenerJuegos(@PathVariable Long id){
         List<Juego> juegos = service.obtenerJuegos(id);
         return ResponseEntity.ok(juegos);
     }
 
 //    Update
+
     @PutMapping("/update/{id}")
+
     public ResponseEntity<Perfil> update(@PathVariable Long id, @RequestBody PerfilDTO perfil){
         validarPerfil(id);
         Perfil result = service.update(id, perfil);
@@ -66,7 +77,9 @@ public class PerfilController {
     }
 
 //    Delete
+
     @DeleteMapping("/delete/{id}")
+
     public ResponseEntity<Void> delete (@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();

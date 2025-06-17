@@ -48,7 +48,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setNombre(userDTO.getNombre());
         user.setApellido(userDTO.getApellido());
         user.setEmail(userDTO.getEmail());
+
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
         user.setRole(userDTO.getRole());
 
         // 🔁 Guardar primero el usuario para que tenga ID
