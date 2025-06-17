@@ -9,6 +9,8 @@ import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
 import com.proyecto.tiendaVirtual.user.dto.UserDTO;
+import com.proyecto.tiendaVirtual.user.model.User;
+import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class PerfilServiceImpl implements PerfilService {
     private PerfilRepository repo;
     @Autowired
     private JuegoService juegoService;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     @Override
     public Perfil create(Perfil perfil) throws ElementoYaExistenteException {
@@ -51,11 +55,22 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
-    public List<Juego> obtenerJuegos(Long id){
-        Perfil optional = repo.findById(id)
+    public List<Juego> obtenerJuegos(Long id){ //Obtener juegos a partil de un Perfil ID
+        Perfil perfil = repo.findById(id)
                         .orElseThrow(()-> new ElementoNoEncontradoException("Perfil con ID "+id+" no encontrado"));
-        return optional.getJuegos();
+        return perfil.getJuegos();
     }
+
+    @Override
+    public List<Juego> obtenerJuegos(){ //Obtener los juegos del usuario Logeado
+        Perfil perfil = securityUtils.getLoggedUser().getPerfil();
+        if (perfil == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener el Perfil del User logeado");
+        }
+        return perfil.getJuegos();
+    }
+
+
 
     @Override
     public void agregarJuego(Long id, Long juegoId){
