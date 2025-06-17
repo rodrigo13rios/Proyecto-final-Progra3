@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
                         //Testeo
-                        .requestMatchers("/api/test/**").hasRole("PERFIL")
+                        .requestMatchers("/api/test/**").authenticated()
 
 
                         //User
