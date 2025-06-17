@@ -32,7 +32,7 @@ public class PerfilController {
     /// No POST: Perfil se crea desde User
 
 //    Get ALL
-    @GetMapping
+    @GetMapping("/get")
     public ResponseEntity<List<Perfil>> getAll(){
         List<Perfil> perfiles = service.getAll();
         return ResponseEntity.ok(perfiles);

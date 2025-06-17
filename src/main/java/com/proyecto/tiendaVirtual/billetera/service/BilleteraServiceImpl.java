@@ -42,7 +42,7 @@ public class BilleteraServiceImpl implements BilleteraService{
     @Override
     public void descontarSaldo(double pago, Long perfilId) {
 
-        if (pago <0) throw new NumeroInvalidoException("El mondo del pago debe ser mayor o igual a cero");
+        if (pago <0) throw new NumeroInvalidoException("El monto del pago debe ser mayor o igual a cero");
 
         Optional<Perfil> perfil = perfilService.getById(perfilId);
 

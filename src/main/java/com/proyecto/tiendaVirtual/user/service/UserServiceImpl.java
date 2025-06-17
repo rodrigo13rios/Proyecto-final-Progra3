@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         User user = new User();
-        user.setNombre(userDTO.getNombre());
-        user.setApellido(userDTO.getApellido());
+        user.setNombre(userDTO.getNombre().toUpperCase());
+        user.setApellido(userDTO.getApellido().toUpperCase());
         user.setEmail(userDTO.getEmail());
 
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // Si el usuario es una desarrolladora
         if (result.getRole().equals(Role.DESARROLLADORA)) {
             Desarrolladora desarrolladora = new Desarrolladora();
-            desarrolladora.setNombre(userDTO.getNombreDesarrolladora());
+            desarrolladora.setNombre(userDTO.getNombreDesarrolladora().toUpperCase());
             desarrolladora.setPaisOrigen(userDTO.getPaisOrigen());
             desarrolladora.setUser(result);
             //Guardo la Desarrolladora
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // Si el usuario es un perfil común
         else if (result.getRole().equals(Role.PERFIL)) {
             Perfil perfil = new Perfil();
-            perfil.setNickName(userDTO.getNickname());
+            perfil.setNickName(userDTO.getNickname().toUpperCase());
             perfil.setUser(result);
             //Inicializo y Guardo el Perfil
             Perfil perResult = perfilService.create(perfil); // <- Esta función también crea dependencias necesarias de Perfil (como Billetera)
@@ -106,8 +106,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User existente = repo.findById(id)
                         .orElseThrow(()->new ElementoNoEncontradoException("User con ID "+id+" no fue encontrado"));
 
-        if (nuevo.getNombre()!=null) existente.setNombre(nuevo.getNombre());
-        if (nuevo.getApellido()!=null) existente.setApellido(nuevo.getApellido());
+        if (nuevo.getNombre()!=null) existente.setNombre(nuevo.getNombre().toUpperCase());
+        if (nuevo.getApellido()!=null) existente.setApellido(nuevo.getApellido().toUpperCase());
         if (nuevo.getPassword()!=null) existente.setPassword(passwordEncoder.encode(nuevo.getPassword()));
         return repo.save(existente);
     }
@@ -131,9 +131,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         dto.setRole(user.getRole());
 
         if (user.getPerfil()!=null){
-            dto.setNickName(user.getPerfil().getNickName());
+            dto.setNickName(user.getPerfil().getNickName().toUpperCase());
         } else if (user.getDesarrolladora()!=null) {
-            dto.setNombreDesarrolladora(user.getDesarrolladora().getNombre());
+            dto.setNombreDesarrolladora(user.getDesarrolladora().getNombre().toUpperCase());
         }
         return dto;
     }

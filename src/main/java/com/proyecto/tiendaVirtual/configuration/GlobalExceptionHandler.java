@@ -15,13 +15,13 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ElementoNoEncontradoException.class)
-    public ResponseEntity<Map<String, String>> cathElementoNoEncontrado(ElementoNoEncontradoException ex) {
+    public ResponseEntity<Map<String, String>> catchElementoNoEncontrado(ElementoNoEncontradoException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
     @ExceptionHandler(ElementoYaExistenteException.class)
-    public ResponseEntity<Map<String, String>> cathElementoYaExistente(ElementoYaExistenteException ex) {
+    public ResponseEntity<Map<String, String>> catchElementoYaExistente(ElementoYaExistenteException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     // Manejo genérico para cualquier otra excepción no controlada
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> cathException(Exception ex) {
+    public ResponseEntity<Map<String, String>> catchException(Exception ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", "Ha ocurrido un error inesperado");
         error.put("detalle", ex.getMessage());

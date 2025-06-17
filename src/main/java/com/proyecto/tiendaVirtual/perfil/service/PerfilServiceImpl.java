@@ -25,7 +25,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Override
     public Perfil create(Perfil perfil) throws ElementoYaExistenteException {
-        if (repo.existsByNickName(perfil.getNickName())){
+        if (repo.existsByNickName(perfil.getNickName().toUpperCase())){
             throw new ElementoYaExistenteException("Ya existe un perfil con el nickName ingresado");
         }
         Billetera billetera = new Billetera();
@@ -47,7 +47,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Override
     public Optional<Perfil> getByNickName(String nickName) {
-        return repo.findByNickName(nickName);
+        return repo.findByNickName(nickName.toUpperCase());
     }
 
     @Override
@@ -75,10 +75,10 @@ public class PerfilServiceImpl implements PerfilService {
     public Perfil update(Long id, PerfilDTO nuevo) {
         Perfil existente = repo.findById(id).orElseThrow(()-> new ElementoNoEncontradoException("Perfil con ID "+id+" no encontrado"));
         if (nuevo.getNickName()!=null){
-            if (!existente.getNickName().equals(nuevo.getNickName()) && repo.existsByNickName(nuevo.getNickName())) {
+            if (!existente.getNickName().toUpperCase().equals(nuevo.getNickName().toUpperCase()) && repo.existsByNickName(nuevo.getNickName().toUpperCase())) {
                 throw new ElementoYaExistenteException("Ya existe un perfil con el nickName "+nuevo.getNickName());
             }
-            existente.setNickName(nuevo.getNickName());
+            existente.setNickName(nuevo.getNickName().toUpperCase());
         }
         return repo.save(existente);
     }
