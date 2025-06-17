@@ -13,8 +13,10 @@ import com.proyecto.tiendaVirtual.user.dto.UserVerDTO;
 import com.proyecto.tiendaVirtual.user.model.Role;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
+import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
@@ -35,6 +38,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     DesarrolladoraService desarrolladoraService;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    SecurityUtils securityUtils;
 
 
     @Override
@@ -101,10 +106,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User update(Long id, UserUpdateDTO nuevo) {
-
-        User existente = repo.findById(id)
-                        .orElseThrow(()->new ElementoNoEncontradoException("User con ID "+id+" no fue encontrado"));
+    public User update(UserUpdateDTO nuevo) {
+        //El Update se realiza sobre el User logeado de quien hace la peticion. Haciendo así que solo pueda editar su propio User.
+        User existente = securityUtils.getLoggedUser();
 
         if (nuevo.getNombre()!=null) existente.setNombre(nuevo.getNombre());
         if (nuevo.getApellido()!=null) existente.setApellido(nuevo.getApellido());
@@ -113,10 +117,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void delete(Long id) {
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-        }else throw new ElementoNoEncontradoException("User con ID "+id+" no fue encontrado");
+    public void delete() {
+        //El Delete se realiza sobre el User logeado de quien hace la peticion. Haciendo así que solo pueda borrar su propio User.
+        User existente = securityUtils.getLoggedUser();
+        repo.delete(existente);
     }
 
     @Override
@@ -129,6 +133,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
+        dto.setNombre(user.getNombre());
+        dto.setApellido(user.getApellido());
 
         if (user.getPerfil()!=null){
             dto.setNickName(user.getPerfil().getNickName());

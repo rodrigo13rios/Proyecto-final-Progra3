@@ -24,12 +24,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/perfil")
-@PreAuthorize("hasRole('PERFIL')")
 public class PerfilController {
     @Autowired
     private PerfilService service;
 
     /// No POST: Perfil se crea desde User
+    /// No DELETE: Perfil se borra junto a User
 
 //    Get ALL
     @GetMapping
@@ -39,9 +39,7 @@ public class PerfilController {
     }
 
 //    Get By ID
-
-    @GetMapping("/obtenerPorId/{id}")
-
+    @GetMapping("/id/{id}")
     public ResponseEntity<Perfil> getById(@PathVariable Long id) {
         Perfil desarrolladora = service.getById(id)
                 .orElseThrow(() -> new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese ID"));
@@ -49,9 +47,7 @@ public class PerfilController {
     }
 
 //    Get By Nickname
-
-    @GetMapping("/obtenerPorNickName/{nickName}")
-
+    @GetMapping("/{nickName}")
     public ResponseEntity<Perfil> getByNickName(@PathVariable String nickName){
         Perfil optional = service.getByNickName(nickName)
                         .orElseThrow(()-> new ElementoNoEncontradoException("No se encuentra un perfil con el nickName "+nickName));
@@ -59,40 +55,23 @@ public class PerfilController {
     }
 
 //    Get Juegos By Perfil_ID
-
-    @GetMapping("/obtenerJuegos/{id}")
-
-    public ResponseEntity<List<Juego>> obtenerJuegos(@PathVariable Long id){
+    @GetMapping("/juegos/{id}")
+    public ResponseEntity<List<Juego>> getJuegosByPerfilId(@PathVariable Long id){
         List<Juego> juegos = service.obtenerJuegos(id);
         return ResponseEntity.ok(juegos);
     }
 
+//    Get Juegos del Perfil loggeado
+    @GetMapping("/juegos")
+    public ResponseEntity<List<Juego>> getJuegos(){
+        List<Juego> juegos = service.obtenerJuegos();
+        return ResponseEntity.ok(juegos);
+    }
+
 //    Update
-
-    @PutMapping("/update/{id}")
-
-    public ResponseEntity<Perfil> update(@PathVariable Long id, @RequestBody PerfilDTO perfil){
-        validarPerfil(id);
-        Perfil result = service.update(id, perfil);
+    @PutMapping
+    public ResponseEntity<Perfil> update(@RequestBody PerfilDTO perfil){
+        Perfil result = service.update(perfil);
         return new ResponseEntity<>(result,HttpStatus.OK);
-    }
-
-//    Delete
-
-    @DeleteMapping("/delete/{id}")
-
-    public ResponseEntity<Void> delete (@PathVariable Long id){
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    private void validarPerfil(Long id){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-
-        Optional<Perfil> perfil = service.getById(id);
-        if (!perfil.get().getUser().getEmail().equals(email)){
-            throw new AccesoNegadoException("No tenes el permiso para modificar este perfil");
-        }
     }
 }
