@@ -12,13 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserUpdateDTO {
-    @NotBlank
     @Size(min = 2,max = 50)
     private String nombre;
-    @NotBlank
+
     @Size(min = 2,max = 50)
     private String apellido;
-    @NotBlank
-    private String password;
 
+    private String password;
 }

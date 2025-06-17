@@ -35,28 +35,18 @@ public class SecurityConfig {
         return http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/api/test/**").authenticated()
-                        .requestMatchers(HttpMethod.POST,"/api/users/create")
-                        .permitAll()
-                        .requestMatchers("/api/users/**")
-                        .authenticated()
-                        .requestMatchers("/api/juego/get",
-                                "/api/juego/buscarPorId"
-                                ,"/api/juego/buscarPorNombre")
-                        .permitAll()
-                        .requestMatchers("/api/juegos/create",
-                                "/api/juegos/update",
-                                "/api/juegos/delete")
-                        .hasRole("DESARROLLADORA")
-                        .requestMatchers("/api/perfil/**")
-                        .hasRole("PERFIL")
-                        .requestMatchers("/api/billetera/**")
-                        .hasRole("PERFIL")
-                        .requestMatchers("/api/desarrolladora/**")
-                        .hasRole("DESARROLLADORA")
-                        .anyRequest().authenticated()
 
-                ).httpBasic(Customizer.withDefaults())
+                        .requestMatchers("/api/test/**").hasRole("PERFIL")
+
+                        //User
+                        .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/users").authenticated()
+
+
+
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 }

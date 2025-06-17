@@ -28,18 +28,14 @@ public class UserController {
     }
 
 //    Get ALL
-
-    @GetMapping("/get")
-
+    @GetMapping
     public ResponseEntity<List<UserVerDTO>> getAll(){
         List<UserVerDTO> users = service.getAll();
         return ResponseEntity.ok(users);
     }
 
 //    Get By ID
-
-    @GetMapping("/getById/{id}")
-
+    @GetMapping("/{id}")
     public ResponseEntity<UserVerDTO> getById(@PathVariable Long id){
         User optional = service.getById(id).orElseThrow(()-> new ElementoNoEncontradoException("No se encontro el perfil"));
         UserVerDTO userVerDTO = service.convertirAVerDTO(optional);
@@ -47,9 +43,7 @@ public class UserController {
     }
 
 //    Get By Email
-
-    @GetMapping("/getByEmail/{id}")
-
+    @GetMapping("/getByEmail/{email}")
     public ResponseEntity<UserVerDTO> getByEmail(@PathVariable String email){
         User optional = service.getByEmail(email).orElseThrow(()-> new ElementoNoEncontradoException("No se encontro el perfil"));
         UserVerDTO userVerDTO = service.convertirAVerDTO(optional);
@@ -57,18 +51,14 @@ public class UserController {
     }
 
 //    Update
-
-    @PutMapping("/update/{id}")
-
-    public ResponseEntity<UserVerDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO nuevo){
-        User actualizado = service.update(id,nuevo);
+    @PutMapping
+    public ResponseEntity<UserVerDTO> update(@RequestBody UserUpdateDTO nuevo){
+        User actualizado = service.update(nuevo);
         return ResponseEntity.ok(service.convertirAVerDTO(actualizado));
     }
 
 //    Delete
-
     @DeleteMapping("/delete/{id}")
-
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
