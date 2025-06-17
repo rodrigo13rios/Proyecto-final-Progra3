@@ -15,6 +15,7 @@ import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
@@ -101,10 +103,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User update(Long id, UserUpdateDTO nuevo) {
+    public User update(UserUpdateDTO nuevo) {
+        //El Update se realiza sobre el User logeado de quien hace la peticion. Haciendo así que solo pueda editar su propio User.
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User existente = repo.findByEmail(email)
+                .orElseThrow(() -> new ElementoNoEncontradoException("No se ha podido obtener el usuario logeado"));
 
-        User existente = repo.findById(id)
-                        .orElseThrow(()->new ElementoNoEncontradoException("User con ID "+id+" no fue encontrado"));
 
         if (nuevo.getNombre()!=null) existente.setNombre(nuevo.getNombre());
         if (nuevo.getApellido()!=null) existente.setApellido(nuevo.getApellido());

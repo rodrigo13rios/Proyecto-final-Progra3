@@ -36,12 +36,15 @@ public class SecurityConfig {
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
 
-                        .requestMatchers("/api/test/**").authenticated()
+                        .requestMatchers("/api/test/**").hasRole("PERFIL")
 
-                        .requestMatchers(HttpMethod.POST,"/api/users")
-                                        .permitAll()
+                        //User
+                        .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/users").authenticated()
+
+
+
                         .anyRequest().authenticated()
-
                 )
                 .httpBasic(Customizer.withDefaults())
                 .build();
