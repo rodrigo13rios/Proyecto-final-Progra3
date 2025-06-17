@@ -1,4 +1,4 @@
-package com.proyecto.tiendaVirtual.configuration;
+package com.proyecto.tiendaVirtual.config;
 
 import com.proyecto.tiendaVirtual.exceptions.AccesoNegadoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
