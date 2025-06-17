@@ -38,4 +38,8 @@ public class Perfil {
             inverseJoinColumns = @JoinColumn(name = "id_juego")
     )
     private List<Juego> juegos = new ArrayList<>();
+
+    public String getNickName() {
+        return nickName;
+    }
 }
