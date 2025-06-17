@@ -29,6 +29,7 @@ public class PerfilController {
     private PerfilService service;
 
     /// No POST: Perfil se crea desde User
+    /// No DELETE: Perfil se borra junto a User
 
 //    Get ALL
     @GetMapping("/get")
@@ -72,12 +73,5 @@ public class PerfilController {
     public ResponseEntity<Perfil> update(@RequestBody PerfilDTO perfil){
         Perfil result = service.update(perfil);
         return new ResponseEntity<>(result,HttpStatus.OK);
-    }
-
-//    Delete
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete (@PathVariable Long id){
-        service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }

@@ -70,8 +70,6 @@ public class PerfilServiceImpl implements PerfilService {
         return perfil.getJuegos();
     }
 
-
-
     @Override
     public void agregarJuego(Long id, Long juegoId){
         Perfil perfil = repo.findById(id)
@@ -102,13 +100,5 @@ public class PerfilServiceImpl implements PerfilService {
             existente.setNickName(nuevo.getNickName().toUpperCase());
         }
         return repo.save(existente);
-    }
-
-    @Override
-    public void delete(Long id){
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-        }
-        else throw new ElementoNoEncontradoException("No se encontro un perfil con el ID seleccionado");
     }
 }

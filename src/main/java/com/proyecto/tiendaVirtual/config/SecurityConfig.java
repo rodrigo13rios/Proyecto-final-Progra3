@@ -38,14 +38,19 @@ public class SecurityConfig {
                         //Testeo
                         .requestMatchers("/api/test/**").authenticated()
 
-
                         //User
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
 
                         //Desarrolladora
                         .requestMatchers(HttpMethod.GET,"/api/desarrolladora/**").authenticated() //Se permite cualquier GET
-                        .requestMatchers("/api/desarrolladora/**").hasRole("DESARROLLADORA") //Otros metodos POST/PUT/DEL requieren el Rol
+                        .requestMatchers("/api/desarrolladora/**").hasRole("DESARROLLADORA") //Otros métodos POST/PUT/DEL requieren el Rol
 
+                        //Perfil
+                        .requestMatchers(HttpMethod.GET,"/api/perfil/**").authenticated() //Se permite cualquier GET
+                        .requestMatchers("/api/perfil/**").hasRole("PERFIL") //Otros métodos POST/PUT/DEL requieren el Rol
+
+
+                        //Otras Rutas
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

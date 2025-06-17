@@ -20,7 +20,6 @@ public interface PerfilService {
     Optional<Perfil> getById(Long id);
     Optional<Perfil> getByNickName(String nickName);
     Perfil update(PerfilDTO nuevo);
-    void delete(Long id);
     List<Juego> obtenerJuegos(Long id);
     List<Juego> obtenerJuegos();
     void agregarJuego(Long id,Long juegoId);
