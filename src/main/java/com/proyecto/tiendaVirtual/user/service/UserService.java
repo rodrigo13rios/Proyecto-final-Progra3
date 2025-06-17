@@ -12,8 +12,6 @@ import java.util.Optional;
 @Service
 public interface UserService  {
     User createUser(UserDTO dto);
-    User createUserPerfil(UserDTO dto);
-    User createUserDesarrolladora(UserDTO dto);
     List<UserVerDTO> getAll();
     Optional<User> getById(Long id);
     User update(Long id, UserUpdateDTO nuevo);
