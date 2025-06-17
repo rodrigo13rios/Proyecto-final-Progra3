@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 public interface PerfilService {
-    Perfil create(UserDTO dto);
+    Perfil create(Perfil perfil);
     List<Perfil> getAll();
     Optional<Perfil> getById(Long id);
     Optional<Perfil> getByNickName(String nickName);

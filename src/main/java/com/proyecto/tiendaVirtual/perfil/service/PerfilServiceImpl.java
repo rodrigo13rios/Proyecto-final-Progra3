@@ -24,17 +24,15 @@ public class PerfilServiceImpl implements PerfilService {
     private JuegoService juegoService;
 
     @Override
-    public Perfil create(UserDTO dto) throws ElementoYaExistenteException {
-
-        Perfil perfil = new Perfil();
+    public Perfil create(Perfil perfil) throws ElementoYaExistenteException {
+        if (repo.existsByNickName(perfil.getNickName())){
+            throw new ElementoYaExistenteException("Ya existe un perfil con el nickName ingresado");
+        }
         Billetera billetera = new Billetera();
         billetera.setSaldo(0.0);
-
-        perfil.setNickName(generarNickName(dto));
-        if (repo.existsByNickName(perfil.getNickName()))throw new ElementoYaExistenteException("Ya existe un perfil con el nickName ingresado");
         perfil.setBilletera(billetera);
 
-        return perfil;
+        return repo.save(perfil);
     }
 
     public String generarNickName(UserDTO user){

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public interface DesarrolladoraService {
-    Desarrolladora create(Desarrolladora desarrolladora);
+    Desarrolladora create(Desarrolladora desarrolladora) throws ElementoYaExistenteException;
     Optional<Desarrolladora> findById(Long id);
     Optional<Desarrolladora> findByNombre(String nombre);
     List<Desarrolladora> getAll();
