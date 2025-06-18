@@ -1,9 +1,8 @@
 package com.proyecto.tiendaVirtual.juego.service;
 
-import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
-import com.proyecto.tiendaVirtual.exceptions.AccesoNegadoException;
+import com.proyecto.tiendaVirtual.exceptions.AccesoDenegadoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
@@ -13,8 +12,6 @@ import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
-import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
-import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,7 +75,7 @@ public class JuegoServiceImpl implements JuegoService{
 
         // Validar que el juego pertenece a la desarrolladora del user
         if (!existente.getDesarrolladora().getId().equals(desarrolladora.getId())) {
-            throw new AccesoNegadoException("No podés modificar juegos de otra desarrolladora.");
+            throw new AccesoDenegadoException("No podés modificar juegos de otra desarrolladora.");
         }
 
         // Actualizar campos si vienen en el DTO
@@ -117,7 +114,7 @@ public class JuegoServiceImpl implements JuegoService{
 
         // Verificar propiedad del juego
         if (!juego.getDesarrolladora().getId().equals(desarrolladora.getId())) {
-            throw new AccesoNegadoException("No podés eliminar un juego que no te pertenece.");
+            throw new AccesoDenegadoException("No podés eliminar un juego que no te pertenece.");
         }
 
         repo.delete(juego);
