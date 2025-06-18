@@ -14,8 +14,8 @@ public interface UserService  {
     User createUser(UserDTO dto);
     List<UserVerDTO> getAll();
     Optional<User> getById(Long id);
-    User update(Long id, UserUpdateDTO nuevo);
-    void delete(Long id);
+    User update(UserUpdateDTO nuevo);
+    void delete();
     Optional<User> getByEmail(String email);
     UserVerDTO convertirAVerDTO(User user);
 }

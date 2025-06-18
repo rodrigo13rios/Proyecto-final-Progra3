@@ -23,11 +23,11 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
+        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authBuilder
                 .userDetailsService(userService)
-                .passwordEncoder(passwordEncoder)
-                .and()
-                .build();
+                .passwordEncoder(passwordEncoder);
+        return authBuilder.build();
     }
 
     @Bean
@@ -35,13 +35,23 @@ public class SecurityConfig {
         return http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-
+                        //Testeo
                         .requestMatchers("/api/test/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST,"/api/users")
-                                        .permitAll()
-                        .anyRequest().authenticated()
+                        //User
+                        .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
 
+                        //Desarrolladora
+                        .requestMatchers(HttpMethod.GET,"/api/desarrolladora/**").authenticated() //Se permite cualquier GET
+                        .requestMatchers("/api/desarrolladora/**").hasRole("DESARROLLADORA") //Otros métodos POST/PUT/DEL requieren el Rol
+
+                        //Perfil
+                        .requestMatchers(HttpMethod.GET,"/api/perfil/**").authenticated() //Se permite cualquier GET
+                        .requestMatchers("/api/perfil/**").hasRole("PERFIL") //Otros métodos POST/PUT/DEL requieren el Rol
+
+
+                        //Otras Rutas
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .build();

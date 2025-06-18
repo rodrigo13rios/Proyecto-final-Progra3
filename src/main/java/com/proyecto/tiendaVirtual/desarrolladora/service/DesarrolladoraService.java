@@ -14,6 +14,5 @@ public interface DesarrolladoraService {
     Optional<Desarrolladora> findById(Long id);
     Optional<Desarrolladora> findByNombre(String nombre);
     List<Desarrolladora> getAll();
-    Desarrolladora update(Long id, Desarrolladora updatedDesarrolladora);
-    void delete(Long id) throws ElementoNoEncontradoException;
+    Desarrolladora update(Desarrolladora updatedDesarrolladora);
 }

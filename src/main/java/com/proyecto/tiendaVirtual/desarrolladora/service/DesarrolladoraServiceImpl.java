@@ -4,7 +4,11 @@ import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraRepository;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.user.model.User;
+import com.proyecto.tiendaVirtual.user.repository.UserRepository;
+import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +18,8 @@ import java.util.Optional;
 public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     @Autowired
     private DesarrolladoraRepository repo;
+    @Autowired
+    private SecurityUtils securityUtils;
 
 
     @Override
@@ -42,10 +48,16 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     }
 
     @Override
-    public Desarrolladora update(Long id, Desarrolladora nuevo) {
-        // Buscar la desarrolladora existente por ID
-        Desarrolladora existente = repo.findById(id)
-                .orElseThrow(() -> new ElementoNoEncontradoException("Desarrolladora con ID " + id + " no encontrada"));
+    public Desarrolladora update(Desarrolladora nuevo) {
+        //El Update se realiza sobre la Desarrolladora del User logeado que hace la peticion. Haciendo así que solo pueda editar su propia Desarrolladora.
+        //Obtengo el User
+        User logedUser = securityUtils.getLoggedUser();
+
+        //Obtengo la desarrolladora desde el User
+        Desarrolladora existente = logedUser.getDesarrolladora();
+        if (existente == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Desarrolladora del User logeado");
+        }
 
         // Actualizar campos
         if (nuevo.getNombre() != null) {
@@ -57,15 +69,5 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
         // Guardar y retornar
         return repo.save(existente);
-    }
-
-
-    @Override
-    public void delete(Long id) throws ElementoNoEncontradoException {
-        if (repo.existsById(id)){
-            repo.deleteById(id);
-        }else{
-            throw new ElementoNoEncontradoException("No se encuentra una desarrolladora con ese Id");
-        }
     }
 }
