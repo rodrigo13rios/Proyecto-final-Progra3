@@ -38,6 +38,7 @@ public class SecurityConfig {
                         //Testeo
                         .requestMatchers("/api/test/**").authenticated()
 
+
                         //User
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
 
@@ -59,6 +60,7 @@ public class SecurityConfig {
 
 
                         //Otras Rutas
+
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

@@ -37,11 +37,13 @@ public class JuegoController {
         return ResponseEntity.ok(actualizado);
     }
 
+
 //    Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarJuego(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build(); // 204 No Content
+
     }
 
 //    Comprar Juego

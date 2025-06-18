@@ -69,6 +69,7 @@ public class JuegoServiceImpl implements JuegoService{
             throw new ElementoNoEncontradoException("No se ha podido obtener la Desarrolladora del User logeado");
         }
 
+
         //Encontrar el Juego
         Juego existente = repo.findById(id)
                 .orElseThrow(() -> new ElementoNoEncontradoException("No se encontró el juego con ID: " + id));
@@ -98,6 +99,7 @@ public class JuegoServiceImpl implements JuegoService{
         }
 
         return repo.save(existente);
+
     }
 
     @Override
@@ -126,6 +128,7 @@ public class JuegoServiceImpl implements JuegoService{
     public void comprarJuego(Long juegoId) {
         Perfil perfil = securityUtils.getLoggedUser().getPerfil();
 
+
         //El juego existe?
         Juego juego = repo.findById(juegoId)
                 .orElseThrow(() -> new ElementoNoEncontradoException("Juego no encontrado con ID: " + juegoId));
@@ -133,6 +136,7 @@ public class JuegoServiceImpl implements JuegoService{
         //Ya tiene comprado el Juego?
         if (perfil.getJuegos().contains(juego)) {
             throw new ElementoYaExistenteException("Ya tienes este juego.");
+
         }
 
         //Realizar el Pago
@@ -157,6 +161,7 @@ public class JuegoServiceImpl implements JuegoService{
     }
 
     @Override
+
     public List<Juego> getByCategoria(String strCategoria){
         Categoria categoriaEnum;
         try { //"Traduzco" la Categoria
@@ -165,6 +170,7 @@ public class JuegoServiceImpl implements JuegoService{
             throw new ElementoNoEncontradoException("No se ha encontrado la categoría: " + strCategoria + ", o no se ha podido asignar");
         }
         return repo.getByCategoria(categoriaEnum);
+
     }
 
     @Override

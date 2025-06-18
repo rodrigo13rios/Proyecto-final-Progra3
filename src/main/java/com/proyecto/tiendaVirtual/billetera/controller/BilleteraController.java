@@ -1,5 +1,8 @@
 package com.proyecto.tiendaVirtual.billetera.controller;
 
+
+import com.proyecto.tiendaVirtual.billetera.dto.BilleteraDTO;
+
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +30,19 @@ public class BilleteraController {
 
     //Cargar Saldo
     @PostMapping("/cargar")
-    public ResponseEntity<Double> cargar(@RequestBody Map<String, Double> body) {//Se recive desde Postman {"monto":1234}
-        Double nuevoSaldo = service.cargarSaldo(body.get("monto"));
+
+    public ResponseEntity<Double> cargar(@RequestBody BilleteraDTO dto) {//Se recive desde Postman {"monto":1234}
+        Double nuevoSaldo = service.cargarSaldo(dto.getMonto());
+
         return ResponseEntity.ok(nuevoSaldo);
     }
 
     //Restar Saldo: Con fines de testeo. En la práctica solo se descontaría saldo al comprar un juego
     @PostMapping("/restar")
-    public ResponseEntity<Double> restar(@RequestBody Map<String, Double> body) {
-        Double nuevoSaldo = service.restarSaldo(body.get("monto"));
+
+    public ResponseEntity<Double> restar(@RequestBody BilleteraDTO dto) {
+        Double nuevoSaldo = service.restarSaldo(dto.getMonto());
+
         return ResponseEntity.ok(nuevoSaldo);
     }
 
