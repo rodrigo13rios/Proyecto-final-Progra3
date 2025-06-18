@@ -35,6 +35,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
+                        //Testeo
                         .requestMatchers("/api/test/**").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/users/create")
                         .permitAll()
@@ -55,8 +56,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/desarrolladora/**")
                         .hasRole("DESARROLLADORA")
                         .anyRequest().authenticated()
-
-                ).httpBasic(Customizer.withDefaults())
+                )
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 }

@@ -32,7 +32,7 @@ public class PerfilController {
     /// No DELETE: Perfil se borra junto a User
 
 //    Get ALL
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<List<Perfil>> getAll(){
         List<Perfil> perfiles = service.getAll();
         return ResponseEntity.ok(perfiles);
