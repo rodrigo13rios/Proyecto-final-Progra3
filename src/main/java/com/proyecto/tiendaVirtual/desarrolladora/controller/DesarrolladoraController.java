@@ -3,6 +3,7 @@ package com.proyecto.tiendaVirtual.desarrolladora.controller;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class DesarrolladoraController {
 
 //    Update
     @PutMapping
-    public ResponseEntity<Desarrolladora> update(@RequestBody Desarrolladora desarrolladora) {
+    public ResponseEntity<Desarrolladora> update(@Valid @RequestBody Desarrolladora desarrolladora) {
         Desarrolladora result = service.update(desarrolladora);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

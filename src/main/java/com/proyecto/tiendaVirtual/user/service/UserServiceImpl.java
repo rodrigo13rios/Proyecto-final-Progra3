@@ -5,6 +5,7 @@ import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
+import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import com.proyecto.tiendaVirtual.user.dto.UserDTO;
@@ -56,7 +57,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
-        user.setRole(userDTO.getRole());
+        try { //"Traduzco" el Rol
+            Role roleEnum = Role.valueOf(userDTO.getRole().toUpperCase());
+            user.setRole(roleEnum);
+        } catch (IllegalArgumentException ex) {
+            throw new ElementoNoEncontradoException("No se ha encontrado el Rol: " + userDTO.getRole() + ", o no se ha podido asignar");
+        }
 
         // 🔁 Guardar primero el usuario para que tenga ID
         User result = repo.save(user);

@@ -6,6 +6,7 @@ import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +62,7 @@ public class PerfilController {
 
 //    Update
     @PutMapping
-    public ResponseEntity<Perfil> update(@RequestBody PerfilDTO perfil){
+    public ResponseEntity<Perfil> update(@Valid @RequestBody PerfilDTO perfil){
         Perfil result = service.update(perfil);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

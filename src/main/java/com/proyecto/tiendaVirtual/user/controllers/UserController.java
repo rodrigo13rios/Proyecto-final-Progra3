@@ -6,6 +6,7 @@ import com.proyecto.tiendaVirtual.user.dto.UserUpdateDTO;
 import com.proyecto.tiendaVirtual.user.dto.UserVerDTO;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController {
 
 //    Create
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO){
         User result = service.createUser(userDTO);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
@@ -52,7 +53,7 @@ public class UserController {
 
 //    Update
     @PutMapping
-    public ResponseEntity<UserVerDTO> update(@RequestBody UserUpdateDTO nuevo){
+    public ResponseEntity<UserVerDTO> update(@Valid @RequestBody UserUpdateDTO nuevo){
         User actualizado = service.update(nuevo);
         return ResponseEntity.ok(service.convertirAVerDTO(actualizado));
     }
