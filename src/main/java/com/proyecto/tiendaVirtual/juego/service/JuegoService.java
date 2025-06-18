@@ -1,7 +1,7 @@
 package com.proyecto.tiendaVirtual.juego.service;
 
-import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
-import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import org.springframework.stereotype.Service;
@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public interface JuegoService {
-    void create(Juego juego) throws ElementoYaExistenteException;
-    Optional<Juego> findById(Long id) throws ElementoNoEncontradoException;
-    Optional<Juego> findByName(String nombre) throws ElementoNoEncontradoException;
-    List<Juego> getByCategoria(Categoria categoria);
+    Juego create(JuegoDTO juegoDTO);
+    Juego update(Long id, JuegoUpdateDTO dto);
+    void delete(Long id);
+    Optional<Juego> getById(Long id);
+    Optional<Juego> getByNombre(String nombre);
+    List<Juego> getByCategoria(String categoria);
     List<Juego> getAll();
-    Juego update(Long id, Juego updateJuego) throws ElementoNoEncontradoException;
-    void delete(Long id) throws ElementoNoEncontradoException;
 }

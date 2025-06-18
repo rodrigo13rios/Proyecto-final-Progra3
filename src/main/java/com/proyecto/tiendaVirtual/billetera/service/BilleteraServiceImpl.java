@@ -36,8 +36,8 @@ public class BilleteraServiceImpl implements BilleteraService{
     @Transactional
     public Double restarSaldo(Double monto) {
         //Valido el monto
-        if (monto == null || monto <= 0) {
-            throw new NumeroInvalidoException("El monto debe ser mayor a cero");
+        if (monto == null || monto < 0) {
+            throw new NumeroInvalidoException("El monto debe ser mayor o igual a cero");
         }
 
         //Obtengo la Billetera
