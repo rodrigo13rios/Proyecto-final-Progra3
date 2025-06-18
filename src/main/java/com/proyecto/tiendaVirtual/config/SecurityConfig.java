@@ -49,6 +49,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/perfil/**").authenticated() //Se permite cualquier GET
                         .requestMatchers("/api/perfil/**").hasRole("PERFIL") //Otros métodos POST/PUT/DEL requieren el Rol
 
+                        //Billetera
+                        .requestMatchers("/api/billetera/**").hasRole("PERFIL")
 
                         //Otras Rutas
                         .anyRequest().authenticated()
