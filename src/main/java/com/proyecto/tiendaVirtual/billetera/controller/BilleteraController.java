@@ -9,6 +9,9 @@ import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -25,9 +28,11 @@ public class BilleteraController {
     /// No POST: Billetera se crea desde Perfil
     /// No DELETE: Billetera se borra junto a Perfil
 
-    @GetMapping
-    public ResponseEntity<Double> consultar() {
-        return ResponseEntity.ok(service.consultarSaldo());
+    @GetMapping("/controlarSaldo/{perfilId}")
+    public ResponseEntity<Double> consultarSaldo (@PathVariable Long perfilId){
+        validarPropietario(perfilId);
+        Double saldo = service.consultarSaldo(perfilId);
+        return ResponseEntity.ok(saldo);
     }
 
     @PutMapping("/recargar/{perfilId}")
