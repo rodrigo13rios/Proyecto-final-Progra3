@@ -24,7 +24,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
     @Override
     public Desarrolladora create(Desarrolladora desarrolladora) throws ElementoYaExistenteException {
-        if (findByNombre(desarrolladora.getNombre()).isPresent()) {
+        if (findByNombre(desarrolladora.getNombre().toUpperCase()).isPresent()) {
             throw new ElementoYaExistenteException("Ya existe una desarrolladora con ese nombre");
         }
         return repo.save(desarrolladora);
@@ -39,7 +39,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     @Override
 
     public Optional<Desarrolladora> findByNombre(String nombre){
-        return repo.findByNombre(nombre);
+        return repo.findByNombre(nombre.toUpperCase());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
         // Actualizar campos
         if (nuevo.getNombre() != null) {
-            existente.setNombre(nuevo.getNombre());
+            existente.setNombre(nuevo.getNombre().toUpperCase());
         }
         if (nuevo.getPaisOrigen() != null) {
             existente.setPaisOrigen(nuevo.getPaisOrigen());

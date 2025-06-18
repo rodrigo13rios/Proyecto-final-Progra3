@@ -21,10 +21,11 @@ public class JuegoServiceImpl implements JuegoService{
     @Override
     public void create(Juego juego) throws ElementoYaExistenteException {
 
-        Optional<Juego>findJuego=repo.findByNombre(juego.getNombre());
+        Optional<Juego>findJuego=repo.findByNombre(juego.getNombre().toUpperCase());
         if (findJuego.isPresent()){
             throw new ElementoYaExistenteException("El juego ya se encuentra cargado");
         }
+        juego.setNombre(juego.getNombre().toUpperCase());
         repo.save(juego);
     }
 
@@ -37,11 +38,11 @@ public class JuegoServiceImpl implements JuegoService{
         return repo.findById(id);
     }
 
-    //TODO preguntar al profe si esta bien implementado asi o es como en DesarrolladoraServiceImpl
+
     @Override
     public Optional<Juego> findByName(String nombre) throws ElementoNoEncontradoException {
 
-        Optional<Juego> optional = repo.findByNombre(nombre);
+        Optional<Juego> optional = repo.findByNombre(nombre.toUpperCase());
         if (optional.isEmpty()){
             throw new ElementoNoEncontradoException("No se encuentran juegos con el nombre a buscar");
         }
@@ -61,11 +62,10 @@ public class JuegoServiceImpl implements JuegoService{
         return repo.findAll();
     }
 
-    //TODO: revisar actualizacion, quiza habra que agregar DTO
     @Override
     public Juego update(Long id, Juego updateJuego) throws ElementoNoEncontradoException {
         return repo.findById(id).map(existing ->{
-                    existing.setNombre(updateJuego.getNombre());
+                    existing.setNombre(updateJuego.getNombre().toUpperCase());
                     existing.setPrecio(updateJuego.getPrecio());
                     existing.setCategoria(updateJuego.getCategoria());
                     existing.setDesarrolladora(updateJuego.getDesarrolladora());
