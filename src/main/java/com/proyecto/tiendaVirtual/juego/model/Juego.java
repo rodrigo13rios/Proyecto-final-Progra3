@@ -1,14 +1,14 @@
 package com.proyecto.tiendaVirtual.juego.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 @Entity
@@ -24,7 +24,9 @@ public class Juego {
     @NotNull(message = "El nombre no puede ser nulo")
     @Size(max = 40, message = "El nombre del juego no puede exceder de 40 caracteres")
     private String nombre;
-
+    @NotNull
+    @PastOrPresent(message = "La fecha debe ser pasada u hoy")
+    @JsonFormat(pattern = ("yyyy/MM/dd"))
     private LocalDate fechaLanzamiento;
 
     @Min(value =0, message = "La cantidad unitaria no puede ser menor a 0")

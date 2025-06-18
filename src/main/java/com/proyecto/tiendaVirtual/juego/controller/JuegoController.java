@@ -42,12 +42,12 @@ public class JuegoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // toDO: Fecha de lanzamiento ingresa la fecha en la cual se crea. Se deberia poder ingresar la fecha que el usuario quiera y validarlo.
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('DESARROLLADORA')")
     public ResponseEntity<ApiResponse> createNewJuego(@RequestBody @Valid Juego juegoNuevo){
         log.info("JuegoController::createNewJuego peticion{}",ValueMapper.jsonAsString(juegoNuevo));
-        juegoNuevo.setFechaLanzamiento(LocalDate.now());
+
         juegoService.create(juegoNuevo);
         ApiResponse<Juego>JuegoApiResponse=new ApiResponse<>(juegoNuevo);
         log.info("juegoController::createNewJuego response{}", ValueMapper.jsonAsString(JuegoApiResponse));

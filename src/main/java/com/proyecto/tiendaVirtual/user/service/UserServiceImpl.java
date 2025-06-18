@@ -1,6 +1,6 @@
 package com.proyecto.tiendaVirtual.user.service;
 
-import com.proyecto.tiendaVirtual.config.PasswordConfig;
+
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;

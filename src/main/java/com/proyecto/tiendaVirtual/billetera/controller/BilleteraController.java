@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.billetera.controller;
 
+import com.proyecto.tiendaVirtual.billetera.dto.BilleteraDTO;
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.exceptions.AccesoNegadoException;
@@ -28,30 +29,25 @@ public class BilleteraController {
     /// No POST: Billetera se crea desde Perfil
 
     @GetMapping("/controlarSaldo/{perfilId}")
-    public ResponseEntity<Map> consultarSaldo (@PathVariable Long perfilId){
+    public ResponseEntity<Double> consultarSaldo (@PathVariable Long perfilId){
         validarPropietario(perfilId);
-        double saldo = service.consultarSaldo(perfilId);
-        return ResponseEntity.ok(Map.of("Saldo",saldo));
+        Double saldo = service.consultarSaldo(perfilId);
+        return ResponseEntity.ok(saldo);
     }
 
     @PutMapping("/recargar/{perfilId}")
-    public ResponseEntity<String> recargarSaldo(@PathVariable Long perfilId, @RequestBody double carga){
+    public ResponseEntity<Double> recargarSaldo(@PathVariable Long perfilId, @RequestBody BilleteraDTO billeteraDTO){
         validarPropietario(perfilId);
-        service.cargarSaldo(carga,perfilId);
-        return ResponseEntity.ok("Recarga Exitosa");
+        Double saldoActualizado = service.cargarSaldo(billeteraDTO.getMonto(), perfilId);
+        return ResponseEntity.ok(saldoActualizado);
     }
 
     @PutMapping("/descontar/{perfilId}")
-    public ResponseEntity<String> descontarSaldo(@PathVariable Long perfilId, @RequestBody double pago){
-        service.descontarSaldo(pago, perfilId);
+    public ResponseEntity<String> descontarSaldo(@PathVariable Long perfilId, @RequestBody BilleteraDTO billeteraDTO){
+        service.descontarSaldo(billeteraDTO.getMonto(), perfilId);
         return ResponseEntity.ok("Pago realizado");
     }
 
-    @DeleteMapping(("/delete/{id}"))
-    public ResponseEntity<Void> delete (@PathVariable Long id){
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 
     private void validarPropietario(Long id){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

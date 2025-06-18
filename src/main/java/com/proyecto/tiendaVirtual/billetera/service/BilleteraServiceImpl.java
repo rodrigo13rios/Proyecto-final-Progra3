@@ -23,12 +23,6 @@ public class BilleteraServiceImpl implements BilleteraService{
 
 
     @Override
-    public Billetera create(Billetera billetera) {
-        if (repo.existsById(billetera.getId())) throw new ElementoYaExistenteException("Billetera duplicada");
-        return repo.save(billetera);
-    }
-
-    @Override
     public double consultarSaldo(Long perfilId) {
         Optional<Perfil> perfil = perfilService.getById(perfilId);
 
@@ -69,7 +63,7 @@ public class BilleteraServiceImpl implements BilleteraService{
 
 
     @Override
-    public void cargarSaldo(double carga, Long perfilId) {
+    public Double cargarSaldo(double carga, Long perfilId) {
 
         if (carga < 0) throw new NumeroInvalidoException("El monto de la carga debe ser mayor a cero");
         Optional<Perfil> perfil = perfilService.getById(perfilId);
@@ -78,13 +72,7 @@ public class BilleteraServiceImpl implements BilleteraService{
         billetera.setSaldo(billetera.getSaldo() + carga);
 
         actualizar(perfil.get().getBilletera().getId(), billetera);
-
+        return billetera.getSaldo();
     }
 
-
-    @Override
-    public void delete(Long id){
-        if (repo.existsById(id))repo.deleteById(id);
-        else throw new ElementoNoEncontradoException("No se encontro la billetera asociada");
-    }
 }
