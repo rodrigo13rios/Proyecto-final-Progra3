@@ -45,9 +45,9 @@ public class CompraServiceImpl implements CompraService{
 
     @Transactional
     public void createCompra(String email)throws ElementoNoEncontradoException{
-        Optional<User> clienteOptional= this.userService.getByEmail(email);
+        Optional<User> clienteOptional=userService.getByEmail(email);
         if (clienteOptional.isEmpty()){
-            throw new ElementoNoEncontradoException("No se encontro un perfil con el nickname:"+email);
+            throw new ElementoNoEncontradoException("No se encontro un perfil con el email:"+email);
         }
         User cliente=clienteOptional.get();
         List<CarroDeCompras>carroDeComprasList=this.carroService.getCarroByCliente_Email(cliente.getEmail());
@@ -56,18 +56,25 @@ public class CompraServiceImpl implements CompraService{
         decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 
         double total=carroDeComprasList.stream().mapToDouble(item->item.getJuego().getPrecio()* item.getCantidad()).sum();
-        if (billeteraService.consultarSaldo(cliente.getId())<total){
+        double saldoActual = billeteraService.consultarSaldo(cliente.getId());
+        if (saldoActual < total) {
             throw new NumeroInvalidoException("No cuenta con el saldo suficiente para realizar la compra (Saldo actual: "
-                    + billeteraService.consultarSaldo(cliente.getId()) + ", Total requerido: "
-                    + total + ").");
+                    + saldoActual + ", Total requerido: " + total + ").");
         }
 
         Compra compra=new Compra(Double.parseDouble(decimalFormat.format(total)), LocalDate.now(),cliente);
 
-        billeteraService.descontarSaldo(total,cliente.getPerfil().getId());
+        Perfil perfil=cliente.getPerfil();
+        if (perfil == null) {
+            throw new ElementoNoEncontradoException("El cliente no tiene perfil asociado.");
+        }
+        billeteraService.descontarSaldo(total, perfil.getId());
         Compra compraSave=this.compraRepository.save(compra);
 
         for (CarroDeCompras carroDeCompras : carroDeComprasList) {
+            if (carroDeCompras.getJuego() == null) {
+                throw new ElementoNoEncontradoException("Carrito con juego nulo. ID Carrito: " + carroDeCompras.getId());
+            }
             DetalleCompra detalle = new DetalleCompra();
             detalle.setJuego(carroDeCompras.getJuego());
             detalle.setCantidad(carroDeCompras.getCantidad());
