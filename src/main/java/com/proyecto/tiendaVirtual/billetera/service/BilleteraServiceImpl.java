@@ -7,71 +7,76 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.NumeroInvalidoException;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
+import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class BilleteraServiceImpl implements BilleteraService{
-
     @Autowired
     private BilleteraRepository repo;
-
     @Autowired
-    private PerfilService perfilService;
-
-
-    @Override
-    public double consultarSaldo(Long perfilId) {
-        Optional<Perfil> perfil = perfilService.getById(perfilId);
-
-        Optional<Billetera> billetera = repo.findById(perfil.get().getBilletera().getId());
-
-        if (billetera.isEmpty()) throw new ElementoNoEncontradoException("No se pudo asociar ninguna billetera");
-
-        return billetera.get().getSaldo();
-    }
+    private SecurityUtils securityUtils;
 
     @Override
-    public void descontarSaldo(double pago, Long perfilId) {
-
-        if (pago <0) throw new NumeroInvalidoException("El monto del pago debe ser mayor o igual a cero");
-
-        Optional<Perfil> perfil = perfilService.getById(perfilId);
-
-        Billetera billetera = perfil.get().getBilletera();
-
-        if (billetera.getSaldo() < pago) throw new NumeroInvalidoException("El saldo es insuficiente");
-
-        billetera.setSaldo(billetera.getSaldo() - pago);
-
-        actualizar(perfil.get().getBilletera().getId(), billetera);
-
-    }
-
-
-    public void actualizar(Long id, Billetera nueva){
-        Billetera existente = repo.findById(id)
-                            .orElseThrow(()-> new ElementoNoEncontradoException("Error al cargar la billetera"));
-        if (nueva.getSaldo()!=null){
-            existente.setSaldo(nueva.getSaldo());
+    public Double consultarSaldo() {
+        //Obtengo la Billetera
+        Billetera billetera = securityUtils.getLoggedUser().getPerfil().getBilletera();
+        if (billetera == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Billetera del Perfil logeado");
         }
 
-        repo.save(existente);
+        return billetera.getSaldo();
+    }
+
+    @Override
+    @Transactional
+    public Double restarSaldo(Double monto) {
+        //Valido el monto
+        if (monto == null || monto <= 0) {
+            throw new NumeroInvalidoException("El monto debe ser mayor a cero");
+        }
+
+        //Obtengo la Billetera
+        Billetera billetera = securityUtils.getLoggedUser().getPerfil().getBilletera();
+        if (billetera == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Billetera del Perfil logeado");
+        }
+
+        //Si el saldo es menor al gasto, significa que no hay suficiente dinero para realizar la operación.
+        if (billetera.getSaldo() < monto) {
+            throw new NumeroInvalidoException("El Saldo de la billetera es insuficiente para realizar esta operación");
+        }
+
+        //Realizo la resta y guardo
+        billetera.setSaldo(billetera.getSaldo() - monto);
+        repo.save(billetera);
+
+        return billetera.getSaldo();
     }
 
 
     @Override
-    public Double cargarSaldo(double carga, Long perfilId) {
+    @Transactional
+    public Double cargarSaldo(Double monto) {
+        //Valido el monto
+        if (monto == null || monto <= 0) {
+            throw new NumeroInvalidoException("El monto debe ser mayor a cero");
+        }
 
-        if (carga < 0) throw new NumeroInvalidoException("El monto de la carga debe ser mayor a cero");
-        Optional<Perfil> perfil = perfilService.getById(perfilId);
+        //Obtengo la Billetera
+        Billetera billetera = securityUtils.getLoggedUser().getPerfil().getBilletera();
+        if (billetera == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Billetera del Perfil logeado");
+        }
 
-        Billetera billetera = perfil.get().getBilletera();
-        billetera.setSaldo(billetera.getSaldo() + carga);
+        //Realizo la suma y guardo
+        billetera.setSaldo(billetera.getSaldo() + monto);
+        repo.save(billetera);
 
-        actualizar(perfil.get().getBilletera().getId(), billetera);
         return billetera.getSaldo();
     }
 
