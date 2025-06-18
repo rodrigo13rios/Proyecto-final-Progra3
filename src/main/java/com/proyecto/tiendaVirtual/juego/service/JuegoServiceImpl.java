@@ -1,5 +1,7 @@
 package com.proyecto.tiendaVirtual.juego.service;
 
+import com.proyecto.tiendaVirtual.billetera.model.Billetera;
+import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.exceptions.AccesoNegadoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
@@ -9,6 +11,10 @@ import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
+import com.proyecto.tiendaVirtual.perfil.model.Perfil;
+import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
+import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
+import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +26,10 @@ import java.util.Optional;
 public class JuegoServiceImpl implements JuegoService{
     @Autowired
     JuegoRepository repo;
+    @Autowired
+    PerfilRepository perfilRepo;
+    @Autowired
+    BilleteraService billeteraService;
     @Autowired
     SecurityUtils securityUtils;
 
@@ -111,6 +121,31 @@ public class JuegoServiceImpl implements JuegoService{
         }
 
         repo.delete(juego);
+    }
+
+
+    @Override
+    @Transactional
+    public void comprarJuego(Long juegoId) {
+        Perfil perfil = securityUtils.getLoggedUser().getPerfil();
+
+        //El juego existe?
+        Juego juego = repo.findById(juegoId)
+                .orElseThrow(() -> new ElementoNoEncontradoException("Juego no encontrado con ID: " + juegoId));
+
+        //Ya tiene comprado el Juego?
+        if (perfil.getJuegos().contains(juego)) {
+            throw new ElementoYaExistenteException("Ya tienes este juego.");
+        }
+
+        //Realizar el Pago
+        billeteraService.restarSaldo(juego.getPrecio());
+
+        // Agregar juego a la lista del Perfil
+        perfil.getJuegos().add(juego);
+
+        // Guardar usuario (o billetera, según cómo esté configurado)
+        perfilRepo.save(perfil);
     }
 
 

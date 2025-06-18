@@ -7,7 +7,6 @@ import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +42,13 @@ public class JuegoController {
     public ResponseEntity<Void> eliminarJuego(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
+//    Comprar Juego
+    @PostMapping("/{id}/comprar")
+    public ResponseEntity<Void> comprar(@PathVariable Long id) {
+        service.comprarJuego(id);
+        return ResponseEntity.ok().build();
     }
 
 //    Get ALL

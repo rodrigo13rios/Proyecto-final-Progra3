@@ -17,4 +17,5 @@ public interface JuegoService {
     Optional<Juego> getByNombre(String nombre);
     List<Juego> getByCategoria(String categoria);
     List<Juego> getAll();
+    void comprarJuego(Long juegoId);
 }
