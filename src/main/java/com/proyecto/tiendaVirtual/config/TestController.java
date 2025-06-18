@@ -17,7 +17,6 @@ public class TestController {
     @Autowired
     UserRepository userRepo;
 
-
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
         return ResponseEntity.ok("Autenticado correctamente!");

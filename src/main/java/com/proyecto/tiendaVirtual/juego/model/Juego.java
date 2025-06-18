@@ -20,9 +20,8 @@ public class Juego {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @NotNull(message = "El nombre no puede ser nulo")
-    @Size(max = 40, message = "El nombre del juego no puede exceder de 40 caracteres")
+    @Size(max = 50, message = "El nombre del juego no puede exceder de 50 caracteres")
     private String nombre;
     @NotNull
     @PastOrPresent(message = "La fecha debe ser pasada u hoy")
@@ -31,7 +30,7 @@ public class Juego {
 
     @Min(value =0, message = "La cantidad unitaria no puede ser menor a 0")
     @Max(value = 999999999, message = "el valor no puede ser mayor a 999999999")
-    @NotNull(message = "el precio actual puede estar vacio")
+    @NotNull(message = "el precio no puede estar vacio")
     private Double precio;
 
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,6 @@
 package com.proyecto.tiendaVirtual.config;
 
-import com.proyecto.tiendaVirtual.exceptions.AccesoNegadoException;
+import com.proyecto.tiendaVirtual.exceptions.AccesoDenegadoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.NumeroInvalidoException;
@@ -36,8 +36,8 @@ public class GlobalExceptionHandler {
         error.put("Error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
-    @ExceptionHandler(AccesoNegadoException.class)
-    public ResponseEntity<Map<String,String>> catchAccesoNegado(AccesoNegadoException ex){
+    @ExceptionHandler(AccesoDenegadoException.class)
+    public ResponseEntity<Map<String,String>> catchAccesoNegado(AccesoDenegadoException ex){
         Map<String,String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);

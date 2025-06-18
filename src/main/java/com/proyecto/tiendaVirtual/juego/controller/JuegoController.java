@@ -1,114 +1,83 @@
 package com.proyecto.tiendaVirtual.juego.controller;
 
 
+import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
-import com.proyecto.tiendaVirtual.utils.ApiResponse;
-import com.proyecto.tiendaVirtual.utils.ValueMapper;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 
-@Slf4j
 @Controller
 @RequestMapping("api/juego")
 public class JuegoController {
+    @Autowired
+    private JuegoService service;
 
-    private final JuegoService juegoService;
-
-    public JuegoController(JuegoService juegoService) {
-        this.juegoService = juegoService;
+//    Create
+    @PostMapping
+    public ResponseEntity<Juego> createJuego(@Valid @RequestBody JuegoDTO juegoDTO){
+        Juego result = service.create(juegoDTO);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<ApiResponse>getJuegos(){
-        List<Juego> juegos=juegoService.getAll();
-        if(!juegos.isEmpty()){
-            ApiResponse<List<Juego>>juegoApiResponse=new ApiResponse<>(juegos);
-            log.info("JuegoController::getJuegos response{}", ValueMapper.jsonAsString(juegoApiResponse));
-            return new ResponseEntity<>(juegoApiResponse, HttpStatus.OK);
-        }
-        log.info("ProductController::getJuegos - No se encontraron juegos, returning NO_CONTENT.");
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('DESARROLLADORA')")
-    public ResponseEntity<ApiResponse> createNewJuego(@RequestBody @Valid Juego juegoNuevo){
-        log.info("JuegoController::createNewJuego peticion{}",ValueMapper.jsonAsString(juegoNuevo));
-
-        juegoService.create(juegoNuevo);
-        ApiResponse<Juego>JuegoApiResponse=new ApiResponse<>(juegoNuevo);
-        log.info("juegoController::createNewJuego response{}", ValueMapper.jsonAsString(JuegoApiResponse));
-        return new ResponseEntity<>(JuegoApiResponse,HttpStatus.CREATED);
-
-    }
-
-    @PutMapping("/update/{id_juego}")
-    @PreAuthorize("hasRole('DESARROLLADORA')")
-    public ResponseEntity<ApiResponse>updateJuego(@Valid @PathVariable Long id_juego,@RequestBody Juego juegoUpdate){
-        log.info("JuegoController::updateJuego response {}",ValueMapper.jsonAsString(id_juego));
-        Juego juegoNuevo=juegoService.update(id_juego,juegoUpdate);
-
-        ApiResponse<Juego> juegoApiResponse=new ApiResponse<>(juegoNuevo);
-        log.info("JuegoController::updateJuego response {}",ValueMapper.jsonAsString(juegoApiResponse));
-        return new ResponseEntity<>(juegoApiResponse,HttpStatus.OK);
-
-    }
-
-    @DeleteMapping("/delete/{id_juego}")
-    @PreAuthorize("hasRole('DESARROLLADORA')")
-    public ResponseEntity<ApiResponse>deleteJuego(@PathVariable Long id_juego){
-        log.info("JuegoController::deleteJuego peticion iniciada con el id:{}", ValueMapper.jsonAsString(id_juego));
-        Optional<Juego> juego=juegoService.findById(id_juego);
-        if (juego.isPresent()){
-            juegoService.delete(id_juego);
-            ApiResponse<String> juegoResponse= new ApiResponse<>("Juego eliminado");
-            log.info("JuegoController::deleteJuego respuesta{}",ValueMapper.jsonAsString(juegoResponse));
-            return  new ResponseEntity<>(juegoResponse,HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    }
-
-    @GetMapping("/buscarPorId/{id_juego}")
-    public ResponseEntity<ApiResponse>findById(@PathVariable Long id_juego){
-        log.info("JuegoController::findById peticion iniciada con id: {}",ValueMapper.jsonAsString(id_juego));
-        Optional<Juego> juego=juegoService.findById(id_juego);
-
-        if (juego.isPresent()){
-            ApiResponse<Juego>juegoApiResponse=new ApiResponse<>(juego.get());
-            log.info("JuegoController::findById response{}",ValueMapper.jsonAsString(juegoApiResponse));
-            return new ResponseEntity(juegoApiResponse,HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    }
-
-    @GetMapping("/buscarPorNombre/{nombre}")
-    public ResponseEntity<ApiResponse>findByNombre(@PathVariable String nombre_juego){
-        log.info("JuegoController::findByNombre peticion iniciada con nombre: {}",ValueMapper.jsonAsString(nombre_juego));
-        Optional<Juego>juego=juegoService.findByName(nombre_juego);
-
-        if (juego.isPresent()){
-            ApiResponse<Juego> juegoApiResponse=new ApiResponse<>(juego.get());
-            log.info("JuegoController::findByNombre response{}",ValueMapper.jsonAsString(juegoApiResponse));
-            return new ResponseEntity<>(juegoApiResponse,HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    Update
+    @PutMapping("/{id}")
+    public ResponseEntity<Juego> actualizar(@PathVariable Long id, @Valid @RequestBody JuegoUpdateDTO dto) {
+        Juego actualizado = service.update(id, dto);
+        return ResponseEntity.ok(actualizado);
     }
 
 
+//    Delete
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarJuego(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build(); // 204 No Content
 
+    }
+
+//    Comprar Juego
+    @PostMapping("/{id}/comprar")
+    public ResponseEntity<Void> comprar(@PathVariable Long id) {
+        service.comprarJuego(id);
+        return ResponseEntity.ok().build();
+    }
+
+//    Get ALL
+    @GetMapping
+    public ResponseEntity<List<Juego>> getAll(){
+        List<Juego> juegos = service.getAll();
+        return ResponseEntity.ok(juegos);
+    }
+
+//    Get By ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Juego> getById(@PathVariable Long id){
+        Juego juego = service.getById(id).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con id:"+id));
+        return ResponseEntity.ok(juego);
+    }
+
+//    Get By Nombre
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<Juego> getByNombre(@PathVariable String nombre){
+        Juego juego = service.getByNombre(nombre).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con el nombre '"+nombre));
+        return ResponseEntity.ok(juego);
+    }
+
+//    Get All By Categoria
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<Juego>> getByCategoria(@PathVariable String categoria){
+        List<Juego> juegos = service.getByCategoria(categoria);
+        return ResponseEntity.ok(juegos);
+    }
 }

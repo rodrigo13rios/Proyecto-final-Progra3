@@ -8,15 +8,12 @@ import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
-import com.proyecto.tiendaVirtual.user.dto.UserDTO;
-import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class PerfilServiceImpl implements PerfilService {
@@ -75,7 +72,7 @@ public class PerfilServiceImpl implements PerfilService {
         Perfil perfil = repo.findById(id)
                 .orElseThrow(()->new ElementoNoEncontradoException("Perfil con ID "+id+" no encontrado"));
 
-        Juego juego = juegoService.findById(id)
+        Juego juego = juegoService.getById(id)
                 .orElseThrow(()->new ElementoNoEncontradoException("Juego no encontrado"));
 
         if (perfil.getJuegos().contains(juego)) throw new ElementoYaExistenteException("El perfil ya posee este juego");

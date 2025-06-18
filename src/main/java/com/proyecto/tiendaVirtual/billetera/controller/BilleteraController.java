@@ -22,11 +22,13 @@ public class BilleteraController {
     /// No POST: Billetera se crea desde Perfil
     /// No DELETE: Billetera se borra junto a Perfil
 
+    //Consultar Saldo
     @GetMapping
     public ResponseEntity<Double> consultar() {
         return ResponseEntity.ok(service.consultarSaldo());
     }
 
+    //Cargar Saldo
     @PostMapping("/cargar")
 
     public ResponseEntity<Double> cargar(@RequestBody BilleteraDTO dto) {//Se recive desde Postman {"monto":1234}
@@ -35,8 +37,7 @@ public class BilleteraController {
         return ResponseEntity.ok(nuevoSaldo);
     }
 
-
-    //Con fines de testeo. En la práctica solo se descontaría saldo al comprar un juego
+    //Restar Saldo: Con fines de testeo. En la práctica solo se descontaría saldo al comprar un juego
     @PostMapping("/restar")
 
     public ResponseEntity<Double> restar(@RequestBody BilleteraDTO dto) {
