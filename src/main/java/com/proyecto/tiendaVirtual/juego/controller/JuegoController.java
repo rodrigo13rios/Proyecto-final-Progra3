@@ -4,6 +4,7 @@ package com.proyecto.tiendaVirtual.juego.controller;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import jakarta.validation.Valid;
@@ -55,8 +56,8 @@ public class JuegoController {
 
 //    Get ALL
     @GetMapping
-    public ResponseEntity<List<Juego>> getAll(){
-        List<Juego> juegos = service.getAll();
+    public ResponseEntity<List<JuegoVerDTO>> getAll(){
+        List<JuegoVerDTO> juegos = service.getAll();
         return ResponseEntity.ok(juegos);
     }
 
@@ -69,15 +70,15 @@ public class JuegoController {
 
 //    Get By Nombre
     @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<Juego> getByNombre(@PathVariable String nombre){
-        Juego juego = service.getByNombre(nombre).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con el nombre '"+nombre));
+    public ResponseEntity<JuegoVerDTO> getByNombre(@PathVariable String nombre){
+        JuegoVerDTO juego = service.getByNombre(nombre).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con el nombre '"+nombre));
         return ResponseEntity.ok(juego);
     }
 
 //    Get All By Categoria
     @GetMapping("/categoria/{categoria}")
-    public ResponseEntity<List<Juego>> getByCategoria(@PathVariable String categoria){
-        List<Juego> juegos = service.getByCategoria(categoria);
+    public ResponseEntity<List<JuegoVerDTO>> getByCategoria(@PathVariable String categoria){
+        List<JuegoVerDTO> juegos = service.getByCategoria(categoria);
         return ResponseEntity.ok(juegos);
     }
 }
