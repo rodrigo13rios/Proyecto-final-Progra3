@@ -98,4 +98,27 @@ public class PerfilServiceImpl implements PerfilService {
         }
         return repo.save(existente);
     }
+
+    @Override
+    public void agregarAFavoritos(Long juegoId){
+        Perfil perfil = securityUtils.getLoggedUser().getPerfil();
+        if (perfil == null){
+            throw new ElementoNoEncontradoException("No ha podido obtener el user del perfil logueado");
+        }
+        Juego juego = juegoService.getById(juegoId)
+                .orElseThrow(()-> new ElementoNoEncontradoException("Juego no encontrado"));
+
+        if (perfil.getFavoritos().contains(juego)) throw new ElementoYaExistenteException("El perfil ya tiene este videojuego en la lista de favoritos");
+
+        perfil.getFavoritos().add(juego);
+        repo.save(perfil);
+    }
+
+    @Override
+    public List<Juego> obtenerFavoritos() {
+        Perfil perfil = securityUtils.getLoggedUser().getPerfil();
+        if (perfil == null) throw new ElementoNoEncontradoException("No se ha podido obtener el user del perfil logueado");
+
+        return perfil.getFavoritos();
+    }
 }

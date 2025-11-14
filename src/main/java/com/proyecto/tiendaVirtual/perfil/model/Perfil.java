@@ -38,4 +38,6 @@ public class Perfil {
             inverseJoinColumns = @JoinColumn(name = "id_juego")
     )
     private List<Juego> juegos = new ArrayList<>();
+
+    private List<Juego> favoritos = new ArrayList<>();
 }

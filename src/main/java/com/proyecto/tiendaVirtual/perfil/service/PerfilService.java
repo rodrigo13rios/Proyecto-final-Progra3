@@ -23,4 +23,6 @@ public interface PerfilService {
     List<Juego> obtenerJuegos(Long id);
     List<Juego> obtenerJuegos();
     void agregarJuego(Long id,Long juegoId);
+    void agregarAFavoritos(Long juegoId);
+    List<Juego> obtenerFavoritos();
 }
