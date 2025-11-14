@@ -36,6 +36,9 @@ public class Juego {
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
 
+    @NotNull
+    private String foto;
+
     @ManyToOne
     @JoinColumn(name = "id_desarrolladora", nullable = false)
     private Desarrolladora desarrolladora;

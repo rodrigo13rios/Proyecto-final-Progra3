@@ -26,4 +26,7 @@ public class JuegoUpdateDTO {
     private Double precio;
 
     private String categoria;
+
+    @NotNull(message = "Debe ingresar una URL para la foto")
+    private String foto;
 }

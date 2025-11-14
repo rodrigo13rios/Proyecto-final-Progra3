@@ -7,6 +7,7 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
@@ -56,6 +57,7 @@ public class JuegoServiceImpl implements JuegoService{
         } catch (IllegalArgumentException ex) {
             throw new ElementoNoEncontradoException("No se ha encontrado la categoría: " + dto.getCategoria() + ", o no se ha podido asignar");
         }
+        juego.setFoto(dto.getFoto());
 
         return repo.save(juego);
     }
@@ -97,6 +99,7 @@ public class JuegoServiceImpl implements JuegoService{
                 throw new ElementoNoEncontradoException("No se ha encontrado la categoría: " + nuevo.getCategoria() + ", o no se ha podido asignar");
             }
         }
+        if (nuevo.getFoto()!=null) existente.setFoto(nuevo.getFoto());
 
         return repo.save(existente);
 
@@ -156,25 +159,41 @@ public class JuegoServiceImpl implements JuegoService{
     }
 
     @Override
-    public Optional<Juego> getByNombre(String nombre){
-        return repo.findByNombre(nombre);
+    public Optional<JuegoVerDTO> getByNombre(String nombre){
+        return repo.findByNombre(nombre).map(this::convertirAVerDTO);
     }
 
     @Override
 
-    public List<Juego> getByCategoria(String strCategoria){
+    public List<JuegoVerDTO> getByCategoria(String strCategoria){
         Categoria categoriaEnum;
         try { //"Traduzco" la Categoria
             categoriaEnum = Categoria.valueOf(strCategoria.toUpperCase());
         } catch (IllegalArgumentException ex) {
             throw new ElementoNoEncontradoException("No se ha encontrado la categoría: " + strCategoria + ", o no se ha podido asignar");
         }
-        return repo.getByCategoria(categoriaEnum);
+        return repo.getByCategoria(categoriaEnum).stream().map(this::convertirAVerDTO).toList();
 
     }
 
     @Override
-    public List<Juego> getAll() {
-        return repo.findAll();
+    public List<JuegoVerDTO> getAll() {
+        return repo.findAll().stream().map(this::convertirAVerDTO).toList();
     }
+
+
+    public JuegoVerDTO convertirAVerDTO(Juego juego){
+        JuegoVerDTO dto = new JuegoVerDTO();
+
+        dto.setNombre(juego.getNombre());
+        dto.setFechaLanzamiento(juego.getFechaLanzamiento());
+        dto.setPrecio(juego.getPrecio());
+        dto.setCategoria(juego.getCategoria());
+        dto.setFoto(juego.getFoto());
+        dto.setNombreDesarrolladora(juego.getDesarrolladora().getNombre());
+
+        return dto;
+    }
+
 }
+

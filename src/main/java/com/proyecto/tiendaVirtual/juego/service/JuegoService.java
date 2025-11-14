@@ -2,6 +2,7 @@ package com.proyecto.tiendaVirtual.juego.service;
 
 import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,9 @@ public interface JuegoService {
     Juego update(Long id, JuegoUpdateDTO dto);
     void delete(Long id);
     Optional<Juego> getById(Long id);
-    Optional<Juego> getByNombre(String nombre);
-    List<Juego> getByCategoria(String categoria);
-    List<Juego> getAll();
+    Optional<JuegoVerDTO> getByNombre(String nombre);
+    List<JuegoVerDTO> getByCategoria(String categoria);
+    List<JuegoVerDTO> getAll();
     void comprarJuego(Long juegoId);
+    JuegoVerDTO convertirAVerDTO (Juego juego);
 }

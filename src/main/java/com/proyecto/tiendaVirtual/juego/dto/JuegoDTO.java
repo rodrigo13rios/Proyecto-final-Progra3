@@ -30,4 +30,7 @@ public class JuegoDTO {
 
     @NotNull(message = "La categoría no puede ser nula")
     private String categoria;
+
+    @NotNull(message = "Debe ingresar una URL para la foto")
+    private String foto;
 }
