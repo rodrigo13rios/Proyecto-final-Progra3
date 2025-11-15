@@ -58,6 +58,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/juego/*/comprar").hasRole("PERFIL") //Solo Perfiles pueden comprar Juegos
                         .requestMatchers("/api/juego/**").hasRole("DESARROLLADORA") //Otros métodos POST/PUT/DEL requieren el Rol
 
+                        // Carrito de compras
+                        .requestMatchers(HttpMethod.GET, "/api/carrito").hasRole("PERFIL")             // Obtener el carrito
+                        .requestMatchers(HttpMethod.POST, "/api/carrito/add").hasRole("PERFIL")       // Agregar juego
+                        .requestMatchers(HttpMethod.DELETE, "/api/carrito/remove/**").hasRole("PERFIL") // Eliminar juego por ID
+                        .requestMatchers(HttpMethod.DELETE, "/api/carrito/clear").hasRole("PERFIL")   // Vaciar carrito
+
+
+
 
                         //Otras Rutas
 
