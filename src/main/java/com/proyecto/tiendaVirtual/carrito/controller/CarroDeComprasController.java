@@ -1,6 +1,7 @@
 package com.proyecto.tiendaVirtual.carrito.controller;
 
 import com.proyecto.tiendaVirtual.carrito.dto.CarroDeComprasDTO;
+import com.proyecto.tiendaVirtual.carrito.dto.NombreJuegoDTO;
 import com.proyecto.tiendaVirtual.carrito.model.CarroDeCompras;
 import com.proyecto.tiendaVirtual.carrito.service.CarroDeComprasService;
 import jakarta.validation.Valid;
@@ -26,8 +27,8 @@ public class CarroDeComprasController {
 
     // Obtener el carrito del usuario logeado
     @GetMapping
-    public ResponseEntity<CarroDeCompras> getCarrito() {
-        CarroDeCompras carro = service.getCarroByCliente();
+    public ResponseEntity<CarroDeComprasDTO> getCarrito() {
+        CarroDeComprasDTO carro = service.getCarroByClienteDTO();
         return ResponseEntity.ok(carro);
     }
 
@@ -35,9 +36,9 @@ public class CarroDeComprasController {
     // Agregar un juego
     @PostMapping("/add")
     public ResponseEntity<CarroDeCompras> addJuegoAlCarro(
-            @RequestBody @Valid CarroDeComprasDTO dto) {
+            @RequestBody @Valid NombreJuegoDTO nombreJuego) {
 
-        CarroDeCompras carro = service.addJuego(dto);
+        CarroDeCompras carro = service.addJuego(nombreJuego);
         return new ResponseEntity<>(carro, HttpStatus.CREATED);
     }
 

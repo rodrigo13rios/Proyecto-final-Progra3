@@ -59,11 +59,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/juego/**").hasRole("DESARROLLADORA") //Otros métodos POST/PUT/DEL requieren el Rol
 
                         // Carrito de compras
-                        .requestMatchers(HttpMethod.GET, "/api/carrito").hasRole("PERFIL")             // Obtener el carrito
-                        .requestMatchers(HttpMethod.POST, "/api/carrito/add").hasRole("PERFIL")       // Agregar juego
-                        .requestMatchers(HttpMethod.DELETE, "/api/carrito/remove/**").hasRole("PERFIL") // Eliminar juego por ID
-                        .requestMatchers(HttpMethod.DELETE, "/api/carrito/clear").hasRole("PERFIL")   // Vaciar carrito
+                        .requestMatchers(HttpMethod.GET, "/api/carrito").hasRole("PERFIL")             //Solo Perfiles pueden GET
+                        .requestMatchers(HttpMethod.POST, "/api/carrito/add").hasRole("PERFIL")       //Solo Perfiles pueden agregar
+                        .requestMatchers(HttpMethod.DELETE, "/api/carrito/remove/**").hasRole("PERFIL") //Solo Perfiles pueden eliminar item
+                        .requestMatchers(HttpMethod.DELETE, "/api/carrito/clear").hasRole("PERFIL")   //Solo Perfiles pueden limpiar
 
+                        //Compras
+                        .requestMatchers(HttpMethod.GET, "/api/compra/*").hasRole("DESARROLLADORA") //Solo Desarrolladoras pueden GET by id
+                        .requestMatchers(HttpMethod.GET, "/api/compra/get").hasRole("DESARROLLADORA")// Solo Desarrolladoras pueden ver todas las compras
+                        .requestMatchers(HttpMethod.GET, "/api/compra").hasRole("PERFIL")          //Solo Perfiles pueden GET propio
+                        .requestMatchers(HttpMethod.POST, "/api/compra").hasRole("PERFIL")//Solo Perfiles pueden Comprar
 
 
 

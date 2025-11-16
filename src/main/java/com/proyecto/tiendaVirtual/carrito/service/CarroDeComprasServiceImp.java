@@ -1,9 +1,14 @@
 package com.proyecto.tiendaVirtual.carrito.service;
 
 import com.proyecto.tiendaVirtual.carrito.dto.CarroDeComprasDTO;
+import com.proyecto.tiendaVirtual.carrito.dto.JuegoToCarroDTO;
+import com.proyecto.tiendaVirtual.carrito.dto.NombreJuegoDTO;
 import com.proyecto.tiendaVirtual.carrito.model.CarroDeCompras;
 import com.proyecto.tiendaVirtual.carrito.repository.CarroDeComprasRepository;
+import com.proyecto.tiendaVirtual.compra.dto.CompraDTO;
+import com.proyecto.tiendaVirtual.compra.model.Compra;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
 import com.proyecto.tiendaVirtual.user.model.User;
@@ -26,14 +31,19 @@ public class CarroDeComprasServiceImp implements CarroDeComprasService {
     private SecurityUtils securityUtils;
 
 
-    // Obtener carrito del usuario logeado
-    public CarroDeCompras getCarroByCliente() {
+    // get carrito del usuario logeado
+    public CarroDeComprasDTO getCarroByClienteDTO() {
         User cliente = securityUtils.getLoggedUser();
 
-        return carroDeCompraRepository.findByCliente_Id(cliente.getId())
+        CarroDeCompras compras=carroDeCompraRepository.findByCliente_Id(cliente.getId())
                 .orElseThrow(() -> new ElementoNoEncontradoException("El carrito está vacío o no existe"));
+        return convertirACarroDTO(compras);
     }
 
+    // Obtener carrito del usuario logeado
+    public CarroDeCompras getCarroByCliente() {
+        User cliente = securityUtils.getLoggedUser(); return carroDeCompraRepository.findByCliente_Id(cliente.getId())
+                .orElseThrow(() -> new ElementoNoEncontradoException("El carrito está vacío o no existe")); }
 
     // Vaciar carrito
     @Transactional
@@ -60,10 +70,10 @@ public class CarroDeComprasServiceImp implements CarroDeComprasService {
 
     // Agregar juego al carrito
     @Transactional
-    public CarroDeCompras addJuego(CarroDeComprasDTO dto) {
+    public CarroDeCompras addJuego(NombreJuegoDTO nombreJugo) {
 
         User cliente = securityUtils.getLoggedUser();
-        Juego juego = juegoRepository.findByNombre(dto.getNombreJuego())
+        Juego juego = juegoRepository.findByNombre(nombreJugo.getNombreJuego())
                 .orElseThrow(() -> new ElementoNoEncontradoException("Juego no encontrado"));
 
         // Busca carrito del usuario
@@ -79,6 +89,9 @@ public class CarroDeComprasServiceImp implements CarroDeComprasService {
         if (carro.getJuegos().contains(juego)) {
             throw new IllegalArgumentException("El juego ya está en el carrito");
         }
+        if (cliente.getPerfil().getJuegos().contains(juego)){
+            throw new ElementoYaExistenteException("Ya tienes el juego en tu biblioteca");
+        }
 
         // Agrega el juego
         carro.getJuegos().add(juego);
@@ -91,4 +104,22 @@ public class CarroDeComprasServiceImp implements CarroDeComprasService {
         CarroDeCompras carro = getCarroByCliente();
         return (long) carro.getJuegos().size();
     }
+
+    @Override
+    public CarroDeComprasDTO convertirACarroDTO(CarroDeCompras compra) {
+
+        List<JuegoToCarroDTO> juegosDTO = compra.getJuegos()
+                .stream()
+                .map(juego -> new JuegoToCarroDTO(
+                        juego.getNombre(),
+                        juego.getPrecio(),
+                        juego.getFoto()
+                ))
+                .toList();
+
+        return new CarroDeComprasDTO(compra.getId(),juegosDTO);
+    }
+
+
+
 }
