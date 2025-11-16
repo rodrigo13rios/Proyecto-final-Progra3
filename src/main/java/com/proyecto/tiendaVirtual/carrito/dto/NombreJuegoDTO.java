@@ -1,16 +1,12 @@
 package com.proyecto.tiendaVirtual.carrito.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarroDeComprasDTO {
-    private Long idCarrito;
-    private List<JuegoToCarroDTO>juegos;
+public class NombreJuegoDTO {
+    private String nombreJuego;
 }

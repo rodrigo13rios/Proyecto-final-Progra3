@@ -22,13 +22,13 @@ public class CarroDeCompras {
     private Long id;
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
     @JsonIgnore
     private User cliente;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "carrito_juegos",
             joinColumns = @JoinColumn(name = "carrito_id"),
