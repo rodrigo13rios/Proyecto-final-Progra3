@@ -73,9 +73,15 @@ public class PerfilController {
         return ResponseEntity.ok(favoritos);
     }
 
-    @PutMapping ("/juegos/favoritos/agregar")
-    public ResponseEntity<Void> agregarFavoritos(@PathVariable Long juegoId){
-        service.agregarAFavoritos(juegoId);
-        return ResponseEntity.noContent().build();
+    @PatchMapping ("/juegos/favoritos/{juegoId}")
+    public ResponseEntity<Perfil> agregarFavoritos(@PathVariable Long juegoId){
+        Perfil actualizado = service.agregarAFavoritos(juegoId);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/juegos/favoritos/{juegoId}")
+    public ResponseEntity<Perfil> eliminarFavoritos(@PathVariable Long juegoId){
+        Perfil actualizado = service.eliminarFavoritos(juegoId);
+        return ResponseEntity.ok(actualizado);
     }
 }
