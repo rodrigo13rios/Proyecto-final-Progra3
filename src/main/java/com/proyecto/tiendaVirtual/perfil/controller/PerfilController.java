@@ -30,7 +30,7 @@ public class PerfilController {
         return ResponseEntity.ok(perfiles);
     }
 
-//    Get By ID
+    //    Get By ID
     @GetMapping("/id/{id}")
     public ResponseEntity<Perfil> getById(@PathVariable Long id) {
         Perfil desarrolladora = service.getById(id)
@@ -65,5 +65,23 @@ public class PerfilController {
     public ResponseEntity<Perfil> update(@Valid @RequestBody PerfilDTO perfil){
         Perfil result = service.update(perfil);
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @GetMapping ("/juegos/favoritos")
+    public ResponseEntity<List<Juego>> getFavoritos(){
+        List<Juego> favoritos = service.obtenerFavoritos();
+        return ResponseEntity.ok(favoritos);
+    }
+
+    @PatchMapping ("/juegos/favoritos/{juegoId}")
+    public ResponseEntity<Perfil> agregarFavoritos(@PathVariable Long juegoId){
+        Perfil actualizado = service.agregarAFavoritos(juegoId);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/juegos/favoritos/{juegoId}")
+    public ResponseEntity<Perfil> eliminarFavoritos(@PathVariable Long juegoId){
+        Perfil actualizado = service.eliminarFavoritos(juegoId);
+        return ResponseEntity.ok(actualizado);
     }
 }

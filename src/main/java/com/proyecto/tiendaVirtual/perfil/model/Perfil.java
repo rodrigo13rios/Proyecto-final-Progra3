@@ -38,4 +38,12 @@ public class Perfil {
             inverseJoinColumns = @JoinColumn(name = "id_juego")
     )
     private List<Juego> juegos = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "perfil_favoritos",
+            joinColumns = @JoinColumn(name = "id_perfil"),
+            inverseJoinColumns = @JoinColumn(name = "id_juego")
+    )
+    private List<Juego> favoritos = new ArrayList<>();
 }
