@@ -6,6 +6,9 @@ import com.proyecto.tiendaVirtual.carrito.service.CarroDeComprasService;
 import com.proyecto.tiendaVirtual.compra.dto.CompraDTO;
 import com.proyecto.tiendaVirtual.compra.model.Compra;
 import com.proyecto.tiendaVirtual.compra.repository.CompraRepository;
+import com.proyecto.tiendaVirtual.compraDetalle.model.CompraDetalle;
+import com.proyecto.tiendaVirtual.compraDetalle.repository.CompraDetalleRepository;
+import com.proyecto.tiendaVirtual.compraDetalle.service.CompraDetalleService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.NumeroInvalidoException;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
@@ -33,6 +36,8 @@ public class CompraServiceImp implements CompraService{
     BilleteraService billeteraService;
     @Autowired
     SecurityUtils securityUtils;
+    @Autowired
+    CompraDetalleService compraDetalleService;
 
 
     @Transactional
@@ -64,6 +69,8 @@ public class CompraServiceImp implements CompraService{
 
         //Guarda la compra
         this.repo.save(compra);
+
+        compraDetalleService.createDetalles(compra,compras);
 
         //Asigna los juegos al cliente
         List<Juego> juegosComprados = new ArrayList<>(compras.getJuegos());
