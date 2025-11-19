@@ -1,8 +1,10 @@
 package com.proyecto.tiendaVirtual.desarrolladora.controller;
 
+import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.model.Juego;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,10 @@ public class DesarrolladoraController {
 
 //    Get ALL
     @GetMapping
-    public List<Desarrolladora> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<DesarrolladoraDTO>> getAll()
+    {
+        List<DesarrolladoraDTO> desarrolladoras = service.getAll();
+        return ResponseEntity.ok(desarrolladoras);
     }
 
 //    Get By ID
@@ -38,5 +42,11 @@ public class DesarrolladoraController {
     public ResponseEntity<Desarrolladora> update(@Valid @RequestBody Desarrolladora desarrolladora) {
         Desarrolladora result = service.update(desarrolladora);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/juegos-propios")
+    public ResponseEntity<List<Juego>> getJuegos(){
+        List<Juego> juegos = service.getJuegos();
+        return ResponseEntity.ok(juegos);
     }
 }

@@ -1,9 +1,12 @@
 package com.proyecto.tiendaVirtual.desarrolladora.service;
 
+import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraRepository;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
+import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
@@ -42,8 +45,8 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     }
 
     @Override
-    public List<Desarrolladora> getAll() {
-        return repo.findAll();
+    public List<DesarrolladoraDTO> getAll() {
+        return repo.findAll().stream().map(this::convertirADTO).toList();
     }
 
     @Override
@@ -73,5 +76,24 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
         // Guardar y retornar
         return repo.save(existente);
+    }
+
+    public List<Juego> getJuegos(){
+        Desarrolladora desarrolladora = securityUtils.getLoggedUser().getDesarrolladora();
+        if (desarrolladora==null)throw new ElementoNoEncontradoException("No se ha podido obtener la desarrolladora del User logueado");
+
+        return desarrolladora.getJuegos();
+    }
+
+    public DesarrolladoraDTO convertirADTO(Desarrolladora desarrolladora){
+        DesarrolladoraDTO dto = new DesarrolladoraDTO();
+
+        dto.setNombre(desarrolladora.getNombre());
+        dto.setPais(desarrolladora.getPaisOrigen());
+
+        String nombreApellido = desarrolladora.getUser().getNombre()+" "+desarrolladora.getUser().getApellido();
+        dto.setCEO(nombreApellido);
+
+        return dto;
     }
 }
