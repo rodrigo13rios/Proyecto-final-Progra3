@@ -18,11 +18,6 @@ public class CompraDetalleController {
     @Autowired
     CompraDetalleService service;
 
-//    @GetMapping
-//    public ResponseEntity<EstadisticasDesarrolladoraDTO> obtenerEstadisticas() {
-//        EstadisticasDesarrolladoraDTO dto = service.obtenerEstadisticas();
-//        return ResponseEntity.ok(dto);
-//    }
 
     @GetMapping
     public ResponseEntity<EstadisticasDesarrolladoraDTO> obtenerEstadisticas() {

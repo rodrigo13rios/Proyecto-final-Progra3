@@ -8,6 +8,4 @@ import java.util.List;
 
 @Repository
 public interface CompraDetalleRepository extends JpaRepository<CompraDetalle, Long> {
-    List<CompraDetalle> findAllByCompraId(Long compraId);
-    List<CompraDetalle> findAllByJuegoId(Long juegoId);
 }

@@ -3,15 +3,12 @@ package com.proyecto.tiendaVirtual.compraDetalle.service;
 import com.proyecto.tiendaVirtual.carrito.model.CarroDeCompras;
 import com.proyecto.tiendaVirtual.compra.model.Compra;
 import com.proyecto.tiendaVirtual.compraDetalle.dto.EstadisticasDesarrolladoraDTO;
-import com.proyecto.tiendaVirtual.compraDetalle.dto.JuegoResumenDTO;
 import com.proyecto.tiendaVirtual.compraDetalle.dto.VentaJuegoDTO;
 import com.proyecto.tiendaVirtual.compraDetalle.model.CompraDetalle;
 import com.proyecto.tiendaVirtual.compraDetalle.repository.CompraDetalleRepository;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
-import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
-import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,15 +35,6 @@ public class CompraDetalleServiceImpl implements CompraDetalleService{
         repo.saveAll(detalles);
     }
 
-
-
-    private Desarrolladora getDesarrolladoraLogueada() {
-        User user = securityUtils.getLoggedUser();
-
-
-        return desarrolladoraService.findById(user.getDesarrolladora().getId())
-                .orElseThrow(() -> new ElementoNoEncontradoException("Desarrolladora no encontrada para el usuario logueado"));
-    }
     @Override
     public List<VentaJuegoDTO> ventasPorJuegoDeDesarrolladora() {
 
@@ -71,18 +59,12 @@ public class CompraDetalleServiceImpl implements CompraDetalleService{
                 .collect(Collectors.toList());
     }
 
-    // ---------------------------------------------------------
-    // JUEGO MÁS VENDIDO
-    // ---------------------------------------------------------
     @Override
     public Optional<VentaJuegoDTO> juegoMasVendido() {
         return ventasPorJuegoDeDesarrolladora().stream()
                 .max(Comparator.comparingLong(VentaJuegoDTO::getCantidadVendida));
     }
 
-    // ---------------------------------------------------------
-    // GANANCIAS HISTÓRICAS
-    // ---------------------------------------------------------
     @Override
     public double gananciasTotalesHistoricasDesarrolladora() {
 
@@ -98,9 +80,6 @@ public class CompraDetalleServiceImpl implements CompraDetalleService{
                 .sum();
     }
 
-    // ---------------------------------------------------------
-    // DTO FINAL
-    // ---------------------------------------------------------
     @Override
     public EstadisticasDesarrolladoraDTO obtenerEstadisticas() {
 
