@@ -1,19 +1,19 @@
 package com.proyecto.tiendaVirtual.juego.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "juegos")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Juego {
@@ -41,5 +41,6 @@ public class Juego {
 
     @ManyToOne
     @JoinColumn(name = "id_desarrolladora", nullable = false)
+    @JsonIgnore
     private Desarrolladora desarrolladora;
 }
