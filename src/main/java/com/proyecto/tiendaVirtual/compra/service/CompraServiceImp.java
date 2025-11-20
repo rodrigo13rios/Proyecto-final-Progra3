@@ -75,6 +75,7 @@ public class CompraServiceImp implements CompraService{
         //Asigna los juegos al cliente
         List<Juego> juegosComprados = new ArrayList<>(compras.getJuegos());
         cliente.getPerfil().setJuegos(juegosComprados);
+        carroService.clearCarroDeCompras();
     }
 
 
