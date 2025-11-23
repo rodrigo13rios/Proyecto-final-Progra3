@@ -1,6 +1,7 @@
 package com.proyecto.tiendaVirtual.juego.service;
 
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
+import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.exceptions.AccesoDenegadoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
@@ -15,6 +16,7 @@ import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -185,12 +187,17 @@ public class JuegoServiceImpl implements JuegoService{
     public JuegoVerDTO convertirAVerDTO(Juego juego){
         JuegoVerDTO dto = new JuegoVerDTO();
 
+        dto.setId(juego.getId());
         dto.setNombre(juego.getNombre());
         dto.setFechaLanzamiento(juego.getFechaLanzamiento());
         dto.setPrecio(juego.getPrecio());
         dto.setCategoria(juego.getCategoria());
         dto.setFoto(juego.getFoto());
-        dto.setNombreDesarrolladora(juego.getDesarrolladora().getNombre());
+        dto.setDesarrolladora(new DesarrolladoraDTO( //Convierto a DesarrolladoraDTO
+                juego.getDesarrolladora().getId(),
+                juego.getDesarrolladora().getNombre(),
+                juego.getDesarrolladora().getPaisOrigen()
+        ));
 
         return dto;
     }

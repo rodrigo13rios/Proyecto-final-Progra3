@@ -88,11 +88,9 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     public DesarrolladoraDTO convertirADTO(Desarrolladora desarrolladora){
         DesarrolladoraDTO dto = new DesarrolladoraDTO();
 
+        dto.setId(desarrolladora.getId());
         dto.setNombre(desarrolladora.getNombre());
         dto.setPais(desarrolladora.getPaisOrigen());
-
-        String nombreApellido = desarrolladora.getUser().getNombre()+" "+desarrolladora.getUser().getApellido();
-        dto.setCEO(nombreApellido);
 
         return dto;
     }
