@@ -9,6 +9,7 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraPerfilDTO;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
@@ -158,6 +159,16 @@ public class JuegoServiceImpl implements JuegoService{
     @Override
     public Optional<Juego> getById(Long id) {
         return repo.findById(id);
+    }
+
+    public Optional<JuegoVerDesarrolladoraPerfilDTO> getByIdVista(Long id) {
+        return repo.findById(id).map(j-> new JuegoVerDesarrolladoraPerfilDTO(j.getId(),
+                j.getNombre(),
+                j.getFechaLanzamiento(),
+                j.getPrecio(),
+                j.getCategoria(),
+                j.getFoto(),
+                j.getDesarrolladora().getNombre()));
     }
 
     @Override

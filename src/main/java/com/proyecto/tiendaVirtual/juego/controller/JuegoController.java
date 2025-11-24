@@ -5,6 +5,7 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraPerfilDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import jakarta.validation.Valid;
@@ -63,8 +64,8 @@ public class JuegoController {
 
 //    Get By ID
     @GetMapping("/{id}")
-    public ResponseEntity<Juego> getById(@PathVariable Long id){
-        Juego juego = service.getById(id).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con id:"+id));
+    public ResponseEntity<JuegoVerDesarrolladoraPerfilDTO> getByIdVista(@PathVariable Long id){
+        JuegoVerDesarrolladoraPerfilDTO juego = service.getByIdVista(id).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con id:"+id));
         return ResponseEntity.ok(juego);
     }
 
