@@ -2,6 +2,7 @@ package com.proyecto.tiendaVirtual.perfil.controller;
 
 
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
@@ -55,8 +56,8 @@ public class PerfilController {
 
 //    Get Juegos del Perfil loggeado
     @GetMapping("/juegos")
-    public ResponseEntity<List<Juego>> getJuegos(){
-        List<Juego> juegos = service.obtenerJuegos();
+    public ResponseEntity<List<JuegoVerDTO>> getJuegos(){
+        List<JuegoVerDTO> juegos = service.obtenerJuegos().stream().map(JuegoVerDTO::convertirAVerDTO).toList();
         return ResponseEntity.ok(juegos);
     }
 

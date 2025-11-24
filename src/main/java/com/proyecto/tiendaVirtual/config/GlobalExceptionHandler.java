@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NumeroInvalidoException.class)
     public ResponseEntity<Map<String,String>> catchNumeroInvalido(NumeroInvalidoException ex){
         Map<String, String> error = new HashMap<>();
-        error.put("Error", ex.getMessage());
+        error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
     @ExceptionHandler(AccesoDenegadoException.class)
@@ -50,8 +50,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> catchException(Exception ex) {
 
         Map<String, String> error = new HashMap<>();
-        error.put("error", "Ha ocurrido un error inesperado");
-        error.put("detalle", ex.getMessage());
+//        error.put("error", "Ha ocurrido un error inesperado");
+        error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

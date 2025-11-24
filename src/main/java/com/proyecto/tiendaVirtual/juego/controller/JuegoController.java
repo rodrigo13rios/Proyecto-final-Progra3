@@ -26,15 +26,15 @@ public class JuegoController {
 
 //    Create
     @PostMapping
-    public ResponseEntity<Juego> createJuego(@Valid @RequestBody JuegoDTO juegoDTO){
-        Juego result = service.create(juegoDTO);
+    public ResponseEntity<JuegoVerDTO> createJuego(@Valid @RequestBody JuegoDTO juegoDTO){
+        JuegoVerDTO result = service.convertirAVerDTO(service.create(juegoDTO));
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
 //    Update
     @PutMapping("/{id}")
-    public ResponseEntity<Juego> actualizar(@PathVariable Long id, @Valid @RequestBody JuegoUpdateDTO dto) {
-        Juego actualizado = service.update(id, dto);
+    public ResponseEntity<JuegoVerDTO> actualizar(@PathVariable Long id, @Valid @RequestBody JuegoUpdateDTO dto) {
+        JuegoVerDTO actualizado = service.convertirAVerDTO(service.update(id, dto));
         return ResponseEntity.ok(actualizado);
     }
 
@@ -63,8 +63,12 @@ public class JuegoController {
 
 //    Get By ID
     @GetMapping("/{id}")
-    public ResponseEntity<Juego> getById(@PathVariable Long id){
-        Juego juego = service.getById(id).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con id:"+id));
+    public ResponseEntity<JuegoVerDTO> getById(@PathVariable Long id){
+        JuegoVerDTO juego = service.convertirAVerDTO(
+                service.getById(id).orElseThrow(
+                        ()-> new ElementoNoEncontradoException("No se encontró el juego con id:"+id)
+                )
+        );
         return ResponseEntity.ok(juego);
     }
 

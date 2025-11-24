@@ -1,11 +1,13 @@
 package com.proyecto.tiendaVirtual.user.service;
 
 import com.proyecto.tiendaVirtual.config.PasswordConfig;
+import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
+import com.proyecto.tiendaVirtual.perfil.dto.PerfilVerDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import com.proyecto.tiendaVirtual.user.dto.UserDTO;
@@ -143,9 +145,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         dto.setApellido(user.getApellido());
 
         if (user.getPerfil()!=null){
-            dto.setNickName(user.getPerfil().getNickName().toUpperCase());
+            dto.setPerfil(new PerfilVerDTO(
+                    user.getPerfil().getId(),
+                    user.getPerfil().getNickName()
+            ));
         } else if (user.getDesarrolladora()!=null) {
-            dto.setNombreDesarrolladora(user.getDesarrolladora().getNombre().toUpperCase());
+            dto.setDesarrolladora(new DesarrolladoraDTO(
+                    user.getDesarrolladora().getId(),
+                    user.getDesarrolladora().getNombre(),
+                    user.getDesarrolladora().getPaisOrigen()
+            ));
         }
         return dto;
     }

@@ -1,5 +1,7 @@
 package com.proyecto.tiendaVirtual.user.dto;
 
+import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
+import com.proyecto.tiendaVirtual.perfil.dto.PerfilVerDTO;
 import com.proyecto.tiendaVirtual.user.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +16,6 @@ public class UserVerDTO {
     private String nombre;
     private String apellido;
     private Role role;
-    private String nickName;
-    private String nombreDesarrolladora;
+    private PerfilVerDTO perfil;
+    private DesarrolladoraDTO desarrolladora;
 }
