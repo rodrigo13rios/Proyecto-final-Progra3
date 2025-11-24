@@ -61,6 +61,7 @@ public class SecurityConfig {
 
                         //User
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/users/me").authenticated()
 
                         //Desarrolladora
                         .requestMatchers(HttpMethod.GET,"/api/desarrolladora/**").authenticated() //Se permite cualquier GET

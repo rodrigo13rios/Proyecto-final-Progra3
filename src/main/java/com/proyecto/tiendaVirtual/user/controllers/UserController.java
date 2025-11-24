@@ -65,4 +65,8 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserVerDTO> getLoggedUser(){
+        return ResponseEntity.ok(service.getLoggedUser());
+    }
 }

@@ -165,6 +165,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_PERFIL"))
         );
+    }
 
+    @Override
+    public UserVerDTO getLoggedUser() {
+        return convertirAVerDTO(securityUtils.getLoggedUser());
     }
 }
