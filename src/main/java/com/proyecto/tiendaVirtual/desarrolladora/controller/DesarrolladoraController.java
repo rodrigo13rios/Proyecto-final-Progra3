@@ -4,8 +4,7 @@ import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
-import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
-import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraPerfilDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +46,8 @@ public class DesarrolladoraController {
     }
 
     @GetMapping("/juegos-propios")
-    public ResponseEntity<List<JuegoVerDesarrolladoraDTO>> getJuegos(){
-        List<JuegoVerDesarrolladoraDTO> juegos = service.getJuegos();
+    public ResponseEntity<List<JuegoVerDesarrolladoraPerfilDTO>> getJuegos(){
+        List<JuegoVerDesarrolladoraPerfilDTO> juegos = service.getJuegos();
         return ResponseEntity.ok(juegos);
     }
 }

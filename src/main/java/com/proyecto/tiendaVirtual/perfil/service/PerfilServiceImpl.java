@@ -3,6 +3,7 @@ package com.proyecto.tiendaVirtual.perfil.service;
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraPerfilDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
@@ -115,11 +116,21 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
-    public List<Juego> obtenerFavoritos() {
+    public List<JuegoVerDesarrolladoraPerfilDTO> obtenerFavoritos() {
         Perfil perfil = securityUtils.getLoggedUser().getPerfil();
         if (perfil == null) throw new ElementoNoEncontradoException("No se ha podido obtener el user del perfil logueado");
 
-        return perfil.getFavoritos();
+        return perfil.getFavoritos().stream()
+                .map(j -> new JuegoVerDesarrolladoraPerfilDTO(
+                        j.getId(),
+                        j.getNombre(),
+                        j.getFechaLanzamiento(),
+                        j.getPrecio(),
+                        j.getCategoria(),
+                        j.getFoto(),
+                        j.getDesarrolladora().getNombre()
+                ))
+                .toList();
     }
 
     @Override
