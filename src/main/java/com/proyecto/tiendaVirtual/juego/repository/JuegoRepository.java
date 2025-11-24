@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface JuegoRepository extends JpaRepository<Juego,Long> {
     Optional<Juego> findByNombre(String nombre);
     List<Juego> getByCategoria(Categoria categoria);
+    List<Juego> findByDesarrolladoraId(Long desarrolladoraId);
 }

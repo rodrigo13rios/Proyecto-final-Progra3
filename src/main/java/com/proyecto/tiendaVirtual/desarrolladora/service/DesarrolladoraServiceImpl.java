@@ -6,7 +6,9 @@ import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraReposi
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
+import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
@@ -23,6 +25,8 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     private DesarrolladoraRepository repo;
     @Autowired
     private SecurityUtils securityUtils;
+    @Autowired
+    private JuegoService juegoService;
 
 
     @Override
@@ -78,12 +82,22 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
         return repo.save(existente);
     }
 
-    public List<Juego> getJuegos(){
+    public List<JuegoVerDesarrolladoraDTO> getJuegos(){
         Desarrolladora desarrolladora = securityUtils.getLoggedUser().getDesarrolladora();
-        if (desarrolladora==null)throw new ElementoNoEncontradoException("No se ha podido obtener la desarrolladora del User logueado");
-
-        return desarrolladora.getJuegos();
+        return desarrolladora.getJuegos()
+                .stream()
+                .map(j -> new JuegoVerDesarrolladoraDTO(
+                        j.getId(),
+                        j.getNombre(),
+                        j.getFechaLanzamiento(),
+                        j.getPrecio(),
+                        j.getCategoria(),
+                        j.getFoto(),
+                        j.getDesarrolladora().getNombre()
+                ))
+                .toList();
     }
+
 
     public DesarrolladoraDTO convertirADTO(Desarrolladora desarrolladora){
         DesarrolladoraDTO dto = new DesarrolladoraDTO();

@@ -20,4 +20,5 @@ public interface JuegoService {
     List<JuegoVerDTO> getAll();
     void comprarJuego(Long juegoId);
     JuegoVerDTO convertirAVerDTO (Juego juego);
+    List<JuegoVerDTO> getJuegosDesarrolladora();
 }
