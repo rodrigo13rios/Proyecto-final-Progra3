@@ -13,13 +13,4 @@ public class DesarrolladoraDTO {
     private String nombre;
     private String pais;
     private String CEO;
-
-    @Override
-    public String toString() {
-        return "DesarrolladoraDTO{" +
-                "nombre='" + nombre + '\'' +
-                ", pais='" + pais + '\'' +
-                ", CEO='" + CEO + '\'' +
-                '}';
-    }
 }
