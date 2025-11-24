@@ -61,6 +61,7 @@ public class SecurityConfig {
 
                         //User
                         .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/users/me").authenticated()
 
                         //Desarrolladora
                         .requestMatchers(HttpMethod.GET,"/api/desarrolladora/**").authenticated() //Se permite cualquier GET
@@ -74,7 +75,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/billetera/**").hasRole("PERFIL")
 
                         //Juego
-                        .requestMatchers(HttpMethod.GET,"/api/juego/**").authenticated() //Se permite cualquier GET
+                        .requestMatchers(HttpMethod.GET,"/api/juego/**").permitAll() //Se permite cualquier GET
                         .requestMatchers("/api/juego/*/comprar").hasRole("PERFIL") //Solo Perfiles pueden comprar Juegos
                         .requestMatchers("/api/juego/**").hasRole("DESARROLLADORA") //Otros métodos POST/PUT/DEL requieren el Rol
 

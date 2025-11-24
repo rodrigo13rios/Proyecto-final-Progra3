@@ -18,4 +18,5 @@ public interface UserService  {
     void delete();
     Optional<User> getByEmail(String email);
     UserVerDTO convertirAVerDTO(User user);
+    UserVerDTO getLoggedUser();
 }

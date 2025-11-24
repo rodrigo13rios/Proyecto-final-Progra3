@@ -167,4 +167,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
 
     }
+
+    @Override
+    public UserVerDTO getLoggedUser() {
+        return convertirAVerDTO(securityUtils.getLoggedUser());
+    }
 }

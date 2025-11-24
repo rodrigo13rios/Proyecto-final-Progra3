@@ -11,4 +11,5 @@ public class DesarrolladoraDTO {
     private Long id;
     private String nombre;
     private String pais;
+    private String CEO;
 }

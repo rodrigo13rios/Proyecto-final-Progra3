@@ -202,5 +202,10 @@ public class JuegoServiceImpl implements JuegoService{
         return dto;
     }
 
+    public List<JuegoVerDTO> getJuegosDesarrolladora() {
+        Long devId = securityUtils.getLoggedUser().getDesarrolladora().getId();
+        return repo.findByDesarrolladoraId(devId).stream().map(this::convertirAVerDTO).toList();
+    }
+
 }
 
