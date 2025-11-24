@@ -1,7 +1,11 @@
 package com.proyecto.tiendaVirtual.billetera.service;
 
+import com.proyecto.tiendaVirtual.billetera.dto.SaldoDTO;
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.billetera.repository.BilleteraRepository;
+import com.proyecto.tiendaVirtual.carrito.dto.CarroDeComprasDTO;
+import com.proyecto.tiendaVirtual.carrito.dto.JuegoToCarroDTO;
+import com.proyecto.tiendaVirtual.carrito.model.CarroDeCompras;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.NumeroInvalidoException;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +35,16 @@ public class BilleteraServiceImpl implements BilleteraService{
         }
 
         return billetera.getSaldo();
+    }
+
+    @Override
+    public SaldoDTO obtenerSaldo() {
+        Billetera billetera = securityUtils.getLoggedUser().getPerfil().getBilletera();
+        if (billetera == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Billetera del Perfil logeado");
+        }
+
+        return convertirADTO(billetera.getSaldo());
     }
 
     @Override
@@ -78,6 +93,14 @@ public class BilleteraServiceImpl implements BilleteraService{
         repo.save(billetera);
 
         return billetera.getSaldo();
+    }
+
+    public SaldoDTO convertirADTO(double saldo) {
+
+        SaldoDTO dto = new SaldoDTO();
+        dto.setSaldo(saldo);
+
+        return dto;
     }
 
 }
