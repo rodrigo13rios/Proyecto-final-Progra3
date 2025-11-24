@@ -2,6 +2,7 @@ package com.proyecto.tiendaVirtual.perfil.service;
 
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraPerfilDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
@@ -24,6 +25,6 @@ public interface PerfilService {
     List<Juego> obtenerJuegos();
     void agregarJuego(Long id,Long juegoId);
     Perfil agregarAFavoritos(Long juegoId);
-    List<Juego> obtenerFavoritos();
+    List<JuegoVerDesarrolladoraPerfilDTO> obtenerFavoritos();
     Perfil eliminarFavoritos(Long juegoId);
 }

@@ -5,8 +5,7 @@ import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraRepository;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
-import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
-import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraDTO;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraPerfilDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.user.model.User;
@@ -82,11 +81,11 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
         return repo.save(existente);
     }
 
-    public List<JuegoVerDesarrolladoraDTO> getJuegos(){
+    public List<JuegoVerDesarrolladoraPerfilDTO> getJuegos(){
         Desarrolladora desarrolladora = securityUtils.getLoggedUser().getDesarrolladora();
         return desarrolladora.getJuegos()
                 .stream()
-                .map(j -> new JuegoVerDesarrolladoraDTO(
+                .map(j -> new JuegoVerDesarrolladoraPerfilDTO(
                         j.getId(),
                         j.getNombre(),
                         j.getFechaLanzamiento(),

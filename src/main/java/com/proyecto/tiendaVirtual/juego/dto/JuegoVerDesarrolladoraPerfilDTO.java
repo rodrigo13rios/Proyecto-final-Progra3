@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JuegoVerDesarrolladoraDTO {
+public class JuegoVerDesarrolladoraPerfilDTO {
     private Long id;
     private String nombre;
     private LocalDate fechaLanzamiento;

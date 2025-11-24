@@ -2,6 +2,7 @@ package com.proyecto.tiendaVirtual.perfil.controller;
 
 
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDesarrolladoraPerfilDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
@@ -68,8 +69,8 @@ public class PerfilController {
     }
 
     @GetMapping ("/juegos/favoritos")
-    public ResponseEntity<List<Juego>> getFavoritos(){
-        List<Juego> favoritos = service.obtenerFavoritos();
+    public ResponseEntity<List<JuegoVerDesarrolladoraPerfilDTO>> getFavoritos(){
+        List<JuegoVerDesarrolladoraPerfilDTO> favoritos = service.obtenerFavoritos();
         return ResponseEntity.ok(favoritos);
     }
 
