@@ -65,4 +65,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    //Consultar Saldo
+    @GetMapping("/me")
+    public ResponseEntity<UserVerDTO> consultar() {
+        return ResponseEntity.ok(service.getLoggedUser());
+    }
 }
