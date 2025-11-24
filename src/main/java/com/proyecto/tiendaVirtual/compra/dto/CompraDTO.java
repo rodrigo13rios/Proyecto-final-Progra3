@@ -10,6 +10,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompraDTO {
+    private Long idCompra;
+    private Long idCliente;
     private String nombreCliente;
     private String apellidoCliente;
     private LocalDate fechaDeCompra;

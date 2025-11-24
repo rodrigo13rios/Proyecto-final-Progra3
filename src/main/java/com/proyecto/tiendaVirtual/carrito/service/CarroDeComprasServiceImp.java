@@ -111,6 +111,7 @@ public class CarroDeComprasServiceImp implements CarroDeComprasService {
         List<JuegoToCarroDTO> juegosDTO = compra.getJuegos()
                 .stream()
                 .map(juego -> new JuegoToCarroDTO(
+                        juego.getId(),
                         juego.getNombre(),
                         juego.getPrecio(),
                         juego.getFoto()

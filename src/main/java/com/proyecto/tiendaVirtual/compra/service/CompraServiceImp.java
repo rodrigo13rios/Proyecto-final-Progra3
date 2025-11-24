@@ -91,6 +91,8 @@ public class CompraServiceImp implements CompraService{
     @Override
     public CompraDTO conventirACompraDTO(Compra compra) {
         CompraDTO dto = new CompraDTO();
+        dto.setIdCompra(compra.getId());
+        dto.setIdCliente(compra.getCliente().getId());
         dto.setNombreCliente(compra.getCliente().getNombre());
         dto.setApellidoCliente(compra.getCliente().getApellido());
         dto.setFechaDeCompra(compra.getFecha());

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JuegoToCarroDTO {
+    private Long idJuego;
     private String nombre;
     private Double precio;
     private String foto;
