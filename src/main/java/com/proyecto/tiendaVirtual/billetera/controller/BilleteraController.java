@@ -3,6 +3,7 @@ package com.proyecto.tiendaVirtual.billetera.controller;
 
 import com.proyecto.tiendaVirtual.billetera.dto.BilleteraDTO;
 
+import com.proyecto.tiendaVirtual.billetera.dto.SaldoDTO;
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class BilleteraController {
 
     //Consultar Saldo
     @GetMapping
-    public ResponseEntity<Double> consultar() {
-        return ResponseEntity.ok(service.consultarSaldo());
+    public ResponseEntity<SaldoDTO> consultar() {
+        return ResponseEntity.ok(service.obtenerSaldo());
     }
 
     //Cargar Saldo
