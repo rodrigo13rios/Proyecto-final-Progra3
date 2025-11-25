@@ -105,5 +105,6 @@ public class CarritoServiceImpl implements CarritoService {
                 juegoService.comprarJuego(juego.getId());
             }
         }
+        limpiar();
     }
 }
