@@ -68,18 +68,29 @@ public class PerfilController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+
+    @GetMapping ("/juegos/favoritos/{juegoId}")
+    public ResponseEntity<Boolean> getFavoritoById(@PathVariable Long juegoId){
+        Boolean favorito = service.isFavorite(juegoId);
+        return ResponseEntity.ok(favorito);
+    }
+
+//    Get Favoritos
     @GetMapping ("/juegos/favoritos")
-    public ResponseEntity<List<Juego>> getFavoritos(){
-        List<Juego> favoritos = service.obtenerFavoritos();
+    public ResponseEntity<List<JuegoVerDTO>> getFavoritos(){
+        List<JuegoVerDTO> favoritos = service.obtenerFavoritos().stream()
+                .map(JuegoVerDTO::convertirAVerDTO).toList();
         return ResponseEntity.ok(favoritos);
     }
 
-    @PatchMapping ("/juegos/favoritos/{juegoId}")
+//    Agregar Juego a Favoritos
+    @PostMapping ("/juegos/favoritos/{juegoId}")
     public ResponseEntity<Perfil> agregarFavoritos(@PathVariable Long juegoId){
         Perfil actualizado = service.agregarAFavoritos(juegoId);
         return ResponseEntity.ok(actualizado);
     }
 
+//    Borrar Juego de Favoritos
     @DeleteMapping("/juegos/favoritos/{juegoId}")
     public ResponseEntity<Perfil> eliminarFavoritos(@PathVariable Long juegoId){
         Perfil actualizado = service.eliminarFavoritos(juegoId);

@@ -3,6 +3,7 @@ package com.proyecto.tiendaVirtual.perfil.service;
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.perfil.dto.PerfilDTO;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -122,7 +124,20 @@ public class PerfilServiceImpl implements PerfilService {
         return perfil.getFavoritos();
     }
 
-    @Override
+    public Boolean isFavorite(Long juegoId) {
+        Perfil perfil = securityUtils.getLoggedUser().getPerfil();
+        if (perfil == null)
+            throw new ElementoNoEncontradoException("No se ha podido obtener el user del perfil logueado");
+
+        Optional<Juego> juegoFav = perfil.getFavoritos()
+                .stream()
+                .filter(juego -> Objects.equals(juego.getId(), juegoId))
+                .findFirst();
+
+        return juegoFav.isPresent();
+    }
+
+        @Override
     public Perfil eliminarFavoritos(Long juegoId) {
         Perfil perfil = securityUtils.getLoggedUser().getPerfil();
         if (perfil== null) throw new ElementoNoEncontradoException("No se ha podido obtener el user del perfil logueado");
