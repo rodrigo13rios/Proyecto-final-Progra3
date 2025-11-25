@@ -1,6 +1,7 @@
 package com.proyecto.tiendaVirtual.desarrolladora.service;
 
 import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
+import com.proyecto.tiendaVirtual.desarrolladora.dto.EstadisticaJuegoDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
@@ -18,4 +19,5 @@ public interface DesarrolladoraService {
     List<DesarrolladoraDTO> getAll();
     Desarrolladora update(Desarrolladora updatedDesarrolladora);
     List<Juego> getJuegos();
+    List<EstadisticaJuegoDTO> getEstadisticasJuegos();
 }

@@ -1,12 +1,14 @@
 package com.proyecto.tiendaVirtual.desarrolladora.service;
 
 import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
+import com.proyecto.tiendaVirtual.desarrolladora.dto.EstadisticaJuegoDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.repository.DesarrolladoraRepository;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
+import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
@@ -14,8 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DesarrolladoraServiceImpl implements DesarrolladoraService{
@@ -23,6 +24,8 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     private DesarrolladoraRepository repo;
     @Autowired
     private SecurityUtils securityUtils;
+    @Autowired
+    private PerfilRepository perfilRepo;
 
 
     @Override
@@ -93,5 +96,33 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
         dto.setPais(desarrolladora.getPaisOrigen());
 
         return dto;
+    }
+
+    @Override
+    public List<EstadisticaJuegoDTO> getEstadisticasJuegos() {
+        Desarrolladora desarrolladora = securityUtils.getLoggedUser().getDesarrolladora();
+        if (desarrolladora==null)throw new ElementoNoEncontradoException("No se ha podido obtener la desarrolladora del User logueado");
+
+        List<Object[]> raw = perfilRepo.countVentasYFavoritosPorDesarrolladora(desarrolladora.getId());
+
+        Map<Long, Long> ventasPorJuego = new HashMap<>();
+        Map<Long, Long> favsPorJuego = new HashMap<>();
+        for (Object[] r : raw) {
+            Long juegoId = ((Number) r[0]).longValue();
+            Long ventas = ((Number) r[1]).longValue();
+            Long favs = ((Number) r[2]).longValue();
+            ventasPorJuego.put(juegoId, ventas);
+            favsPorJuego.put(juegoId, favs);
+        }
+
+        List<EstadisticaJuegoDTO> estadisticas = desarrolladora.getJuegos().stream()
+                .map(j -> new EstadisticaJuegoDTO(
+                        JuegoVerDTO.convertirAVerDTO(j),
+                        ventasPorJuego.getOrDefault(j.getId(), 0L),
+                        favsPorJuego.getOrDefault(j.getId(), 0L)
+                ))
+                .toList();
+
+        return estadisticas;
     }
 }

@@ -1,9 +1,11 @@
 package com.proyecto.tiendaVirtual.desarrolladora.controller;
 
 import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
+import com.proyecto.tiendaVirtual.desarrolladora.dto.EstadisticaJuegoDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.desarrolladora.service.DesarrolladoraService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,14 @@ public class DesarrolladoraController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/juegos-propios")
-    public ResponseEntity<List<Juego>> getJuegos(){
-        List<Juego> juegos = service.getJuegos();
-        return ResponseEntity.ok(juegos);
+//    @GetMapping("/juegos-propios")
+//    public ResponseEntity<List<EstadisticaJuegoDTO>> getJuegos(){
+//        List<Juego> juegos = service.getJuegos();
+//        return ResponseEntity.ok(juegos);
+//    }
+
+    @GetMapping("/estadistica")
+    public ResponseEntity<List<EstadisticaJuegoDTO>> getEstadistica(){
+        return ResponseEntity.ok(service.getEstadisticasJuegos());
     }
 }
