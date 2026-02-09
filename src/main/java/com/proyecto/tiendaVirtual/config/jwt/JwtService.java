@@ -1,4 +1,4 @@
-package com.proyecto.tiendaVirtual.config;
+package com.proyecto.tiendaVirtual.config.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +11,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+@Service
 public class JwtService {
 
 
