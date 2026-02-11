@@ -6,6 +6,7 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.NumeroInvalidoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -41,6 +42,14 @@ public class GlobalExceptionHandler {
         Map<String,String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> catchBadCredentials(BadCredentialsException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Credenciales inválidas");
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(error);
     }
 
 
