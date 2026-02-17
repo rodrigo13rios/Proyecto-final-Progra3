@@ -125,6 +125,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/compra").hasRole("PERFIL")
                         .requestMatchers(HttpMethod.POST, "/api/compra").hasRole("PERFIL")
 
+                        //Mercado pago
+                        .requestMatchers("/api/payments/**").hasRole("PERFIL")
+
+                        //Webhook
+                        .requestMatchers("/api/mp/webhook").permitAll()
+
                         .anyRequest().authenticated()
                 )
 
