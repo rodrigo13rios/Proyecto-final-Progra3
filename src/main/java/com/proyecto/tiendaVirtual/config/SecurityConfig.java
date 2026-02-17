@@ -91,7 +91,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
 
                         // Testeo
-                        .requestMatchers("/api/test/**").authenticated()
+                        .requestMatchers("/api/test/**").permitAll()
 
                         // User
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()

@@ -14,6 +14,7 @@ import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
+import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -150,8 +151,9 @@ public class JuegoServiceImpl implements JuegoService{
         // Agregar juego a la lista del Perfil
         perfil.getJuegos().add(juego);
 
-        // Guardar usuario (o billetera, según cómo esté configurado)
+        // Guardar perfil
         perfilRepo.save(perfil);
+
     }
 
 

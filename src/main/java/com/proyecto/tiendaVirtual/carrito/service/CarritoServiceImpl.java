@@ -2,6 +2,7 @@ package com.proyecto.tiendaVirtual.carrito.service;
 
 import com.proyecto.tiendaVirtual.carrito.model.JuegoCarro;
 import com.proyecto.tiendaVirtual.carrito.repository.CarritoRepository;
+import com.proyecto.tiendaVirtual.email.EmailService;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
@@ -9,6 +10,7 @@ import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
 import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
+import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class CarritoServiceImpl implements CarritoService {
     JuegoRepository juegoRepo;
     @Autowired
     JuegoService juegoService;
+    @Autowired
+    EmailService emailService;
 
     @Override
     @Transactional
@@ -92,7 +96,9 @@ public class CarritoServiceImpl implements CarritoService {
     @Override
     @Transactional
     public void comprar() {
-        Perfil perfil = securityUtils.getLoggedUser().getPerfil();
+        User user = securityUtils.getLoggedUser();
+        Perfil perfil = user.getPerfil();
+
         if (perfil == null) {
             throw new ElementoNoEncontradoException("No se ha podido obtener el perfil del usuario logueado");
         }
@@ -106,5 +112,12 @@ public class CarritoServiceImpl implements CarritoService {
             }
         }
         limpiar();
+
+        //Enviar Email con confirmacion
+        emailService.enviarConfirmacionCompra(
+                user.getEmail(),
+                perfil.getNickName(),
+                carrito.stream().map(JuegoCarro::getJuego).toList()
+        );
     }
 }
