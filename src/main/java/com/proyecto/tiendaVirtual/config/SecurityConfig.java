@@ -120,10 +120,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/carrito/clear").hasRole("PERFIL")
 
                         // Compras
-                        .requestMatchers(HttpMethod.GET, "/api/compra/*").hasRole("DESARROLLADORA")
-                        .requestMatchers(HttpMethod.GET, "/api/compra/get").hasRole("DESARROLLADORA")
-                        .requestMatchers(HttpMethod.GET, "/api/compra").hasRole("PERFIL")
-                        .requestMatchers(HttpMethod.POST, "/api/compra").hasRole("PERFIL")
+                        .requestMatchers("/api/compra/**").hasRole("PERFIL")
 
                         .anyRequest().authenticated()
                 )

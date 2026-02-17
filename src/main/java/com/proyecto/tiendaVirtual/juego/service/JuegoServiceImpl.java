@@ -128,35 +128,6 @@ public class JuegoServiceImpl implements JuegoService{
         repo.delete(juego);
     }
 
-
-    @Override
-    @Transactional
-    public void comprarJuego(Long juegoId) {
-        Perfil perfil = securityUtils.getLoggedUser().getPerfil();
-
-
-        //El juego existe?
-        Juego juego = repo.findById(juegoId)
-                .orElseThrow(() -> new ElementoNoEncontradoException("Juego no encontrado con ID: " + juegoId));
-
-        //Ya tiene comprado el Juego?
-        if (perfil.getJuegos().contains(juego)) {
-            throw new ElementoYaExistenteException("Ya tienes este juego.");
-
-        }
-
-        //Realizar el Pago
-        billeteraService.restarSaldo(juego.getPrecio());
-
-        // Agregar juego a la lista del Perfil
-        perfil.getJuegos().add(juego);
-
-        // Guardar perfil
-        perfilRepo.save(perfil);
-
-    }
-
-
     @Override
     public Optional<Juego> getById(Long id) {
         return repo.findById(id);
