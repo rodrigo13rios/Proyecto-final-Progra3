@@ -47,13 +47,6 @@ public class JuegoController {
 
     }
 
-//    Comprar Juego
-    @PostMapping("/{id}/comprar")
-    public ResponseEntity<Void> comprar(@PathVariable Long id) {
-        service.comprarJuego(id);
-        return ResponseEntity.ok().build();
-    }
-
 //    Get ALL
     @GetMapping
     public ResponseEntity<List<JuegoVerDTO>> getAll(){
