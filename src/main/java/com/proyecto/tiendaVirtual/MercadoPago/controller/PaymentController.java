@@ -60,7 +60,7 @@ public class PaymentController {
                 PreferenceRequest.builder()
                         .items(List.of(item))
                         .externalReference("wallet-" + perfil.getId() + "-" + dto.getMonto())
-                        .notificationUrl("https://roman-perinephrial-unfundamentally.ngrok-free.dev/api/payments/webhook")
+                        .notificationUrl("https://roman-perinephrial-unfundamentally.ngrok-free.dev/api/mp/webhook")
                         .backUrls(
                                 PreferenceBackUrlsRequest.builder()
                                         .success("https://localhost:4200/wallet-ok")

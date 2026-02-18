@@ -9,6 +9,7 @@ import com.proyecto.tiendaVirtual.carrito.service.CarritoService;
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import com.proyecto.tiendaVirtual.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,36 +23,45 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WebhookController {
 
-    private BilleteraRepository billeteraRepo;
-    private PerfilService perfilService;
+    private final BilleteraRepository billeteraRepo;
+    private final PerfilService perfilService;
 
     @PostMapping("/webhook")
-    public ResponseEntity<?> mpWebhook(@RequestBody Map<String, String> params) throws  Exception{
+    public ResponseEntity<?> mpWebhook(@RequestBody Map<String, Object> body) throws  Exception{
 
-        if (!"payment".equals(params.get("type"))){
-           return ResponseEntity.ok().build();
-       }
-
-       String paymentId = params.get("data.id");
-
-        Payment payment = new PaymentClient().get(Long.parseLong(paymentId));
-
-        if (!"approved".equals(payment.getStatus())){
+        if (!"payment".equals(body.get("type"))) {
             return ResponseEntity.ok().build();
         }
 
+        // 2️⃣ obtener id correctamente
+        Map<String, Object> data = (Map<String, Object>) body.get("data");
+        String paymentId = data.get("id").toString();
+
+        // 3️⃣ consultar pago en MP
+        Payment payment = new PaymentClient().get(Long.parseLong(paymentId));
+
+        if (!"approved".equals(payment.getStatus())) {
+            return ResponseEntity.ok().build();
+        }
+
+        // 4️⃣ leer external reference
         String ref = payment.getExternalReference();
-        // wallet-USERID-MONTO
+        // formato: wallet-USERID-MONTO
 
         String[] parts = ref.split("-");
         Long userId = Long.parseLong(parts[1]);
         Double monto = Double.parseDouble(parts[2]);
 
-        Billetera billetera = perfilService.getById(userId).get().getBilletera();
+        // 5️⃣ acreditar saldo
+        Billetera billetera = perfilService
+                .getById(userId)
+                .orElseThrow()
+                .getBilletera();
 
         billetera.setSaldo(billetera.getSaldo() + monto);
         billeteraRepo.save(billetera);
 
         return ResponseEntity.ok().build();
     }
+
 }
