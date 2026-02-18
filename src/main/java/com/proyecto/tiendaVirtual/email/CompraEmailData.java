@@ -7,6 +7,7 @@ import java.util.List;
 public record CompraEmailData(
         String email,
         String nickname,
+        Double total,
         List<Juego> juegos
 ) {}
 

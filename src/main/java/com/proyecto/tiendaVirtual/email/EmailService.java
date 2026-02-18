@@ -18,21 +18,17 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void enviarConfirmacionCompra(
-            String to,
-            String username,
-            List<Juego> juegos
-    ) {
-
+    public void enviarConfirmacionCompra(CompraEmailData data) {
         //Mensaje del Email
-        String juegosTexto = juegos.stream()
+        String juegosTexto = data.juegos().stream()
                 .map(juego ->
                         "Juego: " + juego.getNombre() + "\n" +
                         "Precio: $" + juego.getPrecio() + "\n"
                 ).collect(Collectors.joining("\n"));
         String texto =
-                "Hola " + username + ",\n\n" +
+                "Hola " + data.nickname() + ",\n\n" +
                 "Gracias por tu compra.\n\n" +
+                "Total: $" + data.total() + "\n\n" +
                 juegosTexto +
                 "\n\n¡Que lo disfrutes!\n" +
                 "Ryze Games";
@@ -40,7 +36,7 @@ public class EmailService {
 
         //Enviar Email
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
+        message.setTo(data.email());
         message.setSubject("🎮 Compra confirmada || Ryze Games");
         message.setText(texto);
 

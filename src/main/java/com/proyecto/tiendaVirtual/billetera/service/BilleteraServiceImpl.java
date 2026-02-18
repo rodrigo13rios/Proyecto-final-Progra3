@@ -58,6 +58,30 @@ public class BilleteraServiceImpl implements BilleteraService{
         return billetera.getSaldo();
     }
 
+    @Override
+    @Transactional
+    public Double restarSaldo(Billetera billetera, Double monto) {
+        //Valido el monto
+        if (monto == null || monto < 0) {
+            throw new NumeroInvalidoException("El monto debe ser mayor o igual a cero");
+        }
+
+        if (billetera == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Billetera");
+        }
+
+        //Si el saldo es menor al gasto, significa que no hay suficiente dinero para realizar la operación.
+        if (billetera.getSaldo() < monto) {
+            throw new NumeroInvalidoException("El Saldo de la billetera es insuficiente para realizar esta operación");
+        }
+
+        //Realizo la resta y guardo
+        billetera.setSaldo(billetera.getSaldo() - monto);
+        repo.save(billetera);
+
+        return billetera.getSaldo();
+    }
+
 
     @Override
     @Transactional
@@ -71,6 +95,25 @@ public class BilleteraServiceImpl implements BilleteraService{
         Billetera billetera = securityUtils.getLoggedUser().getPerfil().getBilletera();
         if (billetera == null) {
             throw new ElementoNoEncontradoException("No se ha podido obtener la Billetera del Perfil logeado");
+        }
+
+        //Realizo la suma y guardo
+        billetera.setSaldo(billetera.getSaldo() + monto);
+        repo.save(billetera);
+
+        return billetera.getSaldo();
+    }
+
+    @Override
+    @Transactional
+    public Double cargarSaldo(Billetera billetera, Double monto) {
+        //Valido el monto
+        if (monto == null || monto <= 0) {
+            throw new NumeroInvalidoException("El monto debe ser mayor a cero");
+        }
+
+        if (billetera == null) {
+            throw new ElementoNoEncontradoException("No se ha podido obtener la Billetera");
         }
 
         //Realizo la suma y guardo
