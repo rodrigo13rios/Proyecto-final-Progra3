@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JuegoUpdateDTO {
-    @Size(max = 50, message = "El nombre del juego no puede exceder de 50 caracteres")
+    @Size(min = 2 ,max = 50, message = "El nombre del juego no puede exceder de 50 caracteres")
     private String nombre;
 
     @PastOrPresent(message = "La fecha debe ser pasada u hoy")
