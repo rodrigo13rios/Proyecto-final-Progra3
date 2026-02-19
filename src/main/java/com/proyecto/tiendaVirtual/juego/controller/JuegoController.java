@@ -10,6 +10,9 @@ import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("api/juego")
 public class JuegoController {
     @Autowired
@@ -49,10 +52,15 @@ public class JuegoController {
 
 //    Get ALL
     @GetMapping
-    public ResponseEntity<List<JuegoVerDTO>> getAll(){
-        List<JuegoVerDTO> juegos = service.getAll();
+    public ResponseEntity<Page<JuegoVerDTO>> getAll(
+            @RequestParam(required = false) String categoria,
+            @PageableDefault(size = 20) Pageable pageable)
+    {
+        Page<JuegoVerDTO> juegos = service.getAll(categoria, pageable);
         return ResponseEntity.ok(juegos);
     }
+
+
 
 //    Get By ID
     @GetMapping("/{id}")
@@ -70,12 +78,5 @@ public class JuegoController {
     public ResponseEntity<JuegoVerDTO> getByNombre(@PathVariable String nombre){
         JuegoVerDTO juego = service.getByNombre(nombre).orElseThrow(()-> new ElementoNoEncontradoException("No se encontró el juego con el nombre '"+nombre));
         return ResponseEntity.ok(juego);
-    }
-
-//    Get All By Categoria
-    @GetMapping("/categoria/{categoria}")
-    public ResponseEntity<List<JuegoVerDTO>> getByCategoria(@PathVariable String categoria){
-        List<JuegoVerDTO> juegos = service.getByCategoria(categoria);
-        return ResponseEntity.ok(juegos);
     }
 }

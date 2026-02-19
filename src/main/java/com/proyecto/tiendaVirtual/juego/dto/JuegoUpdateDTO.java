@@ -1,10 +1,7 @@
 package com.proyecto.tiendaVirtual.juego.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +15,7 @@ public class JuegoUpdateDTO {
     @Size(max = 50, message = "El nombre del juego no puede exceder de 50 caracteres")
     private String nombre;
 
+    @PastOrPresent(message = "La fecha debe ser pasada u hoy")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaLanzamiento;
 

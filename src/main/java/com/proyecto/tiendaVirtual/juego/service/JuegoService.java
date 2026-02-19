@@ -5,6 +5,8 @@ import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +18,6 @@ public interface JuegoService {
     void delete(Long id);
     Optional<Juego> getById(Long id);
     Optional<JuegoVerDTO> getByNombre(String nombre);
-    List<JuegoVerDTO> getByCategoria(String categoria);
-    List<JuegoVerDTO> getAll();
+    Page<JuegoVerDTO> getAll(String strCategoria, Pageable pageable);
     JuegoVerDTO convertirAVerDTO (Juego juego);
 }
