@@ -91,7 +91,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
 
                         // Testeo
-                        .requestMatchers("/api/test/**").authenticated()
+                        .requestMatchers("/api/test/**").permitAll()
 
                         // User
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
@@ -120,10 +120,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/carrito/clear").hasRole("PERFIL")
 
                         // Compras
-                        .requestMatchers(HttpMethod.GET, "/api/compra/*").hasRole("DESARROLLADORA")
-                        .requestMatchers(HttpMethod.GET, "/api/compra/get").hasRole("DESARROLLADORA")
-                        .requestMatchers(HttpMethod.GET, "/api/compra").hasRole("PERFIL")
-                        .requestMatchers(HttpMethod.POST, "/api/compra").hasRole("PERFIL")
+                        .requestMatchers("/api/compra/**").hasRole("PERFIL")
 
                         //Mercado pago
                         .requestMatchers("/api/payments/**").hasRole("PERFIL")

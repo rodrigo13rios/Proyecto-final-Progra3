@@ -18,6 +18,5 @@ public interface JuegoService {
     Optional<JuegoVerDTO> getByNombre(String nombre);
     List<JuegoVerDTO> getByCategoria(String categoria);
     List<JuegoVerDTO> getAll();
-    void comprarJuego(Long juegoId);
     JuegoVerDTO convertirAVerDTO (Juego juego);
 }

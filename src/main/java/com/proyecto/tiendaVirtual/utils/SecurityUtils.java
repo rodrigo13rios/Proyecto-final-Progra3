@@ -22,4 +22,8 @@ public class SecurityUtils {
         return userRepo.findByEmail(email)
                 .orElseThrow(() -> new ElementoNoEncontradoException("No se ha podido obtener el usuario logeado"));
     }
+
+    public String getLoggedUserEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
 }
