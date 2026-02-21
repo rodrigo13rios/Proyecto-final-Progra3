@@ -122,6 +122,19 @@ public class SecurityConfig {
                         // Compras
                         .requestMatchers("/api/compra/**").hasRole("PERFIL")
 
+                        //Mercado pago
+                        .requestMatchers("/api/payments/**").hasRole("PERFIL")
+
+                        //Webhook
+                        .requestMatchers("/api/mp/webhook").permitAll()
+
+                        //MercadoPago redirects
+                        .requestMatchers(
+                                "/wallet-ok",
+                                "/wallet-error",
+                                "/wallet-pending"
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 
