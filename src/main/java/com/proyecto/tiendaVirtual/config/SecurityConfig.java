@@ -131,6 +131,13 @@ public class SecurityConfig {
                         //Webhook
                         .requestMatchers("/api/mp/webhook").permitAll()
 
+                        //MercadoPago redirects
+                        .requestMatchers(
+                                "/wallet-ok",
+                                "/wallet-error",
+                                "/wallet-pending"
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 

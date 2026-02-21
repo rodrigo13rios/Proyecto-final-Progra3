@@ -63,9 +63,9 @@ public class PaymentController {
                         .notificationUrl("https://roman-perinephrial-unfundamentally.ngrok-free.dev/api/mp/webhook")
                         .backUrls(
                                 PreferenceBackUrlsRequest.builder()
-                                        .success("https://localhost:4200/wallet-ok")
-                                        .failure("https://localhost:4200/wallet-error")
-                                        .pending("https://localhost:4200/wallet-pending")
+                                        .success("https://roman-perinephrial-unfundamentally.ngrok-free.dev/wallet-ok")
+                                        .failure("https://roman-perinephrial-unfundamentally.ngrok-free.dev/wallet-error")
+                                        .pending("https://roman-perinephrial-unfundamentally.ngrok-free.dev/wallet-pending")
                                         .build()
                         )
                         .autoReturn("approved")
