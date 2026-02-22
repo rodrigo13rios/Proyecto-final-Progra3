@@ -17,6 +17,8 @@ import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,21 +141,22 @@ public class JuegoServiceImpl implements JuegoService{
     }
 
     @Override
+    public Page<JuegoVerDTO> getAll(String strCategoria, Pageable pageable) {
+        if (strCategoria == null) {
+            //Si no se especifica una categoria...
+            return repo.findAll(pageable).map(this::convertirAVerDTO);
+        }
 
-    public List<JuegoVerDTO> getByCategoria(String strCategoria){
         Categoria categoriaEnum;
-        try { //"Traduzco" la Categoria
+        try {
             categoriaEnum = Categoria.valueOf(strCategoria.toUpperCase());
         } catch (IllegalArgumentException ex) {
-            throw new ElementoNoEncontradoException("No se ha encontrado la categoría: " + strCategoria + ", o no se ha podido asignar");
+            throw new ElementoNoEncontradoException(
+                    "No se ha encontrado la categoría: " + strCategoria
+            );
         }
-        return repo.getByCategoria(categoriaEnum).stream().map(this::convertirAVerDTO).toList();
-
-    }
-
-    @Override
-    public List<JuegoVerDTO> getAll() {
-        return repo.findAll().stream().map(this::convertirAVerDTO).toList();
+        return repo.findByCategoria(categoriaEnum, pageable)
+                .map(this::convertirAVerDTO);
     }
 
 

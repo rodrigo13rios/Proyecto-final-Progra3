@@ -21,7 +21,7 @@ public class Juego {
     private Long id;
 
     @NotNull(message = "El nombre no puede ser nulo")
-    @Size(max = 50, message = "El nombre del juego no puede exceder de 50 caracteres")
+    @Size(min = 2, max = 50, message = "El nombre del juego no puede exceder de 50 caracteres")
     private String nombre;
     @NotNull
     @PastOrPresent(message = "La fecha debe ser pasada u hoy")
