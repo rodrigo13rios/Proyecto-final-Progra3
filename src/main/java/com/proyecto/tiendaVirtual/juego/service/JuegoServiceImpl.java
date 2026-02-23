@@ -1,6 +1,5 @@
 package com.proyecto.tiendaVirtual.juego.service;
 
-import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.descuento.repository.DescuentoRepository;
@@ -13,20 +12,14 @@ import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.juego.repository.JuegoRepository;
-import com.proyecto.tiendaVirtual.perfil.model.Perfil;
-import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
-import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 @Service
 public class JuegoServiceImpl implements JuegoService{
@@ -188,14 +181,18 @@ public class JuegoServiceImpl implements JuegoService{
         return page.map(this::convertirAVerDTO);
     }
 
+
+
+    private int descuentoTotalActivo(Long juegoId) {
+        int total = descuentoRepository.getDescuentoTotalActivo(juegoId, LocalDateTime.now());
+        return Math.min(total, 100);
+    }
+
     @Override
-    public Double obtenerPrecioFinal(Juego juego){
-        return descuentoRepository
-                .findDescuentoActivo(juego, LocalDateTime.now())
-                .map(d -> {
-                    double porcentaje = d.getPorcentaje() / 100.0;
-                    return juego.getPrecio() - (juego.getPrecio() * porcentaje);
-                }).orElse(juego.getPrecio());
+    public Double obtenerPrecioFinal(Juego juego) {
+        int porcentajeTotal = descuentoTotalActivo(juego.getId());
+        double precioFinal = juego.getPrecio() * (1.0 - porcentajeTotal / 100.0);
+        return Math.round(precioFinal * 100.0) / 100.0;
     }
 
     public JuegoVerDTO convertirAVerDTO(Juego juego){
@@ -207,8 +204,11 @@ public class JuegoServiceImpl implements JuegoService{
         dto.setPrecio(juego.getPrecio());
 
         dto.setPrecioFinal(this.obtenerPrecioFinal(juego));
-        descuentoRepository.findDescuentoActivo(juego, LocalDateTime.now())
-                .ifPresent(d -> dto.setPorcentajeDescuento(d.getPorcentaje()));
+
+        int descuento = descuentoTotalActivo(juego.getId());
+        if (descuento > 0) {
+            dto.setPorcentajeDescuento(descuento);
+        }
 
         dto.setCategoria(juego.getCategoria());
         dto.setFoto(juego.getFoto());

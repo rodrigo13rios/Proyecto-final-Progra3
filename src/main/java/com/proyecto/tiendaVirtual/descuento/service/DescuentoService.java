@@ -5,8 +5,11 @@ import com.proyecto.tiendaVirtual.descuento.dto.DescuentoResponseDTO;
 import com.proyecto.tiendaVirtual.descuento.model.Descuento;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface DescuentoService {
     public DescuentoResponseDTO crearDescuento(CreateDescuentoDTO dto);
     public void generarNotificaciones(Descuento descuento);
+    public int getDescuentoByGameId(Long gameId);
 }

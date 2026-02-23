@@ -8,17 +8,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 @Repository
 public interface DescuentoRepository extends JpaRepository<Descuento,Long> {
     @Query("""
-    SELECT d FROM Descuento d
-    WHERE d.juego = :juego
-    AND :fecha BETWEEN d.fechaInicio AND d.fechaFin
-    AND d.activo = true
-""")
-    Optional<Descuento> findDescuentoActivo(
-            @Param("juego") Juego juego,
-            @Param("fecha") LocalDateTime fecha
-    );
+        SELECT COALESCE(SUM(d.porcentaje), 0)
+        FROM Descuento d
+        WHERE d.juego.id = :juegoId
+        AND :now BETWEEN d.fechaInicio AND d.fechaFin
+    """)
+    int getDescuentoTotalActivo(Long juegoId, LocalDateTime now);
 }
