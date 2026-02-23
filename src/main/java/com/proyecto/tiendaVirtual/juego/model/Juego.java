@@ -11,7 +11,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "juegos")
+@Table(
+        name = "juegos",
+        indexes = {
+                @Index(name = "idx_juego_categoria", columnList = "categoria"),
+                @Index(name = "idx_juego_desarrolladora", columnList = "id_desarrolladora")
+        }
+)
 @Getter
 @Setter
 @AllArgsConstructor
