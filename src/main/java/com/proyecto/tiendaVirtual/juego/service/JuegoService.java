@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 @Service
 public interface JuegoService {
@@ -18,4 +20,5 @@ public interface JuegoService {
     Optional<JuegoVerDTO> getByNombre(String nombre);
     Page<JuegoVerDTO> getAll(String strCategoria, String search, Pageable pageable);
     JuegoVerDTO convertirAVerDTO (Juego juego);
+    Double obtenerPrecioFinal(Juego juego);
 }
