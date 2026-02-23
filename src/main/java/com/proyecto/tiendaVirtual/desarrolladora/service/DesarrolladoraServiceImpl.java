@@ -8,6 +8,7 @@ import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
+import com.proyecto.tiendaVirtual.juego.service.JuegoService;
 import com.proyecto.tiendaVirtual.perfil.repository.PerfilRepository;
 import com.proyecto.tiendaVirtual.user.model.User;
 import com.proyecto.tiendaVirtual.user.repository.UserRepository;
@@ -26,7 +27,8 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
     private SecurityUtils securityUtils;
     @Autowired
     private PerfilRepository perfilRepo;
-
+    @Autowired
+    private JuegoService juegoService;
 
     @Override
     public Desarrolladora create(Desarrolladora desarrolladora) throws ElementoYaExistenteException {
@@ -81,11 +83,11 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
         return repo.save(existente);
     }
 
-    public List<Juego> getJuegos(){
+    public List<JuegoVerDTO> getJuegos(){
         Desarrolladora desarrolladora = securityUtils.getLoggedUser().getDesarrolladora();
         if (desarrolladora==null)throw new ElementoNoEncontradoException("No se ha podido obtener la desarrolladora del User logueado");
 
-        return desarrolladora.getJuegos();
+        return desarrolladora.getJuegos().stream().map(j -> juegoService.convertirAVerDTO(j)).toList();
     }
 
     public DesarrolladoraDTO convertirADTO(Desarrolladora desarrolladora){

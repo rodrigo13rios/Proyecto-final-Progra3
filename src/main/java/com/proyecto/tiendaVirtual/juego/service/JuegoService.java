@@ -7,6 +7,7 @@ import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -19,4 +20,5 @@ public interface JuegoService {
     List<JuegoVerDTO> getByCategoria(String categoria);
     List<JuegoVerDTO> getAll();
     JuegoVerDTO convertirAVerDTO (Juego juego);
+    Double obtenerPrecioFinal(Juego juego);
 }

@@ -3,6 +3,7 @@ package com.proyecto.tiendaVirtual.juego.service;
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.desarrolladora.dto.DesarrolladoraDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
+import com.proyecto.tiendaVirtual.descuento.repository.DescuentoRepository;
 import com.proyecto.tiendaVirtual.exceptions.AccesoDenegadoException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
@@ -21,6 +22,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -28,11 +31,9 @@ public class JuegoServiceImpl implements JuegoService{
     @Autowired
     JuegoRepository repo;
     @Autowired
-    PerfilRepository perfilRepo;
-    @Autowired
-    BilleteraService billeteraService;
-    @Autowired
     SecurityUtils securityUtils;
+    @Autowired
+    DescuentoRepository descuentoRepository;
 
     @Override
     @Transactional
@@ -156,6 +157,15 @@ public class JuegoServiceImpl implements JuegoService{
         return repo.findAll().stream().map(this::convertirAVerDTO).toList();
     }
 
+    @Override
+    public Double obtenerPrecioFinal(Juego juego){
+        return descuentoRepository
+                .findDescuentoActivo(juego, LocalDateTime.now())
+                .map(d -> {
+                    double porcentaje = d.getPorcentaje() / 100.0;
+                    return juego.getPrecio() - (juego.getPrecio() * porcentaje);
+                }).orElse(juego.getPrecio());
+    }
 
     public JuegoVerDTO convertirAVerDTO(Juego juego){
         JuegoVerDTO dto = new JuegoVerDTO();
@@ -164,6 +174,11 @@ public class JuegoServiceImpl implements JuegoService{
         dto.setNombre(juego.getNombre());
         dto.setFechaLanzamiento(juego.getFechaLanzamiento());
         dto.setPrecio(juego.getPrecio());
+
+        dto.setPrecioFinal(this.obtenerPrecioFinal(juego));
+        descuentoRepository.findDescuentoActivo(juego, LocalDateTime.now())
+                .ifPresent(d -> dto.setPorcentajeDescuento(d.getPorcentaje()));
+
         dto.setCategoria(juego.getCategoria());
         dto.setFoto(juego.getFoto());
         dto.setDesarrolladora(new DesarrolladoraDTO( //Convierto a DesarrolladoraDTO

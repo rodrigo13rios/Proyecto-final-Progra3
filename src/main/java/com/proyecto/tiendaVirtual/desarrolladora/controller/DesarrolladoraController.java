@@ -46,11 +46,11 @@ public class DesarrolladoraController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-//    @GetMapping("/juegos-propios")
-//    public ResponseEntity<List<EstadisticaJuegoDTO>> getJuegos(){
-//        List<Juego> juegos = service.getJuegos();
-//        return ResponseEntity.ok(juegos);
-//    }
+    @GetMapping("/juegos-propios")
+    public ResponseEntity<List<JuegoVerDTO>> getJuegos(){
+        List<JuegoVerDTO> juegos = service.getJuegos();
+        return ResponseEntity.ok(juegos);
+    }
 
     @GetMapping("/estadistica")
     public ResponseEntity<List<EstadisticaJuegoDTO>> getEstadistica(){

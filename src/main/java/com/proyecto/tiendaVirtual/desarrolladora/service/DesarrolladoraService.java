@@ -5,6 +5,7 @@ import com.proyecto.tiendaVirtual.desarrolladora.dto.EstadisticaJuegoDTO;
 import com.proyecto.tiendaVirtual.desarrolladora.model.Desarrolladora;
 import com.proyecto.tiendaVirtual.exceptions.ElementoYaExistenteException;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
+import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,6 @@ public interface DesarrolladoraService {
     Optional<Desarrolladora> findByNombre(String nombre);
     List<DesarrolladoraDTO> getAll();
     Desarrolladora update(Desarrolladora updatedDesarrolladora);
-    List<Juego> getJuegos();
+    List<JuegoVerDTO> getJuegos();
     List<EstadisticaJuegoDTO> getEstadisticasJuegos();
 }

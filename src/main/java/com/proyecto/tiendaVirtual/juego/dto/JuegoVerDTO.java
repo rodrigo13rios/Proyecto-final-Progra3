@@ -18,6 +18,8 @@ public class JuegoVerDTO {
     private String nombre;
     private LocalDate fechaLanzamiento;
     private Double precio;
+    private Double precioFinal;
+    private Integer porcentajeDescuento;
     private Categoria categoria;
     private String foto;
     private DesarrolladoraDTO desarrolladora;

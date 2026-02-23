@@ -5,7 +5,7 @@ import com.mercadopago.resources.payment.Payment;
 import com.proyecto.tiendaVirtual.billetera.model.Billetera;
 import com.proyecto.tiendaVirtual.billetera.repository.BilleteraRepository;
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
-import com.proyecto.tiendaVirtual.carrito.service.CarritoService;
+
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
 import com.proyecto.tiendaVirtual.user.service.UserService;
 import lombok.RequiredArgsConstructor;
