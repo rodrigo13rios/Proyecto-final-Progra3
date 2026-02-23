@@ -141,22 +141,50 @@ public class JuegoServiceImpl implements JuegoService{
     }
 
     @Override
-    public Page<JuegoVerDTO> getAll(String strCategoria, Pageable pageable) {
-        if (strCategoria == null) {
-            //Si no se especifica una categoria...
-            return repo.findAll(pageable).map(this::convertirAVerDTO);
+    public Page<JuegoVerDTO> getAll(String strCategoria, String search, Pageable pageable) {
+        //Obtener Categoria
+        Categoria categoriaEnum = null;
+        if (strCategoria != null) {
+            try {
+                categoriaEnum = Categoria.valueOf(strCategoria.toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new ElementoNoEncontradoException(
+                        "No se ha encontrado la categoría: " + strCategoria
+                );
+            }
         }
 
-        Categoria categoriaEnum;
-        try {
-            categoriaEnum = Categoria.valueOf(strCategoria.toUpperCase());
-        } catch (IllegalArgumentException ex) {
-            throw new ElementoNoEncontradoException(
-                    "No se ha encontrado la categoría: " + strCategoria
-            );
+        //Buscar según parametros
+        boolean hasSearch = search != null && !search.isBlank();
+
+        Page<Juego> page;
+
+        if (categoriaEnum != null && hasSearch) { //Se busca Categoria y Search
+            page = repo
+                    .findByCategoriaAndNombreContainingIgnoreCaseOrCategoriaAndDesarrolladora_NombreContainingIgnoreCase(
+                            categoriaEnum,
+                            search,
+                            categoriaEnum,
+                            search,
+                            pageable
+                    );
         }
-        return repo.findByCategoria(categoriaEnum, pageable)
-                .map(this::convertirAVerDTO);
+        else if (categoriaEnum != null) { //Solo Categoria
+            page = repo.findByCategoria(categoriaEnum, pageable);
+        }
+        else if (hasSearch) { //Solo Search
+            page = repo
+                    .findByNombreContainingIgnoreCaseOrDesarrolladora_NombreContainingIgnoreCase(
+                            search, //Busca juegos con ese 'search'
+                            search, //Busca desarrolladoras con ese 'search'
+                            pageable
+                    );
+        }
+        else { //Sin parametros (findAll)
+            page = repo.findAll(pageable);
+        }
+
+        return page.map(this::convertirAVerDTO);
     }
 
 

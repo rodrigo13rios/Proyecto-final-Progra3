@@ -50,13 +50,14 @@ public class JuegoController {
 
     }
 
-//    Get ALL
+//    Get ALL (get page)
     @GetMapping
     public ResponseEntity<Page<JuegoVerDTO>> getAll(
             @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) String search,
             @PageableDefault(size = 20) Pageable pageable)
     {
-        Page<JuegoVerDTO> juegos = service.getAll(categoria, pageable);
+        Page<JuegoVerDTO> juegos = service.getAll(categoria, search, pageable);
         return ResponseEntity.ok(juegos);
     }
 

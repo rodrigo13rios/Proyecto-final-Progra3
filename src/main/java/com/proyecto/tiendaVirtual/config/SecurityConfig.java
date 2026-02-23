@@ -109,7 +109,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/billetera/**").hasRole("PERFIL")
 
                         // Juego
-                        .requestMatchers(HttpMethod.GET, "/api/juego/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/juego/**").permitAll()
                         .requestMatchers("/api/juego/*/comprar").hasRole("PERFIL")
                         .requestMatchers("/api/juego/**").hasRole("DESARROLLADORA")
 
