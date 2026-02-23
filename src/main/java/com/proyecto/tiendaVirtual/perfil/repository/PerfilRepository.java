@@ -1,5 +1,6 @@
 package com.proyecto.tiendaVirtual.perfil.repository;
 
+import com.proyecto.tiendaVirtual.juego.model.Juego;
 import com.proyecto.tiendaVirtual.perfil.model.Perfil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,5 @@ public interface PerfilRepository extends JpaRepository<Perfil,Long> {
         WHERE j.desarrolladora.id = :desarrolladoraId
     """)
     List<Object[]> countVentasYFavoritosPorDesarrolladora(@Param("desarrolladoraId") Long desarrolladoraId);
+    List<Perfil> findByFavoritosContaining(Juego juego);
 }
