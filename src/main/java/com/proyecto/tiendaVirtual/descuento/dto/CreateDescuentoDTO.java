@@ -1,9 +1,6 @@
 package com.proyecto.tiendaVirtual.descuento.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,9 +16,11 @@ public class CreateDescuentoDTO {
     private Integer porcentaje;
 
     @NotNull
+    @FutureOrPresent
     private LocalDateTime fechaInicio;
 
     @NotNull
+    @FutureOrPresent
     private LocalDateTime fechaFin;
 
     @NotNull

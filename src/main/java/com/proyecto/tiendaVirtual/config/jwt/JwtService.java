@@ -17,7 +17,7 @@ public class JwtService {
 
     // 🔐 CLAVE JWT (mínimo 256 bits)
     private static final String SECRET_KEY =
-            "EstaEsLaClaveConLaQueJWTVaAEncriptarLosDatos";
+            "ZXN0YSBlcyBsYSBjb250cmFzZcOxYSBkZSBKV1QgcGFyYSBlbmNpcHRhciBkYXRvcw==";
 
     // ⏰ 1 hora
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;

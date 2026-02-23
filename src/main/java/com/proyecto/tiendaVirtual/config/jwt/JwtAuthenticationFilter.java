@@ -47,8 +47,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(jwt);
         } catch (Exception e) {
-            // Token inválido
-            filterChain.doFilter(request, response);
+            SecurityContextHolder.clearContext();
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setHeader("X-JWT-FILTER", "invalid-token");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"TOKEN_INVALID\"}");
+
             return;
         }
 

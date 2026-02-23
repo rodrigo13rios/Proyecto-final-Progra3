@@ -37,6 +37,7 @@ public class DescuentoServiceImpl implements DescuentoService{
     private final DescuentoMapper mapper;
     private final SecurityUtils securityUtils;
 
+    @Override
     public DescuentoResponseDTO crearDescuento(CreateDescuentoDTO dto) {
 
 
@@ -55,15 +56,16 @@ public class DescuentoServiceImpl implements DescuentoService{
 
         if (!juego.get().getDesarrolladora().getId()
                 .equals(desarrolladora.getId())) {
-            throw new AccesoDenegadoException("El juego no pertenece a la desarrolladora");
+            throw new AccesoDenegadoException("El juego no pertenece a esta desarrolladora");
         }
 
-        Optional<Descuento> existente =
-                descuentoRepository.findDescuentoActivo(juego.get(), LocalDateTime.now());
+        //Remplazo esto y permito que haya varios descuentos simultaneos. A cambio, los descuentos se suman hasta un máximo de 100%
+//        Optional<Descuento> existente =
+//                descuentoRepository.findDescuentoActivo(juego.get(), LocalDateTime.now());
+//        if (existente.isPresent()) {
+//            throw new AccesoDenegadoException("Ya existe un descuento activo para este juego");
+//        }
 
-        if (existente.isPresent()) {
-            throw new AccesoDenegadoException("Ya existe un descuento activo para este juego");
-        }
         Descuento descuento = Descuento.builder()
                 .porcentaje(dto.getPorcentaje())
                 .fechaInicio(dto.getFechaInicio())
@@ -80,35 +82,8 @@ public class DescuentoServiceImpl implements DescuentoService{
         return mapper.toResponseDTO(descuento);
     }
 
-    public List<Descuento> getAll(){return descuentoRepository.findAll();}
-
-//    private void generarNotificaciones(Descuento descuento) {
-//
-//        List<Juego> descuentos = this.getAll().stream().map(Descuento::getJuego).toList();
-//        if (descuentos.isEmpty())throw new ElementoNoEncontradoException("No hay descuentos disponibles");
-//
-//        for (Juego juego : descuentos) {
-//            List<Perfil> perfiles =
-//                    perfilRepository.findByFavoritosContaining(juego);
-//
-//            for (Perfil perfil : perfiles) {
-//
-//                Notificacion notificacion = Notificacion.builder()
-//                        .mensaje("El juego " + juego.getNombre()
-//                                + " tiene un "
-//                                + descuento.getPorcentaje()
-//                                + "% de descuento!")
-//                        .perfil(perfil)
-//                        .fecha(LocalDateTime.now())
-//                        .leida(false)
-//                        .build();
-//
-//                notificacionRepository.save(notificacion);
-//            }
-//        }
-//    }
-
-   public void generarNotificaciones(Descuento descuento) {
+    @Override
+    public void generarNotificaciones(Descuento descuento) {
 
         Juego juego = descuento.getJuego();
 
@@ -129,5 +104,12 @@ public class DescuentoServiceImpl implements DescuentoService{
 
             notificacionRepository.save(notificacion);
         }
+    }
+
+    @Override
+    public int getDescuentoByGameId(Long gameId) {
+        int total = descuentoRepository
+                .getDescuentoTotalActivo(gameId, LocalDateTime.now());
+        return Math.min(total, 100);
     }
 }
