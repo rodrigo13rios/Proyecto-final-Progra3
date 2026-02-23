@@ -33,6 +33,7 @@ public class PaymentController {
     private final BilleteraService billeteraService;
     @Value("${mercadopago.access.token}")
     private String mptoken;
+    private final String NGROK_URL = "https://taren-aureate-sparkle.ngrok-free.dev"; // URL de Ngrok
 
     @PostConstruct
     public void init(){
@@ -56,16 +57,17 @@ public class PaymentController {
                         .unitPrice(BigDecimal.valueOf(dto.getMonto()))
                         .build();
 
+
         PreferenceRequest prefReq =
                 PreferenceRequest.builder()
                         .items(List.of(item))
                         .externalReference("wallet-" + perfil.getId() + "-" + dto.getMonto())
-                        .notificationUrl("https://roman-perinephrial-unfundamentally.ngrok-free.dev/api/mp/webhook")
+                        .notificationUrl(NGROK_URL+"/api/mp/webhook")
                         .backUrls(
                                 PreferenceBackUrlsRequest.builder()
-                                        .success("https://roman-perinephrial-unfundamentally.ngrok-free.dev/wallet-ok")
-                                        .failure("https://roman-perinephrial-unfundamentally.ngrok-free.dev/wallet-error")
-                                        .pending("https://roman-perinephrial-unfundamentally.ngrok-free.dev/wallet-pending")
+                                        .success(NGROK_URL+"/wallet-ok")
+                                        .failure(NGROK_URL+"/wallet-error")
+                                        .pending(NGROK_URL+"/wallet-pending")
                                         .build()
                         )
                         .autoReturn("approved")

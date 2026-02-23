@@ -3,7 +3,6 @@ package com.proyecto.tiendaVirtual.juego.service;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoUpdateDTO;
 import com.proyecto.tiendaVirtual.juego.dto.JuegoVerDTO;
-import com.proyecto.tiendaVirtual.juego.model.Categoria;
 import com.proyecto.tiendaVirtual.juego.model.Juego;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,7 @@ public interface JuegoService {
     void delete(Long id);
     Optional<Juego> getById(Long id);
     Optional<JuegoVerDTO> getByNombre(String nombre);
-    Page<JuegoVerDTO> getAll(String strCategoria, Pageable pageable);
+    Page<JuegoVerDTO> getAll(String strCategoria, String search, Pageable pageable);
     JuegoVerDTO convertirAVerDTO (Juego juego);
     Double obtenerPrecioFinal(Juego juego);
 }

@@ -7,9 +7,7 @@ import com.proyecto.tiendaVirtual.billetera.repository.BilleteraRepository;
 import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 
 import com.proyecto.tiendaVirtual.perfil.service.PerfilService;
-import com.proyecto.tiendaVirtual.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

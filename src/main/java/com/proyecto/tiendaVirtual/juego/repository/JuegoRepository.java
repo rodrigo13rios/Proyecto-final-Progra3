@@ -12,5 +12,62 @@ import java.util.Optional;
 @Repository
 public interface JuegoRepository extends JpaRepository<Juego,Long> {
     Optional<Juego> findByNombre(String nombre);
+
     Page<Juego> findByCategoria(Categoria categoria, Pageable pageable);
+
+
+    /**
+     * Busca juegos cuyo nombre contenga el texto indicado (ignorando mayúsculas/minúsculas)
+     * o cuya desarrolladora tenga un nombre que contenga dicho texto.
+     *
+     * Equivalente aproximado a:
+     *
+     * SELECT j
+     * FROM Juego j
+     * WHERE LOWER(j.nombre) LIKE LOWER('%texto%')
+     *    OR LOWER(j.desarrolladora.nombre) LIKE LOWER('%texto%')
+     *
+     * @param nombreJuego texto a buscar dentro del nombre del juego
+     * @param nombreDesarrolladora texto a buscar dentro del nombre de la desarrolladora
+     * @param pageable información de paginación y orden
+     * @return página de juegos que coinciden con alguno de los criterios
+     */
+    Page<Juego> findByNombreContainingIgnoreCaseOrDesarrolladora_NombreContainingIgnoreCase(
+            String nombreJuego,
+            String nombreDesarrolladora,
+            Pageable pageable
+    );
+
+
+    /**
+     * Busca juegos dentro de una categoría específica, cuyo nombre contenga el texto indicado
+     * o cuya desarrolladora tenga un nombre que contenga dicho texto (ignorando mayúsculas/minúsculas).
+     *
+     * IMPORTANTE:
+     * Se recibe la categoría dos veces porque Spring Data no permite agrupar condiciones.
+     * Esto asegura que la categoría se aplique a ambos lados del OR.
+     *
+     * Equivalente aproximado a:
+     *
+     * SELECT j
+     * FROM Juego j
+     * WHERE (j.categoria = :categoria
+     *        AND LOWER(j.nombre) LIKE LOWER('%texto%'))
+     *    OR (j.categoria = :categoria
+     *        AND LOWER(j.desarrolladora.nombre) LIKE LOWER('%texto%'))
+     *
+     * @param categoria1 categoría aplicada a la búsqueda por nombre del juego
+     * @param nombreJuego texto a buscar dentro del nombre del juego
+     * @param categoria2 categoría aplicada a la búsqueda por nombre de la desarrolladora
+     * @param nombreDesarrolladora texto a buscar dentro del nombre de la desarrolladora
+     * @param pageable información de paginación y orden
+     * @return página de juegos que coinciden con la categoría y alguno de los criterios de búsqueda
+     */
+    Page<Juego> findByCategoriaAndNombreContainingIgnoreCaseOrCategoriaAndDesarrolladora_NombreContainingIgnoreCase(
+            Categoria categoria1,
+            String nombreJuego,
+            Categoria categoria2,
+            String nombreDesarrolladora,
+            Pageable pageable
+    );
 }
