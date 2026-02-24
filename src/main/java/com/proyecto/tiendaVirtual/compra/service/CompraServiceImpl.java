@@ -4,6 +4,7 @@ import com.proyecto.tiendaVirtual.billetera.service.BilleteraService;
 import com.proyecto.tiendaVirtual.compra.dto.PedidoCompra;
 import com.proyecto.tiendaVirtual.compra.event.CompraRealizadaEvent;
 import com.proyecto.tiendaVirtual.compra.model.Compra;
+import com.proyecto.tiendaVirtual.compra.model.CompraItem;
 import com.proyecto.tiendaVirtual.compra.repository.CompraRepository;
 import com.proyecto.tiendaVirtual.email.CompraEmailData;
 import com.proyecto.tiendaVirtual.exceptions.ElementoNoEncontradoException;
@@ -67,10 +68,29 @@ public class CompraServiceImpl implements CompraService {
             }
         }
 
-        // 3. Calcular total (Double)
-        Double total = juegos.stream()
-                .mapToDouble(juegoService::obtenerPrecioFinal)
-                .sum();
+        // 3. Crear la compra + items y calcular total con precioPagado (precio final en ese momento)
+        Compra compra = new Compra();
+        compra.setUser(user);
+
+        double total = 0.0;
+
+        for (Juego juego : juegos) {
+            double precioPagado = juegoService.obtenerPrecioFinal(juego);
+
+            CompraItem item = CompraItem.builder()
+                    .compra(compra)
+                    .juego(juego)
+                    .precioPagado(precioPagado)
+                    .build();
+
+            compra.getItems().add(item);
+            total += precioPagado;
+        }
+
+        // Redondeo monetario simple (Double)
+        total = Math.round(total * 100.0) / 100.0;
+
+        compra.setTotal(total);
 
         // 4. Cobrar UNA SOLA VEZ
         billeteraService.restarSaldo(perfil.getBilletera(), total);
@@ -79,10 +99,7 @@ public class CompraServiceImpl implements CompraService {
         perfil.getJuegos().addAll(juegos);
 
         // 6. Crear entidad Compra
-        Compra compra = new Compra();
-        compra.setUser(user);
         compra.setJuegos(juegos);
-        compra.setTotal(total);
 
         // 7. Guardar
         perfilRepo.save(perfil);

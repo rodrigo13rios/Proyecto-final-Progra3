@@ -37,7 +37,10 @@ public class Compra {
             joinColumns = @JoinColumn(name = "compra_id"),
             inverseJoinColumns = @JoinColumn(name = "juego_id")
     )
-    private List<Juego> juegos = new ArrayList<>();
+    private List<Juego> juegos = new ArrayList<>();//Deprecated
+
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CompraItem> items = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
