@@ -94,9 +94,13 @@ public class DescuentoServiceImpl implements DescuentoService{
 
             Notificacion notificacion = Notificacion.builder()
                     .mensaje("El juego " + juego.getNombre()
-                            + " tiene un "
+                            + " tendrá un "
                             + descuento.getPorcentaje()
-                            + "% de descuento!")
+                            + "% de descuento a partir del "
+                            + descuento.getFechaInicio()
+                            + " hasta el "
+                            + descuento.getFechaFin()
+                            + ". No te lo pierdas!")
                     .perfil(perfil)
                     .fecha(LocalDateTime.now())
                     .leida(false)
