@@ -119,7 +119,7 @@ public class DesarrolladoraServiceImpl implements DesarrolladoraService{
 
         List<EstadisticaJuegoDTO> estadisticas = desarrolladora.getJuegos().stream()
                 .map(j -> new EstadisticaJuegoDTO(
-                        JuegoVerDTO.convertirAVerDTO(j),
+                        juegoService.convertirAVerDTO(j),
                         ventasPorJuego.getOrDefault(j.getId(), 0L),
                         favsPorJuego.getOrDefault(j.getId(), 0L)
                 ))
