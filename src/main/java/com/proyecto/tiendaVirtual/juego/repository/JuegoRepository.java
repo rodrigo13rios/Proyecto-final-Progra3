@@ -5,6 +5,7 @@ import com.proyecto.tiendaVirtual.juego.model.Juego;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -70,4 +71,29 @@ public interface JuegoRepository extends JpaRepository<Juego,Long> {
             String nombreDesarrolladora,
             Pageable pageable
     );
+
+
+
+    @Query("""
+      SELECT COALESCE(AVG(j.precio), 0)
+      FROM Juego j
+      WHERE j.desarrolladora.id = :devId
+    """)
+    double precioPromedioDev(Long devId);
+
+    @Query("""
+      SELECT j.precio
+      FROM Juego j
+      WHERE j.desarrolladora.id = :devId
+      ORDER BY j.precio ASC
+    """)
+    List<Double> preciosOrdenadosDev(Long devId);
+
+    @Query("""
+      SELECT j.categoria, COUNT(j)
+      FROM Juego j
+      WHERE j.desarrolladora.id = :devId
+      GROUP BY j.categoria
+    """)
+    List<Object[]> distribucionCategoriasDev(Long devId);
 }

@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record DesarrolladoraStatsDTO (
-    long comprasTotales,
+    long ventasTotales,
     double ingresosTotales,
 
-    long comprasPeriodo,
+    long ventasPeriodo,
     double ingresosPeriodo,
 
     List<SeriePointDTO> ventasPorDia,     // date + count

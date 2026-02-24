@@ -20,10 +20,10 @@ public class EmailService {
 
     public void enviarConfirmacionCompra(CompraEmailData data) {
         //Mensaje del Email
-        String juegosTexto = data.juegos().stream()
-                .map(juego ->
-                        "Juego: " + juego.getNombre() + "\n" +
-                        "Precio: $" + juego.getPrecio() + "\n"
+        String juegosTexto = data.items().stream()
+                .map(item ->
+                        "Juego: " + item.getJuego().getNombre() + "\n" +
+                        "Precio: $" + item.getPrecioPagado() + "\n"
                 ).collect(Collectors.joining("\n"));
         String texto =
                 "Hola " + data.nickname() + ",\n\n" +

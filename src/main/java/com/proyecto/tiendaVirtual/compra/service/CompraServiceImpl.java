@@ -98,10 +98,7 @@ public class CompraServiceImpl implements CompraService {
         // 5. Agregar todos los juegos
         perfil.getJuegos().addAll(juegos);
 
-        // 6. Crear entidad Compra
-        compra.setJuegos(juegos);
-
-        // 7. Guardar
+        // 6. Guardar
         perfilRepo.save(perfil);
         compraRepo.save(compra);
 

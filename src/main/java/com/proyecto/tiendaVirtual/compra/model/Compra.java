@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,17 +28,8 @@ public class Compra {
     private Long id;
 
     @NotNull
-    @Positive
+    @PositiveOrZero
     private Double total;
-
-    @NotEmpty
-    @ManyToMany
-    @JoinTable(
-            name = "compra_juego",
-            joinColumns = @JoinColumn(name = "compra_id"),
-            inverseJoinColumns = @JoinColumn(name = "juego_id")
-    )
-    private List<Juego> juegos = new ArrayList<>();//Deprecated
 
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompraItem> items = new ArrayList<>();

@@ -24,7 +24,7 @@ public class CompraEmailListener {
                 compra.getUser().getEmail(),
                 compra.getUser().getPerfil().getNickName(),
                 compra.getTotal(),
-                compra.getJuegos()
+                compra.getItems()
         );
 
         emailService.enviarConfirmacionCompra(emailData);
